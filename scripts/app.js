@@ -43,7 +43,18 @@ function init() {
   }
   addMines(cells)
 
-  // add a class of mine. and when the player clicks on the square with the mine class. ADD mine image and endGame()
+  function playerClick(event) {
+    console.log('click on this cell', event.target)
+    if (event.target.classList == 'mineHere') {
+      event.target.classList.add('mine')
+      console.log('mine is here')
+    }
+  }
+
+  gridCells.forEach(element => {
+    element.addEventListener('click', playerClick)
+  })
+
 }
 
 
