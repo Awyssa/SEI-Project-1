@@ -48,12 +48,17 @@ function init() {
     if (event.target.classList == 'mineHere') {
       event.target.classList.add('mine')
       console.log('mine is here')
+      endGame()
     }
   }
 
   gridCells.forEach(element => {
     element.addEventListener('click', playerClick)
   })
+
+  function endGame() {
+    window.alert('YOU HIT A COVID VIRUS!!!')
+  }
 
 }
 
