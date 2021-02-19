@@ -14,9 +14,7 @@ body {
   margin: 0 10%;
   display: flex;
   flex-direction: column;
-  align-items: center;
   background-color: rgba(255, 255, 255, 0.3);
-  font-size: 18px;
   text-align: center;
 }
 
@@ -29,8 +27,10 @@ body {
 }
 
 .header .score {
+  display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  justify-content: space-evenly;
+  margin: 5px 100px;
 }
 
 .grid-wrapper {
@@ -58,6 +58,60 @@ body {
   flex-grow: 1;
   height: 10%;
   width: 10%;
+}
+
+/* IMAGES */
+
+.rum {
+  background-image: url('../assets/rum.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+}
+
+.murray {
+  background-image: url('../assets/murray.jpg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+}
+
+.duffman {
+  background-image: url('../assets/duff.man.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+}
+
+.theDude {
+  background-image: url('../assets/the.dude.jpg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+}
+.covid {
+  background-image: url('../assets/virus.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+}
+.beer {
+  background-image: url('../assets/beer.jpg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+}
+.corbyn {
+  background-image: url('../assets/corbyn.cheers.jpg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+}
+.boris {
+  background-image: url('../assets/boris.cheers2.jpg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
 }
 
 
