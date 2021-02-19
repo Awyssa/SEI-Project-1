@@ -38,15 +38,17 @@ function init() {
     for (i = 0; i < width; i++) {
       let cellToAddMine =  grid[Math.floor(Math.random() * grid.length)]
       console.log(cellToAddMine)
-      cellToAddMine.classList.add('mine')
+      cellToAddMine.classList.add('mineHere')
     }
   }
-  
   addMines(cells)
+
+  // add a class of mine. and when the player clicks on the square with the mine class. ADD mine image and endGame()
 }
 
 
 // for each grid item, add 10 random mines. Once complete ELSE add beer
+// add a class of mine. and when the player clicks on the square with the mine class. ADD mine image and endGame()
 
 window.addEventListener('DOMContentLoaded', init)
 
