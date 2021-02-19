@@ -59,16 +59,22 @@ function init() {
 
   function endGame() {
     window.alert('YOU HIT A COVID VIRUS!!!')
-    showAllMines()
+    showAllMines(gridCells)
   }
 
   function showAllMines() {
     gridCells.forEach((cell) => {
       cell.classList == 'mineHere'
-      cell.classList.add('mine')
+      console.log(cell)
     })
-
   }
+
+  // function showAllMines() {
+  //   gridCells.forEach((cell) => {
+  //     cell.classList == 'mineHere'
+  //     cell.classList.add('mine')
+  //   })
+  // }
 
 }
 
