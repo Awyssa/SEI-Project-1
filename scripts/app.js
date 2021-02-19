@@ -33,6 +33,7 @@ function init() {
   // !!! NOT FOR NOW!!! Just leave it empty! LATER = for every other cell add a beer
   //
 
+ // ISSUEE!!! mines are being assined to the same cell, make an if statement so that if classList === mine, dont add mine!
 
   function addMines(grid) {
     for (i = 0; i < width; i++) {
@@ -58,6 +59,15 @@ function init() {
 
   function endGame() {
     window.alert('YOU HIT A COVID VIRUS!!!')
+    showAllMines()
+  }
+
+  function showAllMines() {
+    gridCells.forEach((cell) => {
+      cell.classList == 'mineHere'
+      cell.classList.add('mine')
+    })
+
   }
 
 }
