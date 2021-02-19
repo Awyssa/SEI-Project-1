@@ -114,6 +114,13 @@ body {
   cursor: pointer;
 }
 
+.mine {
+  background-image: url('../assets/virus.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+
+}
 
 
 
