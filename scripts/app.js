@@ -60,11 +60,11 @@ function init() {
   }
 
   function showAllMines(array) {
-    for (let i = 0; i <= cells.length; i++) {
-      if (cells.classList == 'mineHere') {
-        cells.classList.add('mine')
+    return array.filter(value => {
+      if (value.classList.contains('mineHere') ) {
+        value.classList.add('mine')
       }
-    }
+    })
   }
 }
 
@@ -101,3 +101,12 @@ window.addEventListener('DOMContentLoaded', init)
 //     cell.classList == 'mineHere'
 //     cell.classList.add('mine')
 //   })
+
+// function showAllMines(array) {
+//   for (let i = 0; i <= cells.length; i++) {
+//     if (cells.classList == 'mineHere') {
+//       cells.classList.add('mine')
+//       console.log()
+//     }
+//   }
+// }
