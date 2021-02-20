@@ -64,8 +64,7 @@ function init() {
 
   function showAllMines() {
     gridCells.forEach((cell) => {
-      cell.classList == 'mineHere'
-      console.log(cell)
+      console.log('show mines', gridCells.classList('mineHere'))
     })
   }
 
