@@ -6,8 +6,6 @@ function init() {
   const grid = document.querySelector('.grid')
   const gridCells = document.querySelectorAll('.grid')
 
-  console.log('gridcells', gridCells)
-
   console.log('grid', grid)
   
   const width = 10
@@ -20,7 +18,6 @@ function init() {
       grid.appendChild(cell)
       cells.push(cell)
       cell.id = i
-      // make an array for the mines? 
     }
   }  
   createGrid()
@@ -59,13 +56,15 @@ function init() {
 
   function endGame() {
     window.alert('YOU HIT A COVID VIRUS!!!')
-    showAllMines(gridCells)
+    showAllMines(grid)
   }
 
-  function showAllMines() {
-    gridCells.forEach((element) => {
+  // iterate over the 
+
+  function showAllMines(grid) {
+    grid.forEach((element) => {
       let arrayOfMines = element.contains
-      console.log('show mines', gridCells.classList('mineHere'))
+      console.log('show mines', grid.classList('mineHere'))
     })
   }
 
