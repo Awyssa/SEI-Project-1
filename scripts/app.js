@@ -56,30 +56,31 @@ function init() {
 
   function endGame() {
     window.alert('YOU HIT A COVID VIRUS!!!')
-    showAllMines(grid)
+    showAllMines(cells)
   }
 
-  // iterate over the 
-
-  function showAllMines(grid) {
-    grid.forEach((element) => {
-      let arrayOfMines = element.contains
-      console.log('show mines', grid.classList('mineHere'))
-    })
+  function showAllMines(array) {
+    for (let i = 0; i <= cells.length; i++) {
+      if (cells.classList == 'mineHere') {
+        cells.classList.add('mine')
+      }
+    }
   }
-
-
 }
-
-
-// for each grid item, add 10 random mines. Once complete ELSE add beer
-// add a class of mine. and when the player clicks on the square with the mine class. ADD mine image and endGame()
 
 window.addEventListener('DOMContentLoaded', init)
 
+// function showAllMines() {             --- Using the grid as opposed to the cells.
+//   console.log('show all mine ran')
+//   gridCells.forEach((element) => {
+//     let mines = element.classList.contains('mineHere')
+//     element.classList.add('mine')
+//     console.log(cells)
+//   })
+// }
 
-
-
+// for each grid item, add 10 random mines. Once complete ELSE add beer
+// add a class of mine. and when the player clicks on the square with the mine class. ADD mine image and endGame()
 
 // redundant code 
 
@@ -100,4 +101,3 @@ window.addEventListener('DOMContentLoaded', init)
 //     cell.classList == 'mineHere'
 //     cell.classList.add('mine')
 //   })
-// }
