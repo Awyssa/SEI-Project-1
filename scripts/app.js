@@ -2,9 +2,8 @@
 // points are being double added
 // when mines are added, they can be added to the same cell. math.random function isn't adding an if statement so that if classList = 'mineHere' { don't add another mine / move to next cell and add mine there}
 // Cells on left column, are picking up mines on the right column and vice versa (if cell % width = 0)
-
-
-
+// ISSUE: Can keep reclicking on cells
+ 
 
 // THINGS TO ADD!
 // function so that when a safe cell is clicked, it randomly starts revealing safe cells next to it.
@@ -22,7 +21,7 @@ function init() {
   let bonus = 0
   let score = 0
   let antiLeft = width * 1.5
-  let bonusActions = [playTheDude, playMurray, playDuffman, playRum]
+  const bonusActions = [playTheDude, playMurray, playDuffman, playRum]
 
   // FUNCTION TO CREATE THE GRID
   function createGrid() {
@@ -31,6 +30,7 @@ function init() {
       grid.appendChild(cell)
       cells.push(cell)
       cell.id = i
+      cell.classList.add('unclicked')
     }
   }  
   createGrid()
@@ -41,25 +41,26 @@ function init() {
   }
   showAnti()
 
+  // ADDING EVENT LISTENERS
+  // ISSUE! Points are being double clicked   {once: true} . dosn't work
+  gridCells.forEach(element => {
+    element.addEventListener('click', playerClick)
+    element.addEventListener('contextmenu', flagMine)
+  })
+
   // ADDS RANDOM MINES TO THE GRID THAT ARE EQUAL TO THE WIDTHS NUMBER
   // ISSUE!!! mines are being assined to the same cell, make an if statement so that if classList === mine, dont add mine!
   function addMines(grid) {
-    for (i = 0; i < width; i++) {
-      let cellToAddMine =  grid[Math.floor(Math.random() * grid.length)]
+    for (let i = 0; i < width; i++) {
+      const cellToAddMine =  grid[Math.floor(Math.random() * grid.length)]
       console.log(cellToAddMine)
       cellToAddMine.classList.add('mineHere')
     }
   }
   addMines(cells)
 
-  // ADDING EVENT LISTENERS
-  gridCells.forEach(element => {
-    element.addEventListener('click', playerClick)
-    element.addEventListener('contextmenu', flagMine)
-  })
-
   // HANDLES THE PLAYER CLICK
-  // ISSUE! Points are being double clicked
+  // ISSUE! Points are being double clicked   {once: true} . dosn't work
   function playerClick(event) {
     console.log('click on this cell', event.target)
     if (event.target.classList == 'mineHere') {
@@ -69,23 +70,27 @@ function init() {
       event.target.classList.add('beer')
       score += 100
       minesAdjacent(event)
+      // this.removeEventListener('click', playerClick)   --- this removes all clicks
+      // event.target.removeEventListener('click', playerClick)   --- dosn't work?
     }
     if (event.target.classList == 'grid') {
+      return null
     } 
     updateScore()
   }
 
   // HANDLES RIGHT CLICK TO FLAG MINES OR SHOW INCORRECT FLAGS
+  // ISSUE: Can keep reclicking on cell
   function flagMine(event) {
     if (antiLeft > 0) {
       antiLeft --
       if (event.target.classList.contains('mineHere')) {
-        let bonusToPlay =  bonusActions[Math.floor(Math.random() * bonusActions.length)]
+        const bonusToPlay =  bonusActions[Math.floor(Math.random() * bonusActions.length)]
         bonusToPlay(event)
         bonus += 200
         updateBonus()
-      }
-      else {
+        // this.removeEventListener('contextmenu', flagMine)
+      } else {
         playWrong(event)
       }
     } if (antiLeft === 0) {
@@ -140,7 +145,7 @@ function init() {
 
   // HANDLES UPDATING SCORE INNER HTML
   function updateScore() {
-    let totalScore = bonus += score
+    const totalScore = bonus += score
     document.getElementById('score').innerHTML = `Score: ${totalScore}`
   }
 
@@ -148,17 +153,17 @@ function init() {
   // ISSUE! Cells on left colum, are picking up mines on the right column and vice versa
   function minesAdjacent(event) {
     let minesAdjacent = 0
-    let currentCellNum = event.target.id
+    const currentCellNum = event.target.id
 
-    let right = Number(currentCellNum) + 1
-    let bottomLeft = Number(currentCellNum) + width - 1
-    let bottom = Number(currentCellNum) + width
-    let bottomRight = Number(currentCellNum) + width + 1
+    const right = Number(currentCellNum) + 1
+    const bottomLeft = Number(currentCellNum) + width - 1
+    const bottom = Number(currentCellNum) + width
+    const bottomRight = Number(currentCellNum) + width + 1
 
-    let left = Number(currentCellNum) - 1
-    let topLeft = Number(currentCellNum) - width - 1
-    let top = Number(currentCellNum) - width
-    let topRight = Number(currentCellNum) - width + 1
+    const left = Number(currentCellNum) - 1
+    const topLeft = Number(currentCellNum) - width - 1
+    const top = Number(currentCellNum) - width
+    const topRight = Number(currentCellNum) - width + 1
 
     if (right < cellCount && cells[right].classList.contains('mineHere')) {
       minesAdjacent ++
@@ -182,42 +187,42 @@ function init() {
   }
 
   // HANDLES UPDATING THE BONUS INNER HTML
-  function updateBonus(event) {
+  function updateBonus() {
     document.getElementById('bonus').innerHTML = `BONUS: ${bonus}`
   }
 
   // ALL BELOW ------------------------------------------------------------------------
   // BONUS AND INCORRECT FLAG SOUND AND IMAGE ADDS
   function playTheDude(event) {
-    let theDudeAudio = new Audio('../assets/theDude.mp3')
+    const theDudeAudio = new Audio('../assets/theDude.mp3')
     event.target.classList.add('theDude')
     theDudeAudio.volume = 0.2
     theDudeAudio.play()
   }
 
   function playMurray(event) {
-    let murrayAudio = new Audio('../assets/murray.mp3')
+    const murrayAudio = new Audio('../assets/murray.mp3')
     event.target.classList.add('murray')
     murrayAudio.volume = 0.2
     murrayAudio.play()
   }
 
   function playDuffman(event) {
-    let duffmanAudio = new Audio('../assets/duffman.mp3')
+    const duffmanAudio = new Audio('../assets/duffman.mp3')
     event.target.classList.add('duffman')
     duffmanAudio.volume = 0.2
     duffmanAudio.play()
   }
 
   function playRum(event) {
-    let rumAudio = new Audio('../assets/rum.mp3')
+    const rumAudio = new Audio('../assets/rum.mp3')
     event.target.classList.add('rum')
     rumAudio.volume = 0.2
     rumAudio.play()
   }
 
   function playWrong(event) {
-    let wrongAudio = new Audio('../assets/wrong.mp3')
+    const wrongAudio = new Audio('../assets/wrong.mp3')
     event.target.classList.add('cross')
     wrongAudio.volume = 0.2
     wrongAudio.play()
