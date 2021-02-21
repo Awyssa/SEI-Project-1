@@ -10,6 +10,7 @@ function init() {
   let antiLeft = width * 1.5
   let bonusActions = [playTheDude, playMurray, playDuffman, playRum]
 
+  // FUNCTION TO CREATE THE GRID
   function createGrid() {
     for (let i = 0; i < cellCount; i++) {
       const cell = document.createElement('div')
@@ -20,12 +21,14 @@ function init() {
   }  
   createGrid()
 
+  // UPDATES AND ANTI SPRAY INNER HTML
   function showAnti() {
     document.getElementById('anti').innerHTML = `Antibacterial Spray: ${antiLeft}`
   }
   showAnti()
- 
-  // ISSUEE!!! mines are being assined to the same cell, make an if statement so that if classList === mine, dont add mine!
+
+  // ADDS RANDOM MINES TO THE GRID THAT ARE EQUAL TO THE WIDTHS NUMBER
+  // ISSUE!!! mines are being assined to the same cell, make an if statement so that if classList === mine, dont add mine!
   function addMines(grid) {
     for (i = 0; i < width; i++) {
       let cellToAddMine =  grid[Math.floor(Math.random() * grid.length)]
@@ -35,11 +38,14 @@ function init() {
   }
   addMines(cells)
 
+  // ADDING EVENT LISTENERS
   gridCells.forEach(element => {
     element.addEventListener('click', playerClick)
     element.addEventListener('contextmenu', flagMine)
   })
 
+  // HANDLES THE PLAYER CLICK
+  // ISSUE! Points are being double clicked
   function playerClick(event) {
     console.log('click on this cell', event.target)
     if (event.target.classList == 'mineHere') {
@@ -51,10 +57,11 @@ function init() {
       minesAdjacent(event)
     }
     if (event.target.classList == 'grid') {
-    }
+    } 
     updateScore()
   }
 
+  // HANDLES RIGHT CLICK TO FLAG MINES OR SHOW INCORRECT FLAGS
   function flagMine(event) {
     if (antiLeft > 0) {
       antiLeft --
@@ -74,6 +81,7 @@ function init() {
     updateScore()
   }
 
+  // HANDLES ENDGAME FUNCTION
   function endGame() {
     window.alert('YOU HIT A COVID VIRUS!!!')
     showAllMines(cells)
@@ -82,6 +90,7 @@ function init() {
     })
   }
 
+  // HANDLES SHOWING ALL MINES ON ENDGAME
   function showAllMines(array) {
     array.filter(value => {
       if (value.classList.contains('mineHere') || value.classList.contains('mineWasHere')) {
@@ -90,6 +99,7 @@ function init() {
     })
   }
 
+  // HANDLES CLEARING CLASSES ON ENDGAME
   function clearClasses(grid) {
     grid.forEach((element) => {
       element.className = ''
@@ -97,6 +107,7 @@ function init() {
     })
   }
 
+  // HANDLES RESET BUTTON 
   function resetGame() {
     clearClasses(cells)
     addMines(cells)
@@ -110,15 +121,17 @@ function init() {
     updateScore()
   }
 
+  // HANDLES RESET BUTTON EVENT CLICK
   document.querySelector('#reset').addEventListener('click', resetGame)
 
+  // HANDLES UPDATING SCORE INNER HTML
   function updateScore() {
     let totalScore = bonus += score
     document.getElementById('score').innerHTML = `Score: ${totalScore}`
   }
 
-  // If cell === left column, don't look for cells top left, left or bottom left
-
+  // HANDLES SHOWING HOW MANY MINES ARE NEXT TO PLAYER CLICK
+  // ISSUE! Cells on left colum, are picking up mines on the right column and vice versa
   function minesAdjacent(event) {
     let minesAdjacent = 0
     let currentCellNum = event.target.id
@@ -154,10 +167,13 @@ function init() {
     event.target.innerHTML = minesAdjacent
   }
 
+  // HANDLES UPDATING THE BONUS INNER HTML
   function updateBonus(event) {
     document.getElementById('bonus').innerHTML = `BONUS: ${bonus}`
   }
 
+  // ALL BELOW ------------------------------------------------------------------------
+  // BONUS AND INCORRECT FLAG SOUND AND IMAGE ADDS
   function playTheDude(event) {
     let theDudeAudio = new Audio('../assets/theDude.mp3')
     event.target.classList.add('theDude')
@@ -192,48 +208,6 @@ function init() {
     wrongAudio.volume = 0.2
     wrongAudio.play()
   }
-
 }
 
 window.addEventListener('DOMContentLoaded', init)
-
-// function showAllMines() {             --- Using the grid as opposed to the cells.
-//   console.log('show all mine ran')
-//   gridCells.forEach((element) => {
-//     let mines = element.classList.contains('mineHere')
-//     element.classList.add('mine')
-//     console.log(cells)
-//   })
-// }
-
-// for each grid item, add 10 random mines. Once complete ELSE add beer
-// add a class of mine. and when the player clicks on the square with the mine class. ADD mine image and endGame()
-
-// redundant code 
-
-// const addRandomImage = (event) => {
-//   console.log(event.target)
-//   event.target.classList.toggle(randomImage(images))
-// }
-
-// const randomImage = (array) => {
-//   image = array[Math.floor(Math.random() * array.length)]
-//   return image
-// }
-
-// grid.addEventListener('click', addRandomImage)
-
-// function showAllMines() {
-//   gridCells.forEach((cell) => {
-//     cell.classList == 'mineHere'
-//     cell.classList.add('mine')
-//   })
-
-// function showAllMines(array) {
-//   for (let i = 0; i <= cells.length; i++) {
-//     if (cells.classList == 'mineHere') {
-//       cells.classList.add('mine')
-//       console.log()
-//     }
-//   }
-// }
