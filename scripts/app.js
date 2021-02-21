@@ -112,9 +112,32 @@ function init() {
   function howManyMines(event) {
     let minesAdjacent = 0
     let currentCellNum = event.target.id
-    if (cells[Number(currentCellNum) + 1].classList.contains('mineHere')) {
+    let rightCell = cells[Number(currentCellNum) + 1]
+    let bottomLeft = cells[Number(currentCellNum) + width - 1]
+    let bottom = cells[Number(currentCellNum) + width]
+    let bottomRight = cells[Number(currentCellNum) + width + 1]
+    let leftCell = cells[Number(currentCellNum) - 1]
+    let topLeft = cells[Number(currentCellNum) - width - 1]
+    let top = cells[Number(currentCellNum) - width]
+    let topRight = cells[Number(currentCellNum) - width + 1]
+
+
+    if (rightCell.classList.contains('mineHere')) {
       minesAdjacent ++
-    }
+    } if (bottomLeft.classList.contains('mineHere')) {
+      minesAdjacent ++
+    } if (bottom.classList.contains('mineHere')) {
+      minesAdjacent ++
+    } if (bottomRight.classList.contains('mineHere')) {
+      minesAdjacent ++
+    } if (leftCell.classList.contains('mineHere')) {
+      minesAdjacent ++
+    } if (topLeft.classList.contains('mineHere')) {
+      minesAdjacent ++
+    } if (top.classList.contains('mineHere')) {
+      minesAdjacent ++
+    } if (topRight.classList.contains('mineHere')) {
+      minesAdjacent ++ }
     console.log(minesAdjacent)
     event.target.innerHTML = minesAdjacent
   }
