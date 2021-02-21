@@ -1,16 +1,11 @@
 function init() {
 
-
-
-  // * Variables
   const grid = document.querySelector('.grid')
   const gridCells = document.querySelectorAll('.grid')
-
-  console.log('grid', grid)
-  
   const width = 10
   const cellCount = width * width
   const cells = []
+  let score = 0
 
   function createGrid() {
     for (let i = 0; i < cellCount; i++) {
@@ -22,16 +17,7 @@ function init() {
   }  
   createGrid()
  
-  // Addmine function.
-  // The width is going to equal the amount of mines in the game 
-  // the function will take the width, and add that amount of mines 
-  // Using a for loop, add width amount of mines randomly among the cells 
-  // as the i ===  width, loop that many times adding mines to the grid.
-  // !!! NOT FOR NOW!!! Just leave it empty! LATER = for every other cell add a beer
-  //
-
   // ISSUEE!!! mines are being assined to the same cell, make an if statement so that if classList === mine, dont add mine!
-
   function addMines(grid) {
     for (i = 0; i < width; i++) {
       let cellToAddMine =  grid[Math.floor(Math.random() * grid.length)]
@@ -47,6 +33,8 @@ function init() {
       event.target.classList.add('mine')
       console.log('mine is here')
       endGame()
+    } else {
+      event.target.classList.add('beer')
     }
   }
 
@@ -60,7 +48,7 @@ function init() {
   }
 
   function showAllMines(array) {
-    return array.filter(value => {
+    array.filter(value => {
       if (value.classList.contains('mineHere') ) {
         value.classList.add('mine')
       }
@@ -71,19 +59,11 @@ function init() {
     grid.forEach((element) => {
       element.classList.remove('mine')
       element.classList.remove('mineHere')
+      element.classList.remove('beer')
     })
   }
 
-  function addMines(grid) {
-    for (i = 0; i < width; i++) {
-      let cellToAddMine =  grid[Math.floor(Math.random() * grid.length)]
-      console.log(cellToAddMine)
-      cellToAddMine.classList.add('mineHere')
-    }
-  }
-
   // resetGame = clear current mines, add new mines, clear score, clear bonus, add new bonus
-
   function resetGame(event) {
     clearMines(cells)
     addMines(cells)
