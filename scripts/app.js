@@ -5,7 +5,7 @@ function init() {
   const width = 10
   const cellCount = width * width
   const cells = []
-  let score = 100
+  let score = 0
 
   function createGrid() {
     for (let i = 0; i < cellCount; i++) {
@@ -27,16 +27,31 @@ function init() {
   }
   addMines(cells)
 
+  // function addBonus(grid) {
+  //   for (i = 0; i < width; i++) {
+  //     if (grid.classList != 'mineHere') {
+  //       let cellToAddMine =  grid[Math.floor(Math.random() * grid.length)]
+  //       console.log(addBonus)
+  //       cellToAddMine.classList.add('theDude')
+  //     }
+  //   }
+  // }
+  // addBonus(cells)
+
   function playerClick(event) {
     console.log('click on this cell', event.target)
     if (event.target.classList == 'mineHere') {
       event.target.classList.add('mine')
       console.log('mine is here')
       endGame()
-    } if (event.target.classList == 'grid') {
-    } else {
+    } if (event.target.classList == '') {
       event.target.classList.add('beer')
+      score += 100
+      updateScore(score)
+      howManyMines(event)
     }
+    if (event.target.classList == 'grid') {
+    } 
   }
 
   gridCells.forEach(element => {
@@ -71,16 +86,24 @@ function init() {
   function resetGame(event) {
     clearMines(cells)
     addMines(cells)
-    console.log(cells)
+    score = 0
     gridCells.forEach(element => {
       element.addEventListener('click', playerClick)
     })
+    updateScore(score)
   }
 
   document.querySelector('#reset').addEventListener('click', resetGame)
 
-  function addScore(score) {
-    document.getElementById('score').innerHTML = `score: ${score}`
+  function updateScore(points) {
+    document.getElementById('score').innerHTML = `Score: ${score}`
+    console.log(points)
+  }
+
+
+  function howManyMines(event) {
+    let currentCellNum = document.getElementById(event)
+    console.log('currentCellNum is', currentCellNum)
   }
 
 }
