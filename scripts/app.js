@@ -5,7 +5,7 @@ function init() {
   const width = 10
   const cellCount = width * width
   const cells = []
-  let score = 0
+  let score = 100
 
   function createGrid() {
     for (let i = 0; i < cellCount; i++) {
@@ -78,6 +78,10 @@ function init() {
   }
 
   document.querySelector('#reset').addEventListener('click', resetGame)
+
+  function addScore(score) {
+    document.getElementById('score').innerHTML = `score: ${score}`
+  }
 
 }
 
