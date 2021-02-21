@@ -21,18 +21,13 @@ body {
 }
 
 .header h1 {
-  margin: 10px 0 0 0;
-}
-
-.header p {
-  margin: 0 0 2px 0;
+  margin: 10px 0 10px 0;
 }
 
 .header .score {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  margin: 5px 100px;
 }
 
 .grid-wrapper {

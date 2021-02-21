@@ -7,8 +7,8 @@ function init() {
   const cells = []
   let bonus = 0
   let score = 0
-  let masksLeft = width
-  let bonusActions = [playTheDude, playMurray, playDuffman]
+  let antiLeft = width * 1.5
+  let bonusActions = [playTheDude, playMurray, playDuffman, playRum]
 
   function createGrid() {
     for (let i = 0; i < cellCount; i++) {
@@ -20,10 +20,10 @@ function init() {
   }  
   createGrid()
 
-  function showMasks() {
-    document.getElementById('masks').innerHTML = `Masks: ${masksLeft}`
+  function showAnti() {
+    document.getElementById('anti').innerHTML = `Antibacterial Spray: ${antiLeft}`
   }
-  showMasks()
+  showAnti()
  
   // ISSUEE!!! mines are being assined to the same cell, make an if statement so that if classList === mine, dont add mine!
   function addMines(grid) {
@@ -34,17 +34,6 @@ function init() {
     }
   }
   addMines(cells)
-
-  // function addBonus(grid) {
-  //   for (i = 0; i < width; i++) {
-  //     if (grid.classList != 'mineHere') {
-  //       let cellToAddMine =  grid[Math.floor(Math.random() * grid.length)]
-  //       console.log(addBonus)
-  //       cellToAddMine.classList.add('theDude')
-  //     }
-  //   }
-  // }
-  // addBonus(cells)
 
   gridCells.forEach(element => {
     element.addEventListener('click', playerClick)
@@ -59,16 +48,16 @@ function init() {
     } if (event.target.classList == '') {
       event.target.classList.add('beer')
       score += 100
-      updateScore()
       minesAdjacent(event)
     }
     if (event.target.classList == 'grid') {
-    } 
+    }
+    updateScore()
   }
 
   function flagMine(event) {
-    if (masksLeft > 0) {
-      masksLeft --
+    if (antiLeft > 0) {
+      antiLeft --
       if (event.target.classList.contains('mineHere')) {
         let bonusToPlay =  bonusActions[Math.floor(Math.random() * bonusActions.length)]
         bonusToPlay(event)
@@ -76,12 +65,12 @@ function init() {
         updateBonus()
       }
       else {
-        event.target.classList.add('cross')
+        playWrong(event)
       }
-    } if (masksLeft === 0) {
-      window.alert('You are out of masks!')
+    } if (antiLeft === 0) {
+      window.alert('You are out of Antibacterial Spray!!!')
     }
-    showMasks()
+    showAnti()
     updateScore()
   }
 
@@ -113,8 +102,8 @@ function init() {
     addMines(cells)
     score = 0
     bonus = 0
-    masksLeft = width
-    showMasks()
+    antiLeft = width
+    showAnti()
     gridCells.forEach(element => {
       element.addEventListener('click', playerClick)
     })
@@ -172,21 +161,37 @@ function init() {
   function playTheDude(event) {
     let theDudeAudio = new Audio('../assets/theDude.mp3')
     event.target.classList.add('theDude')
+    theDudeAudio.volume = 0.2
     theDudeAudio.play()
   }
 
   function playMurray(event) {
     let murrayAudio = new Audio('../assets/murray.mp3')
     event.target.classList.add('murray')
+    murrayAudio.volume = 0.2
     murrayAudio.play()
   }
 
   function playDuffman(event) {
     let duffmanAudio = new Audio('../assets/duffman.mp3')
     event.target.classList.add('duffman')
+    duffmanAudio.volume = 0.2
     duffmanAudio.play()
   }
 
+  function playRum(event) {
+    let rumAudio = new Audio('../assets/rum.mp3')
+    event.target.classList.add('rum')
+    rumAudio.volume = 0.2
+    rumAudio.play()
+  }
+
+  function playWrong(event) {
+    let wrongAudio = new Audio('../assets/wrong.mp3')
+    event.target.classList.add('cross')
+    wrongAudio.volume = 0.2
+    wrongAudio.play()
+  }
 
 }
 
