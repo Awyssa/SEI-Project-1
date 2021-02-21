@@ -66,6 +66,32 @@ function init() {
       }
     })
   }
+
+  function clearMines(grid) {
+    grid.forEach((element) => {
+      element.classList.remove('mine')
+      element.classList.remove('mineHere')
+    })
+  }
+
+  function addMines(grid) {
+    for (i = 0; i < width; i++) {
+      let cellToAddMine =  grid[Math.floor(Math.random() * grid.length)]
+      console.log(cellToAddMine)
+      cellToAddMine.classList.add('mineHere')
+    }
+  }
+
+  // resetGame = clear current mines, add new mines, clear score, clear bonus, add new bonus
+
+  function resetGame(event) {
+    clearMines(cells)
+    addMines(cells)
+    console.log(cells)
+  }
+
+  document.querySelector('#reset').addEventListener('click', resetGame)
+
 }
 
 window.addEventListener('DOMContentLoaded', init)

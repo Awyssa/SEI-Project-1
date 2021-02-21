@@ -9,12 +9,15 @@ body {
   font-family: 'Varela Round', sans-serif;
 }
 
-.header {
+.container {
   margin: 0 10%;
   display: flex;
   flex-direction: column;
-  background-color: rgba(255, 255, 255, 0.3);
   text-align: center;
+}
+
+.header {
+  background-color: rgba(255, 255, 255, 0.514);
 }
 
 .header h1 {
@@ -57,6 +60,19 @@ body {
   flex-grow: 1;
   height: 10%;
   width: 10%;
+}
+
+.reset-button {
+    display: flex;
+    justify-content: center;
+    color: black;
+    align-items: center;
+  }
+
+.reset-button p {
+  align-items: center;
+  background-color: white;
+  padding: 15px 50px;
 }
 
 /* IMAGES */
@@ -125,9 +141,6 @@ body {
 
 @media screen and (max-width: 800px) {
   
-  .header {
-    margin: 0
-  }
 
 }
 
