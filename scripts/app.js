@@ -33,6 +33,7 @@ function init() {
       event.target.classList.add('mine')
       console.log('mine is here')
       endGame()
+    } if (event.target.classList == 'grid') {
     } else {
       event.target.classList.add('beer')
     }
@@ -45,6 +46,9 @@ function init() {
   function endGame() {
     window.alert('YOU HIT A COVID VIRUS!!!')
     showAllMines(cells)
+    gridCells.forEach(element => {
+      element.removeEventListener('click', playerClick)
+    })
   }
 
   function showAllMines(array) {
@@ -68,6 +72,9 @@ function init() {
     clearMines(cells)
     addMines(cells)
     console.log(cells)
+    gridCells.forEach(element => {
+      element.addEventListener('click', playerClick)
+    })
   }
 
   document.querySelector('#reset').addEventListener('click', resetGame)
