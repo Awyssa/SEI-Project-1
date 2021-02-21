@@ -100,10 +100,23 @@ function init() {
     console.log(points)
   }
 
+  // if (rightCell.classList.contains('mineHere'){
+  //   minesAdjacent ++
+  // } if (leftCell.classList.contains('mineHere) {
+  //   minesAdjacent ++
+  // } event.target.innerHTML = minesAdjacent
+
+  // the currentCellNum ++ dosn't equal the id number plus 1. why? 
+
 
   function howManyMines(event) {
+    let minesAdjacent = 0
     let currentCellNum = event.target.id
-    console.log('currentCellNum is', currentCellNum)
+    if (cells[Number(currentCellNum) + 1].classList.contains('mineHere')) {
+      minesAdjacent ++
+    }
+    console.log(minesAdjacent)
+    event.target.innerHTML = minesAdjacent
   }
 
 }
