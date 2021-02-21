@@ -83,8 +83,7 @@ function init() {
     })
   }
 
-  // resetGame = clear current mines, add new mines, clear score, clear bonus, add new bonus
-  function resetGame(event) {
+  function resetGame() {
     clearMines(cells)
     addMines(cells)
     score = 0
@@ -100,15 +99,6 @@ function init() {
     document.getElementById('score').innerHTML = `Score: ${score}`
     console.log(points)
   }
-
-  // if (rightCell.classList.contains('mineHere'){
-  //   minesAdjacent ++
-  // } if (leftCell.classList.contains('mineHere) {
-  //   minesAdjacent ++
-  // } event.target.innerHTML = minesAdjacent
-
-  // the currentCellNum ++ dosn't equal the id number plus 1. why? 
-
 
   function howManyMines(event) {
     let minesAdjacent = 0
@@ -127,14 +117,14 @@ function init() {
     let topRight = Number(currentCellNum) - width + 1
 
 
-    if (right >= 0 && right <= cellCount && cells[right].classList.contains('mineHere')) {
+    if (right >= 0 && right < cellCount && cells[right].classList.contains('mineHere')) {
       minesAdjacent ++
 
-    } if (bottomLeft >= 0 && bottomLeft <= cellCount && cells[bottomLeft].classList.contains('mineHere')) {
+    } if (bottomLeft >= 0 && bottomLeft < cellCount && cells[bottomLeft].classList.contains('mineHere')) {
       minesAdjacent ++
-    } if (bottom >= 0 && bottom <= cellCount && cells[bottom].classList.contains('mineHere')) {
+    } if (bottom >= 0 && bottom < cellCount && cells[bottom].classList.contains('mineHere')) {
       minesAdjacent ++
-    } if (bottomRight >= 0 && bottomRight <= cellCount &&  cells[bottomRight].classList.contains('mineHere')) {
+    } if (bottomRight >= 0 && bottomRight < cellCount &&  cells[bottomRight].classList.contains('mineHere')) {
       minesAdjacent ++
 
     } if (left >= 0 && left <= cellCount &&  cells[left].classList.contains('mineHere')) {
@@ -149,6 +139,9 @@ function init() {
     }
 
     console.log(minesAdjacent)
+    console.log('bottom is', bottom)
+    console.log('bottom left is', bottomLeft)
+    console.log('bottom right is', bottomRight)
     event.target.innerHTML = minesAdjacent
   }
 
