@@ -53,6 +53,7 @@ body {
   width: 600px;
   background-color: white;
   border: 5px solid rgb(37, 37, 37);
+  cursor: pointer;
 }
 
 .grid div {
@@ -73,6 +74,7 @@ body {
   align-items: center;
   background-color: white;
   padding: 15px 50px;
+  cursor: pointer;
 }
 
 .grid div{
@@ -87,63 +89,60 @@ body {
   background-image: url('../assets/rum.png');
   background-repeat: no-repeat;
   background-size: contain;
-  cursor: pointer;
 }
 
 .murray {
   background-image: url('../assets/murray.jpg');
   background-repeat: no-repeat;
   background-size: contain;
-  cursor: pointer;
 }
 
 .duffman {
   background-image: url('../assets/duff.man.png');
   background-repeat: no-repeat;
   background-size: contain;
-  cursor: pointer;
 }
 
 .theDude {
   background-image: url('../assets/the.dude.jpg');
   background-repeat: no-repeat;
   background-size: contain;
-  cursor: pointer;
 }
 .covid {
   background-image: url('../assets/virus.png');
   background-repeat: no-repeat;
   background-size: contain;
-  cursor: pointer;
 }
 .beer {
   background-image: url('../assets/beer.jpg');
   background-repeat: no-repeat;
   background-size: contain;
-  cursor: pointer;
 }
 .corbyn {
   background-image: url('../assets/corbyn.cheers.jpg');
   background-repeat: no-repeat;
   background-size: contain;
-  cursor: pointer;
 }
 .boris {
   background-image: url('../assets/boris.cheers2.jpg');
   background-repeat: no-repeat;
   background-size: contain;
-  cursor: pointer;
 }
 
 .mine {
   background-image: url('../assets/virus.png');
   background-repeat: no-repeat;
   background-size: contain;
-  cursor: pointer;
 }
 
 .mask {
   background-image: url('../assets/mask.jpg');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.cross {
+  background-image: url('../assets/cross.png');
   background-repeat: no-repeat;
   background-size: contain;
   cursor: pointer;

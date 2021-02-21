@@ -5,8 +5,10 @@ function init() {
   const width = 10
   const cellCount = width * width
   const cells = []
+  let bonus = 0
   let score = 0
-  masksLeft = width
+  let masksLeft = width
+  let bonusActions = [playTheDude, playMurray, playDuffman]
 
   function createGrid() {
     for (let i = 0; i < cellCount; i++) {
@@ -17,6 +19,11 @@ function init() {
     }
   }  
   createGrid()
+
+  function showMasks() {
+    document.getElementById('masks').innerHTML = `Masks: ${masksLeft}`
+  }
+  showMasks()
  
   // ISSUEE!!! mines are being assined to the same cell, make an if statement so that if classList === mine, dont add mine!
   function addMines(grid) {
@@ -52,26 +59,30 @@ function init() {
     } if (event.target.classList == '') {
       event.target.classList.add('beer')
       score += 100
-      updateScore(score)
-      howManyMines(event)
+      updateScore()
+      minesAdjacent(event)
     }
     if (event.target.classList == 'grid') {
     } 
   }
 
   function flagMine(event) {
-    console.log('right mouse clicked')
     if (masksLeft > 0) {
       masksLeft --
-      window.alert(`You have ${masksLeft} masks left!`)
-      event.target.classList.add('mask')
-      event.target.classList.add('mineWasHere')
       if (event.target.classList.contains('mineHere')) {
-        event.target.classList.remove('mineHere')
+        let bonusToPlay =  bonusActions[Math.floor(Math.random() * bonusActions.length)]
+        bonusToPlay(event)
+        bonus += 200
+        updateBonus()
       }
-    } else {
+      else {
+        event.target.classList.add('cross')
+      }
+    } if (masksLeft === 0) {
       window.alert('You are out of masks!')
     }
+    showMasks()
+    updateScore()
   }
 
   function endGame() {
@@ -101,19 +112,25 @@ function init() {
     clearClasses(cells)
     addMines(cells)
     score = 0
+    bonus = 0
+    masksLeft = width
+    showMasks()
     gridCells.forEach(element => {
       element.addEventListener('click', playerClick)
     })
-    updateScore(score)
+    updateScore()
   }
 
   document.querySelector('#reset').addEventListener('click', resetGame)
 
-  function updateScore(points) {
-    document.getElementById('score').innerHTML = `Score: ${score}`
+  function updateScore() {
+    let totalScore = bonus += score
+    document.getElementById('score').innerHTML = `Score: ${totalScore}`
   }
 
-  function howManyMines(event) {
+  // If cell === left column, don't look for cells top left, left or bottom left
+
+  function minesAdjacent(event) {
     let minesAdjacent = 0
     let currentCellNum = event.target.id
 
@@ -121,19 +138,21 @@ function init() {
     let bottomLeft = Number(currentCellNum) + width - 1
     let bottom = Number(currentCellNum) + width
     let bottomRight = Number(currentCellNum) + width + 1
+
     let left = Number(currentCellNum) - 1
     let topLeft = Number(currentCellNum) - width - 1
     let top = Number(currentCellNum) - width
     let topRight = Number(currentCellNum) - width + 1
 
-    if (right >= 0 && right < cellCount && cells[right].classList.contains('mineHere')) {
+    if (right < cellCount && cells[right].classList.contains('mineHere')) {
       minesAdjacent ++
-    } if (bottomLeft >= 0 && bottomLeft < cellCount && cells[bottomLeft].classList.contains('mineHere')) {
+    } if (bottomLeft < cellCount && cells[bottomLeft].classList.contains('mineHere')) {
       minesAdjacent ++
-    } if (bottom >= 0 && bottom < cellCount && cells[bottom].classList.contains('mineHere')) {
+    } if (bottom < cellCount && cells[bottom].classList.contains('mineHere')) {
       minesAdjacent ++
-    } if (bottomRight >= 0 && bottomRight < cellCount &&  cells[bottomRight].classList.contains('mineHere')) {
+    } if (bottomRight < cellCount &&  cells[bottomRight].classList.contains('mineHere')) {
       minesAdjacent ++
+
     } if (left >= 0 && left <= cellCount &&  cells[left].classList.contains('mineHere')) {
       minesAdjacent ++
     } if (topLeft >= 0 && topLeft <= cellCount &&  cells[topLeft].classList.contains('mineHere')) {
@@ -145,6 +164,29 @@ function init() {
     }
     event.target.innerHTML = minesAdjacent
   }
+
+  function updateBonus(event) {
+    document.getElementById('bonus').innerHTML = `BONUS: ${bonus}`
+  }
+
+  function playTheDude(event) {
+    let theDudeAudio = new Audio('../assets/theDude.mp3')
+    event.target.classList.add('theDude')
+    theDudeAudio.play()
+  }
+
+  function playMurray(event) {
+    let murrayAudio = new Audio('../assets/murray.mp3')
+    event.target.classList.add('murray')
+    murrayAudio.play()
+  }
+
+  function playDuffman(event) {
+    let duffmanAudio = new Audio('../assets/duffman.mp3')
+    event.target.classList.add('duffman')
+    duffmanAudio.play()
+  }
+
 
 }
 
