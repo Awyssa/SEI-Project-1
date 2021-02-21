@@ -79,6 +79,7 @@ function init() {
       element.classList.remove('mine')
       element.classList.remove('mineHere')
       element.classList.remove('beer')
+      element.innerHTML = ''
     })
   }
 
@@ -112,32 +113,41 @@ function init() {
   function howManyMines(event) {
     let minesAdjacent = 0
     let currentCellNum = event.target.id
-    let rightCell = cells[Number(currentCellNum) + 1]
-    let bottomLeft = cells[Number(currentCellNum) + width - 1]
-    let bottom = cells[Number(currentCellNum) + width]
-    let bottomRight = cells[Number(currentCellNum) + width + 1]
-    let leftCell = cells[Number(currentCellNum) - 1]
-    let topLeft = cells[Number(currentCellNum) - width - 1]
-    let top = cells[Number(currentCellNum) - width]
-    let topRight = cells[Number(currentCellNum) - width + 1]
+
+    let right = Number(currentCellNum) + 1
+
+    let bottomLeft = Number(currentCellNum) + width - 1
+    let bottom = Number(currentCellNum) + width
+    let bottomRight = Number(currentCellNum) + width + 1
+
+    let left = Number(currentCellNum) - 1
+
+    let topLeft = Number(currentCellNum) - width - 1
+    let top = Number(currentCellNum) - width
+    let topRight = Number(currentCellNum) - width + 1
 
 
-    if (rightCell.classList.contains('mineHere')) {
+    if (right >= 0 && right <= cellCount && cells[right].classList.contains('mineHere')) {
       minesAdjacent ++
-    } if (bottomLeft.classList.contains('mineHere')) {
+
+    } if (bottomLeft >= 0 && bottomLeft <= cellCount && cells[bottomLeft].classList.contains('mineHere')) {
       minesAdjacent ++
-    } if (bottom.classList.contains('mineHere')) {
+    } if (bottom >= 0 && bottom <= cellCount && cells[bottom].classList.contains('mineHere')) {
       minesAdjacent ++
-    } if (bottomRight.classList.contains('mineHere')) {
+    } if (bottomRight >= 0 && bottomRight <= cellCount &&  cells[bottomRight].classList.contains('mineHere')) {
       minesAdjacent ++
-    } if (leftCell.classList.contains('mineHere')) {
+
+    } if (left >= 0 && left <= cellCount &&  cells[left].classList.contains('mineHere')) {
       minesAdjacent ++
-    } if (topLeft.classList.contains('mineHere')) {
+
+    } if (topLeft >= 0 && topLeft <= cellCount &&  cells[topLeft].classList.contains('mineHere')) {
       minesAdjacent ++
-    } if (top.classList.contains('mineHere')) {
+    } if (top >= 0 && top <= cellCount &&  cells[top].classList.contains('mineHere')) {
       minesAdjacent ++
-    } if (topRight.classList.contains('mineHere')) {
-      minesAdjacent ++ }
+    } if (topRight >= 0 && topRight <= cellCount &&  cells[topRight].classList.contains('mineHere')) {
+      minesAdjacent ++
+    }
+
     console.log(minesAdjacent)
     event.target.innerHTML = minesAdjacent
   }
