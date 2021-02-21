@@ -102,7 +102,7 @@ function init() {
 
 
   function howManyMines(event) {
-    let currentCellNum = document.getElementById(event)
+    let currentCellNum = event.target.id
     console.log('currentCellNum is', currentCellNum)
   }
 
