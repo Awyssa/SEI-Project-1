@@ -1,3 +1,17 @@
+// ISSUE / BUG BACKLOG!!!
+// points are being double added
+// when mines are added, they can be added to the same cell. math.random function isn't adding an if statement so that if classList = 'mineHere' { don't add another mine / move to next cell and add mine there}
+// Cells on left column, are picking up mines on the right column and vice versa (if cell % width = 0)
+
+
+
+
+// THINGS TO ADD!
+// function so that when a safe cell is clicked, it randomly starts revealing safe cells next to it.
+// Timer for the game
+// 3 difficulties - Easy: width = 5*5 && timer = 2 mins || Medium: width = 10*10, timer = 1:30mins || Hard: width 15*15, timer 1min || Custom: width = x*y, timer = t, mines = n
+
+
 function init() {
 
   const grid = document.querySelector('.grid')
@@ -207,7 +221,7 @@ function init() {
     event.target.classList.add('cross')
     wrongAudio.volume = 0.2
     wrongAudio.play()
-  }
+  } 
 }
 
 window.addEventListener('DOMContentLoaded', init)
