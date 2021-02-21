@@ -140,8 +140,15 @@ body {
   background-repeat: no-repeat;
   background-size: contain;
   cursor: pointer;
-
 }
+
+.mask {
+  background-image: url('../assets/mask.jpg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+}
+
 
 
 

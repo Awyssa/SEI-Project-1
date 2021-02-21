@@ -6,6 +6,7 @@ function init() {
   const cellCount = width * width
   const cells = []
   let score = 0
+  masksLeft = width
 
   function createGrid() {
     for (let i = 0; i < cellCount; i++) {
@@ -38,11 +39,15 @@ function init() {
   // }
   // addBonus(cells)
 
+  gridCells.forEach(element => {
+    element.addEventListener('click', playerClick)
+    element.addEventListener('contextmenu', flagMine)
+  })
+
   function playerClick(event) {
     console.log('click on this cell', event.target)
     if (event.target.classList == 'mineHere') {
       event.target.classList.add('mine')
-      console.log('mine is here')
       endGame()
     } if (event.target.classList == '') {
       event.target.classList.add('beer')
@@ -54,9 +59,20 @@ function init() {
     } 
   }
 
-  gridCells.forEach(element => {
-    element.addEventListener('click', playerClick)
-  })
+  function flagMine(event) {
+    console.log('right mouse clicked')
+    if (masksLeft > 0) {
+      masksLeft --
+      window.alert(`You have ${masksLeft} masks left!`)
+      event.target.classList.add('mask')
+      event.target.classList.add('mineWasHere')
+      if (event.target.classList.contains('mineHere')) {
+        event.target.classList.remove('mineHere')
+      }
+    } else {
+      window.alert('You are out of masks!')
+    }
+  }
 
   function endGame() {
     window.alert('YOU HIT A COVID VIRUS!!!')
@@ -68,23 +84,21 @@ function init() {
 
   function showAllMines(array) {
     array.filter(value => {
-      if (value.classList.contains('mineHere') ) {
+      if (value.classList.contains('mineHere') || value.classList.contains('mineWasHere')) {
         value.classList.add('mine')
       }
     })
   }
 
-  function clearMines(grid) {
+  function clearClasses(grid) {
     grid.forEach((element) => {
-      element.classList.remove('mine')
-      element.classList.remove('mineHere')
-      element.classList.remove('beer')
+      element.className = ''
       element.innerHTML = ''
     })
   }
 
   function resetGame() {
-    clearMines(cells)
+    clearClasses(cells)
     addMines(cells)
     score = 0
     gridCells.forEach(element => {
@@ -97,7 +111,6 @@ function init() {
 
   function updateScore(points) {
     document.getElementById('score').innerHTML = `Score: ${score}`
-    console.log(points)
   }
 
   function howManyMines(event) {
@@ -105,31 +118,24 @@ function init() {
     let currentCellNum = event.target.id
 
     let right = Number(currentCellNum) + 1
-
     let bottomLeft = Number(currentCellNum) + width - 1
     let bottom = Number(currentCellNum) + width
     let bottomRight = Number(currentCellNum) + width + 1
-
     let left = Number(currentCellNum) - 1
-
     let topLeft = Number(currentCellNum) - width - 1
     let top = Number(currentCellNum) - width
     let topRight = Number(currentCellNum) - width + 1
 
-
     if (right >= 0 && right < cellCount && cells[right].classList.contains('mineHere')) {
       minesAdjacent ++
-
     } if (bottomLeft >= 0 && bottomLeft < cellCount && cells[bottomLeft].classList.contains('mineHere')) {
       minesAdjacent ++
     } if (bottom >= 0 && bottom < cellCount && cells[bottom].classList.contains('mineHere')) {
       minesAdjacent ++
     } if (bottomRight >= 0 && bottomRight < cellCount &&  cells[bottomRight].classList.contains('mineHere')) {
       minesAdjacent ++
-
     } if (left >= 0 && left <= cellCount &&  cells[left].classList.contains('mineHere')) {
       minesAdjacent ++
-
     } if (topLeft >= 0 && topLeft <= cellCount &&  cells[topLeft].classList.contains('mineHere')) {
       minesAdjacent ++
     } if (top >= 0 && top <= cellCount &&  cells[top].classList.contains('mineHere')) {
@@ -137,11 +143,6 @@ function init() {
     } if (topRight >= 0 && topRight <= cellCount &&  cells[topRight].classList.contains('mineHere')) {
       minesAdjacent ++
     }
-
-    console.log(minesAdjacent)
-    console.log('bottom is', bottom)
-    console.log('bottom left is', bottomLeft)
-    console.log('bottom right is', bottomRight)
     event.target.innerHTML = minesAdjacent
   }
 
