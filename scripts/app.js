@@ -53,6 +53,7 @@ function init() {
       const cellToAddMine =  grid[Math.floor(Math.random() * grid.length)]
       console.log(cellToAddMine)
       cellToAddMine.classList.add('mineHere')
+      cellToAddMine.classList.add('mask')
     }
   }
   addMines(cells)
@@ -61,7 +62,7 @@ function init() {
   // ISSUE! Points are being double clicked   {once: true} . dosn't work
   function playerClick(event) {
     console.log('click on this cell', event.target)
-    if (event.target.classList == 'unclicked mineHere') {
+    if (event.target.classList.contains('mineHere')) {
       event.target.classList.add('mine')
       endGame()
     } if (event.target.classList == 'unclicked') {
@@ -70,8 +71,6 @@ function init() {
       minesAdjacent(event)
       updateScore()
       console.log(score)
-      // this.removeEventListener('click', playerClick)   --- this removes all clicks
-      // event.target.removeEventListener('click', playerClick)   --- dosn't work?
     }
     if (event.target.classList == 'grid' || event.target.classList == 'unclicked beer') {
       return null
@@ -82,13 +81,13 @@ function init() {
   // ISSUE: Can keep reclicking on cell
   function flagMine(event) {
     if (antiLeft > 0) {
-      if (event.target.classList == 'unclicked mineHere') {
+      if (event.target.classList.contains('mineHere')) {
         const bonusToPlay =  bonusActions[Math.floor(Math.random() * bonusActions.length)]
         bonusToPlay(event)
         bonus += 200
         updateBonus()
         antiLeft --
-      } if (event.target.className == 'unclicked') {
+      } if (!event.target.className.includes('mineHere')) {
         playWrong(event)
         antiLeft --
       }
@@ -112,7 +111,7 @@ function init() {
   // HANDLES SHOWING ALL MINES ON ENDGAME
   function showAllMines(array) {
     array.filter(value => {
-      if (value.classList.contains('mineHere') || value.classList.contains('mineWasHere')) {
+      if (value.classList.contains('mineHere')) {
         value.classList.add('mine')
       }
     })
