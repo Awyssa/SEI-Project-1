@@ -156,48 +156,57 @@ function init() {
     let minesAdjacent = 0
     const currentCellNum = event.target.id
 
+
+    const topRight = Number(currentCellNum) - width + 1
     const right = Number(currentCellNum) + 1
-    const bottomLeft = Number(currentCellNum) + width - 1
-    const bottom = Number(currentCellNum) + width
     const bottomRight = Number(currentCellNum) + width + 1
 
-    const left = Number(currentCellNum) - 1
     const topLeft = Number(currentCellNum) - width - 1
+    const left = Number(currentCellNum) - 1
+    const bottomLeft = Number(currentCellNum) + width - 1
+
     const top = Number(currentCellNum) - width
-    const topRight = Number(currentCellNum) - width + 1
+    const bottom = Number(currentCellNum) + width
 
+    console.log('topright',topRight)
     console.log('right', right)
-
-    console.log('BL', bottomLeft)
-    console.log('B', bottom)
     console.log('BR', bottomRight)
 
-    console.log('left',left)
-
     console.log('topleft',topLeft)
+    console.log('left',left)
+    console.log('BL', bottomLeft)
+    
     console.log('top',top)
-    console.log('topright',topRight)
+    console.log('B', bottom)
 
-    if (right < cellCount && cells[right].classList.contains('mineHere')) {
+    if (topRight >= 0 && cells[topRight].classList.contains('mineHere')) {
       minesAdjacent ++
-
-    } if (bottomLeft < cellCount && cells[bottomLeft].classList.contains('mineHere')) {
+      console.log('topright tiggered')
+    } if (right < cellCount && currentCellNum % width !== width - 1 && cells[right].classList.contains('mineHere')) {
       minesAdjacent ++
-    } if (bottom < cellCount && cells[bottom].classList.contains('mineHere')) {
-      minesAdjacent ++
+      console.log('right tiggered')
     } if (bottomRight < cellCount && cells[bottomRight].classList.contains('mineHere')) {
       minesAdjacent ++
-
-    } if (left >= 0 && cells[left].classList.contains('mineHere')) {
-      minesAdjacent ++
+      console.log('bottomright tiggered')
 
     } if (topLeft >= 0 && cells[topLeft].classList.contains('mineHere')) {
       minesAdjacent ++
+      console.log('topLeft tiggered')
+    } if (left >= 0 && cells[left].classList.contains('mineHere')) {
+      minesAdjacent ++
+      console.log('left tiggered')
+    } if (bottomLeft < cellCount && cells[bottomLeft].classList.contains('mineHere')) {
+      minesAdjacent ++
+      console.log('bottomleft tiggered')
+
     } if (top >= 0 && cells[top].classList.contains('mineHere')) {
       minesAdjacent ++
-    } if (topRight >= 0 && cells[topRight].classList.contains('mineHere')) {
+      console.log('top tiggered')
+    } if (bottom < cellCount && cells[bottom].classList.contains('mineHere')) {
       minesAdjacent ++
+      console.log('bottom tiggered')
     }
+
     event.target.innerHTML = minesAdjacent
     console.log(currentCellNum % width)
   }
