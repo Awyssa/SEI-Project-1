@@ -53,7 +53,7 @@ function init() {
       const cellToAddMine =  grid[Math.floor(Math.random() * grid.length)]
       console.log(cellToAddMine)
       cellToAddMine.classList.add('mineHere')
-      cellToAddMine.classList.add('mask')
+      cellToAddMine.classList.add('mine')
     }
   }
   addMines(cells)
@@ -150,11 +150,9 @@ function init() {
   }
 
   // HANDLES SHOWING HOW MANY MINES ARE NEXT TO PLAYER CLICK
-  // ISSUE! Cells on left colum, are picking up mines on the right column and vice versa
   function minesAdjacent(event) {
     let minesAdjacent = 0
     const currentCellNum = event.target.id
-
 
     const topRight = Number(currentCellNum) - width + 1
     const right = Number(currentCellNum) + 1
@@ -167,16 +165,16 @@ function init() {
     const top = Number(currentCellNum) - width
     const bottom = Number(currentCellNum) + width
 
-    console.log('topright',topRight)
-    console.log('right', right)
-    console.log('BR', bottomRight)
+    // console.log('topright',topRight)
+    // console.log('right', right)
+    // console.log('BR', bottomRight)
 
-    console.log('topleft',topLeft)
-    console.log('left',left)
-    console.log('BL', bottomLeft)
+    // console.log('topleft',topLeft)
+    // console.log('left',left)
+    // console.log('BL', bottomLeft)
     
-    console.log('top',top)
-    console.log('B', bottom)
+    // console.log('top',top)
+    // console.log('B', bottom)
 
     if (topRight >= 0 && currentCellNum % width !== width - 1 && cells[topRight].classList.contains('mineHere')) {
       minesAdjacent ++
@@ -208,6 +206,11 @@ function init() {
 
     event.target.innerHTML = minesAdjacent
     console.log(currentCellNum % width)
+  }
+
+  // run the minesAdjacent() function on the next cell, if it returns 0 = show that square, 
+  function revealSquares() {
+
   }
 
   // HANDLES UPDATING THE BONUS INNER HTML

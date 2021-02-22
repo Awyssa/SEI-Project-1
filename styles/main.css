@@ -130,8 +130,8 @@ body {
   background-size: contain;
 }
 
-.mask {
-  background-image: url('../assets/mask.jpg');
+.mine {
+  background-image: url('../assets/mine.jpg');
   background-repeat: no-repeat;
   background-size: contain;
 }
