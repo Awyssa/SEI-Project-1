@@ -179,8 +179,9 @@ function init() {
     console.log('top',top)
     console.log('B', bottom)
 
-    if (topRight >= 0 && cells[topRight].classList.contains('mineHere')) {
+    if (topRight >= 0 && currentCellNum % width !== 0 && cells[topRight].classList.contains('mineHere')) {
       minesAdjacent ++
+      console.log('modulus', currentCellNum % width)
       console.log('topright tiggered')
     } if (right < cellCount && currentCellNum % width !== width - 1 && cells[right].classList.contains('mineHere')) {
       minesAdjacent ++
