@@ -63,35 +63,36 @@ function init() {
   // ISSUE! Points are being double clicked   {once: true} . dosn't work
   function playerClick(event) {
     console.log('click on this cell', event.target)
-    if (event.target.classList == 'mineHere') {
+    if (event.target.classList == 'unclicked mineHere') {
       event.target.classList.add('mine')
       endGame()
-    } if (event.target.classList == '') {
+    } if (event.target.classList == 'unclicked') {
       event.target.classList.add('beer')
       score += 100
       minesAdjacent(event)
+      updateScore()
+      console.log(score)
       // this.removeEventListener('click', playerClick)   --- this removes all clicks
       // event.target.removeEventListener('click', playerClick)   --- dosn't work?
     }
-    if (event.target.classList == 'grid') {
+    if (event.target.classList == 'grid' || event.target.classList == 'unclicked beer') {
       return null
-    } 
-    updateScore()
+    }
   }
 
   // HANDLES RIGHT CLICK TO FLAG MINES OR SHOW INCORRECT FLAGS
   // ISSUE: Can keep reclicking on cell
   function flagMine(event) {
     if (antiLeft > 0) {
-      antiLeft --
-      if (event.target.classList.contains('mineHere')) {
+      if (event.target.classList == 'unclicked mineHere') {
         const bonusToPlay =  bonusActions[Math.floor(Math.random() * bonusActions.length)]
         bonusToPlay(event)
         bonus += 200
         updateBonus()
-        // this.removeEventListener('contextmenu', flagMine)
-      } else {
+        antiLeft --
+      } if (event.target.className == 'unclicked') {
         playWrong(event)
+        antiLeft --
       }
     } if (antiLeft === 0) {
       window.alert('You are out of Antibacterial Spray!!!')
@@ -123,6 +124,7 @@ function init() {
     grid.forEach((element) => {
       element.className = ''
       element.innerHTML = ''
+      element.classList.add('unclicked')
     })
   }
 
@@ -145,7 +147,7 @@ function init() {
 
   // HANDLES UPDATING SCORE INNER HTML
   function updateScore() {
-    const totalScore = bonus += score
+    let totalScore = score + bonus
     document.getElementById('score').innerHTML = `Score: ${totalScore}`
   }
 
