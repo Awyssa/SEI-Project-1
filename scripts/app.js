@@ -6,6 +6,7 @@
 // function so that when a safe cell is clicked, it randomly starts revealing safe cells next to it.
 // Timer for the game
 // 3 difficulties - Easy: width = 5*5 && timer = 2 mins || Medium: width = 10*10, timer = 1:30mins || Hard: width 15*15, timer 1min || Custom: width = x*y, timer = t, mines = n
+// add a win function
 
 
 function init() {
@@ -132,7 +133,7 @@ function init() {
     addMines(cells)
     score = 0
     bonus = 0
-    antiLeft = width
+    antiLeft = width + 3
     showAnti()
     gridCells.forEach(element => {
       element.addEventListener('click', playerClick)
