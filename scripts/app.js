@@ -179,24 +179,23 @@ function init() {
     console.log('top',top)
     console.log('B', bottom)
 
-    if (topRight >= 0 && currentCellNum % width !== 0 && cells[topRight].classList.contains('mineHere')) {
+    if (topRight >= 0 && currentCellNum % width !== width - 1 && cells[topRight].classList.contains('mineHere')) {
       minesAdjacent ++
-      console.log('modulus', currentCellNum % width)
-      console.log('topright tiggered')
+      console.log('topRight triggered')
     } if (right < cellCount && currentCellNum % width !== width - 1 && cells[right].classList.contains('mineHere')) {
       minesAdjacent ++
       console.log('right tiggered')
-    } if (bottomRight < cellCount && cells[bottomRight].classList.contains('mineHere')) {
+    } if (bottomRight < cellCount && currentCellNum % width !== width - 1  && cells[bottomRight].classList.contains('mineHere')) {
       minesAdjacent ++
       console.log('bottomright tiggered')
 
-    } if (topLeft >= 0 && cells[topLeft].classList.contains('mineHere')) {
+    } if (topLeft >= 0 && currentCellNum % width !== 0 && cells[topLeft].classList.contains('mineHere')) {
       minesAdjacent ++
       console.log('topLeft tiggered')
-    } if (left >= 0 && cells[left].classList.contains('mineHere')) {
+    } if (left >= 0 && currentCellNum % width !== 0 && cells[left].classList.contains('mineHere')) {
       minesAdjacent ++
       console.log('left tiggered')
-    } if (bottomLeft < cellCount && cells[bottomLeft].classList.contains('mineHere')) {
+    } if (bottomLeft < cellCount &&  currentCellNum % width !== 0 && cells[bottomLeft].classList.contains('mineHere')) {
       minesAdjacent ++
       console.log('bottomleft tiggered')
 
