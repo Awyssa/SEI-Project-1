@@ -166,25 +166,40 @@ function init() {
     const top = Number(currentCellNum) - width
     const topRight = Number(currentCellNum) - width + 1
 
+    console.log('right', right)
+
+    console.log('BL', bottomLeft)
+    console.log('B', bottom)
+    console.log('BR', bottomRight)
+
+    console.log('left',left)
+
+    console.log('topleft',topLeft)
+    console.log('top',top)
+    console.log('topright',topRight)
+
     if (right < cellCount && cells[right].classList.contains('mineHere')) {
       minesAdjacent ++
+
     } if (bottomLeft < cellCount && cells[bottomLeft].classList.contains('mineHere')) {
       minesAdjacent ++
     } if (bottom < cellCount && cells[bottom].classList.contains('mineHere')) {
       minesAdjacent ++
-    } if (bottomRight < cellCount &&  cells[bottomRight].classList.contains('mineHere')) {
+    } if (bottomRight < cellCount && cells[bottomRight].classList.contains('mineHere')) {
       minesAdjacent ++
 
-    } if (left >= 0 && left <= cellCount &&  cells[left].classList.contains('mineHere')) {
+    } if (left >= 0 && cells[left].classList.contains('mineHere')) {
       minesAdjacent ++
-    } if (topLeft >= 0 && topLeft <= cellCount &&  cells[topLeft].classList.contains('mineHere')) {
+
+    } if (topLeft >= 0 && cells[topLeft].classList.contains('mineHere')) {
       minesAdjacent ++
-    } if (top >= 0 && top <= cellCount &&  cells[top].classList.contains('mineHere')) {
+    } if (top >= 0 && cells[top].classList.contains('mineHere')) {
       minesAdjacent ++
-    } if (topRight >= 0 && topRight <= cellCount &&  cells[topRight].classList.contains('mineHere')) {
+    } if (topRight >= 0 && cells[topRight].classList.contains('mineHere')) {
       minesAdjacent ++
     }
     event.target.innerHTML = minesAdjacent
+    console.log(currentCellNum % width)
   }
 
   // HANDLES UPDATING THE BONUS INNER HTML
