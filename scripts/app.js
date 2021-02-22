@@ -17,7 +17,7 @@ function init() {
   const cells = []
   let bonus = 0
   let score = 0
-  let antiLeft = width * 1.5
+  let antiLeft = width + 3
   const bonusActions = [playTheDude, playMurray, playDuffman, playRum]
 
   // FUNCTION TO CREATE THE GRID
