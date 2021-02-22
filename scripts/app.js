@@ -1,6 +1,5 @@
 // ISSUE / BUG BACKLOG!!!
 // when mines are added, they can be added to the same cell. math.random function isn't adding an if statement so that if classList = 'mineHere' { don't add another mine / move to next cell and add mine there}
-// Cells on left column, are picking up mines on the right column and vice versa (if cell % width = 0) 
 
 // THINGS TO ADD!
 // function so that when a safe cell is clicked, it randomly starts revealing safe cells next to it.
@@ -208,7 +207,11 @@ function init() {
     console.log(currentCellNum % width)
   }
 
-  // run the minesAdjacent() function on the next cell, if it returns 0 = show that square, 
+
+  // We have minesAdjacent() that checks all cells around it if they have a mine next to them. We can use this so that if they return a value of 0, the are blank. We can use recursion to run the minesAdjacent function on that blank cell to check if cells surrounding that are also blank, we contiune this until we pull all surrounding mines that are blank.
+
+  // how do we show these back to the player? We can do it so that as soon as they return 0 we add a class of beer and innerHTML of 0 | OR | we can push all these blank cells to an empty array called blackCells = []. when the function ends and that there are no more cells in the chain reaction that occours from the recursion we add the class and innerHTML to all thoses cells via a forEach()
+
   function revealSquares() {
 
   }
