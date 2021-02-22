@@ -1,9 +1,6 @@
 // ISSUE / BUG BACKLOG!!!
-// points are being double added
 // when mines are added, they can be added to the same cell. math.random function isn't adding an if statement so that if classList = 'mineHere' { don't add another mine / move to next cell and add mine there}
-// Cells on left column, are picking up mines on the right column and vice versa (if cell % width = 0)
-// ISSUE: Can keep reclicking on cells
- 
+// Cells on left column, are picking up mines on the right column and vice versa (if cell % width = 0) 
 
 // THINGS TO ADD!
 // function so that when a safe cell is clicked, it randomly starts revealing safe cells next to it.
@@ -103,11 +100,12 @@ function init() {
 
   // HANDLES ENDGAME FUNCTION
   function endGame() {
-    window.alert('YOU HIT A COVID VIRUS!!!')
+    playEndgame(event)
     showAllMines(cells)
     gridCells.forEach(element => {
       element.removeEventListener('click', playerClick)
     })
+    window.alert('YOU HIT A COVID VIRUS!!!')
   }
 
   // HANDLES SHOWING ALL MINES ON ENDGAME
@@ -228,6 +226,11 @@ function init() {
     event.target.classList.add('cross')
     wrongAudio.volume = 0.2
     wrongAudio.play()
+  }
+  function playEndgame(event) {
+    const endgameAudio = new Audio('../assets/endgame.mp3')
+    endgameAudio.volume = 0.2
+    endgameAudio.play()
   } 
 }
 
