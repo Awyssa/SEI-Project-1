@@ -73,3 +73,21 @@ function addMines(grid) {
   }
 }
 addMines(cells)
+
+if (topRight >= 0 && currentCellNum % width !== width - 1 && cells[topRight].classList.contains('mineHere')) {
+  minesAdjacent ++
+} if (right < cellCount && currentCellNum % width !== width - 1 && cells[right].classList.contains('mineHere')) {
+  minesAdjacent ++
+} if (bottomRight < cellCount && currentCellNum % width !== width - 1  && cells[bottomRight].classList.contains('mineHere')) {
+  minesAdjacent ++
+} if (topLeft >= 0 && currentCellNum % width !== 0 && cells[topLeft].classList.contains('mineHere')) {
+  minesAdjacent ++
+} if (left >= 0 && currentCellNum % width !== 0 && cells[left].classList.contains('mineHere')) {
+  minesAdjacent ++
+} if (bottomLeft < cellCount &&  currentCellNum % width !== 0 && cells[bottomLeft].classList.contains('mineHere')) {
+  minesAdjacent ++
+} if (top >= 0 && cells[top].classList.contains('mineHere')) {
+  minesAdjacent ++
+} if (bottom < cellCount && cells[bottom].classList.contains('mineHere')) {
+  minesAdjacent ++
+}
