@@ -1,3 +1,6 @@
+/* eslint-disable */
+
+
 // HANDLES SHOWING HOW MANY MINES ARE NEXT TO PLAYER CLICK
 function minesAdjacent(event) {
   let minesAdjacent = 0
@@ -56,3 +59,17 @@ function minesAdjacent(event) {
   event.target.innerHTML = minesAdjacent
   console.log(currentCellNum % width)
 }
+
+// ADDS RANDOM MINES TO THE GRID THAT ARE EQUAL TO THE WIDTHS NUMBER
+function addMines(grid) {
+  for (let i = 0; i < width; i) {
+    let cellToAddMine =  grid[Math.floor(Math.random() * grid.length)]
+    console.log(cellToAddMine)
+    if (cellToAddMine.classList.contains('unclicked')) {
+      cellToAddMine.classList.replace('unclicked', 'mineHere')
+      cellToAddMine.classList.add('mine')
+      i++
+    }
+  }
+}
+addMines(cells)

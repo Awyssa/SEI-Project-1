@@ -44,17 +44,16 @@ function init() {
 
   // ADDS RANDOM MINES TO THE GRID THAT ARE EQUAL TO THE WIDTHS NUMBER
   function addMines(grid) {
-    for (let i = 0; i < width; i) {
+    for (let i = 0; i < width; i++) {
       let cellToAddMine =  grid[Math.floor(Math.random() * grid.length)]
       console.log(cellToAddMine)
-      if (cellToAddMine.classList.contains('unclicked')) {
-        cellToAddMine.classList.replace('unclicked', 'mineHere')
-        cellToAddMine.classList.add('mine')
-        i++
-      }
+      cellToAddMine.classList.replace('unclicked', 'mineHere')
+      cellToAddMine.classList.add('mine')
     }
   }
   addMines(cells)
+
+  // --------------------------------------------------------------------------------------------------
 
   // HANDLES THE PLAYER CLICK
   function playerClick(event) {
@@ -67,7 +66,38 @@ function init() {
       score += 100
       updateScore()
       showValues(event)
+      runShowValuesOnNextCells(event.target)
     }
+  }
+
+  function runShowValuesOnNextCells(cell) {
+    
+    const currentCellNum = cell.id
+
+    const topRight = cells[Number(currentCellNum) - width + 1]
+    const right = Number(currentCellNum) + 1
+    const bottomRight = Number(currentCellNum) + width + 1
+    const topLeft = Number(currentCellNum) - width - 1
+    const left = Number(currentCellNum) - 1
+    const bottomLeft = Number(currentCellNum) + width - 1
+    const top = Number(currentCellNum) - width
+    const bottom = Number(currentCellNum) + width
+    
+
+    console.log('the topright is', topRight)
+    let topRightValue = minesAdjacent(topRight)
+
+    if (topRightValue === 0) {
+      topRight.classList.remove('unclicked')
+      topRight.innerHTML = 0
+    }
+
+  }
+
+  function showCell(cell) {
+    cell.classList.remove('unclicked')
+    showValues(cell)
+    runShowValuesOnNextCells(cell.target)
   }
 
   // HANDLES ASSIGNING THE CELLS THE MINE ADJACENT VALUE
@@ -83,7 +113,38 @@ function init() {
     cell.target.innerHTML = cell.target.classList
   }
 
-
+  // HANDLES COLLECTING NUMBER OF MINES ADJACENT TO THE CURRENT CELL
+  function minesAdjacent(currentCell) {
+    let minesAdjacent = 0
+    const currentCellNum = currentCell.id
+    const topRight = Number(currentCellNum) - width + 1
+    const right = Number(currentCellNum) + 1
+    const bottomRight = Number(currentCellNum) + width + 1
+    const topLeft = Number(currentCellNum) - width - 1
+    const left = Number(currentCellNum) - 1
+    const bottomLeft = Number(currentCellNum) + width - 1
+    const top = Number(currentCellNum) - width
+    const bottom = Number(currentCellNum) + width
+    
+    if (topRight >= 0 && currentCellNum % width !== width - 1 && cells[topRight].classList.contains('mineHere')) {
+      minesAdjacent ++
+    } if (right < cellCount && currentCellNum % width !== width - 1 && cells[right].classList.contains('mineHere')) {
+      minesAdjacent ++
+    } if (bottomRight < cellCount && currentCellNum % width !== width - 1  && cells[bottomRight].classList.contains('mineHere')) {
+      minesAdjacent ++
+    } if (topLeft >= 0 && currentCellNum % width !== 0 && cells[topLeft].classList.contains('mineHere')) {
+      minesAdjacent ++
+    } if (left >= 0 && currentCellNum % width !== 0 && cells[left].classList.contains('mineHere')) {
+      minesAdjacent ++
+    } if (bottomLeft < cellCount &&  currentCellNum % width !== 0 && cells[bottomLeft].classList.contains('mineHere')) {
+      minesAdjacent ++
+    } if (top >= 0 && cells[top].classList.contains('mineHere')) {
+      minesAdjacent ++
+    } if (bottom < cellCount && cells[bottom].classList.contains('mineHere')) {
+      minesAdjacent ++
+    }
+    return minesAdjacent
+  }
 
   // HANDLES RIGHT CLICK TO FLAG MINES OR SHOW INCORRECT FLAGS
   function flagMine(event) {
@@ -99,7 +160,6 @@ function init() {
         event.target.classList.remove('unclicked')
         playWrong(event)
         antiLeft --
-        showValues(event)
       }
     } if (antiLeft === 0) {
       window.alert('You are out of Antibacterial Spray!!!')
@@ -158,39 +218,6 @@ function init() {
     let totalScore = score + bonus
     document.getElementById('score').innerHTML = `Score: ${totalScore}`
   }
-
-  // HANDLES COLLECTING NUMBER OF MINES ADJACENT TO THE CURRENT CELL
-  function minesAdjacent(currentCell) {
-    let minesAdjacent = 0
-    const currentCellNum = currentCell.id
-    const topRight = Number(currentCellNum) - width + 1
-    const right = Number(currentCellNum) + 1
-    const bottomRight = Number(currentCellNum) + width + 1
-    const topLeft = Number(currentCellNum) - width - 1
-    const left = Number(currentCellNum) - 1
-    const bottomLeft = Number(currentCellNum) + width - 1
-    const top = Number(currentCellNum) - width
-    const bottom = Number(currentCellNum) + width
-    if (topRight >= 0 && currentCellNum % width !== width - 1 && cells[topRight].classList.contains('mineHere')) {
-      minesAdjacent ++
-    } if (right < cellCount && currentCellNum % width !== width - 1 && cells[right].classList.contains('mineHere')) {
-      minesAdjacent ++
-    } if (bottomRight < cellCount && currentCellNum % width !== width - 1  && cells[bottomRight].classList.contains('mineHere')) {
-      minesAdjacent ++
-    } if (topLeft >= 0 && currentCellNum % width !== 0 && cells[topLeft].classList.contains('mineHere')) {
-      minesAdjacent ++
-    } if (left >= 0 && currentCellNum % width !== 0 && cells[left].classList.contains('mineHere')) {
-      minesAdjacent ++
-    } if (bottomLeft < cellCount &&  currentCellNum % width !== 0 && cells[bottomLeft].classList.contains('mineHere')) {
-      minesAdjacent ++
-    } if (top >= 0 && cells[top].classList.contains('mineHere')) {
-      minesAdjacent ++
-    } if (bottom < cellCount && cells[bottom].classList.contains('mineHere')) {
-      minesAdjacent ++
-    }
-    return minesAdjacent
-  }
-
   // HANDLES UPDATING THE BONUS INNER HTML
   function updateBonus() {
     document.getElementById('bonus').innerHTML = `BONUS: ${bonus}`
@@ -228,7 +255,7 @@ function init() {
 
   function playWrong(event) {
     const wrongAudio = new Audio('../assets/wrong.mp3')
-    event.target.classList.add('cross')
+    event.target.className = 'cross'
     wrongAudio.volume = 0.2
     wrongAudio.play()
   }
