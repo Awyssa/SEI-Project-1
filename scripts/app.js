@@ -81,12 +81,13 @@ function init() {
     const top = Number(currentCellNum) - width
     const bottom = Number(currentCellNum) + width
 
-    if (topRight >= 0 && currentCellNum % width !== width - 1 && cells[topRight].classList.contains('unclicked')) {
+    if (topRight >= 0 && currentCellNum % width !== width - 1) {
       let topRightValue = minesAdjacent(cells[topRight])
       if (topRightValue === 0) {
         cells[topRight].classList.remove('unclicked')
         cells[topRight].innerHTML = topRightValue
         runShowValuesOnNextCells(topRight)
+        console.log('run show values on top right ran', runShowValuesOnNextCells(topRight))
       }
     }
     if (right < cellCount && currentCellNum % width !== width - 1 && cells[right].classList.contains('unclicked')) {
