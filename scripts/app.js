@@ -7,7 +7,6 @@
 // 3 difficulties - Easy: width = 5*5 && timer = 2 mins || Medium: width = 10*10, timer = 1:30mins || Hard: width 15*15, timer 1min || Custom: width = x*y, timer = t, mines = n
 // add a win function
 
-
 function init() {
 
   const grid = document.querySelector('.grid')
@@ -149,9 +148,28 @@ function init() {
   }
 
   // HANDLES SHOWING HOW MANY MINES ARE NEXT TO PLAYER CLICK
-  function minesAdjacent(event) {
+
+  function assignMineValueToGrid(array) {
+    array.forEach(element => {
+      minesAdjacent(element)
+      element.innerHTML = minesAdjacent(element)
+    })
+  }
+
+  cellsTestArray = [cells[1], cells[2], cells[3], cells[4], cells[5], cells[6]]
+
+  assignMineValueToGrid(cells)
+
+
+  function minesAdjacent(currentCell) {
     let minesAdjacent = 0
-    const currentCellNum = event.target.id
+
+    const currentCellNum = currentCell.id
+
+    console.log('the current cell is', currentCell)
+    console.log('the current cell number is', currentCellNum)
+
+    console.log('the current cell is', currentCellNum)
 
     const topRight = Number(currentCellNum) - width + 1
     const right = Number(currentCellNum) + 1
@@ -164,16 +182,16 @@ function init() {
     const top = Number(currentCellNum) - width
     const bottom = Number(currentCellNum) + width
 
-    // console.log('topright',topRight)
-    // console.log('right', right)
-    // console.log('BR', bottomRight)
+    console.log('topright',topRight)
+    console.log('right', right)
+    console.log('BR', bottomRight)
 
-    // console.log('topleft',topLeft)
-    // console.log('left',left)
-    // console.log('BL', bottomLeft)
+    console.log('topleft',topLeft)
+    console.log('left',left)
+    console.log('BL', bottomLeft)
     
-    // console.log('top',top)
-    // console.log('B', bottom)
+    console.log('top',top)
+    console.log('B', bottom)
 
     if (topRight >= 0 && currentCellNum % width !== width - 1 && cells[topRight].classList.contains('mineHere')) {
       minesAdjacent ++
@@ -203,8 +221,9 @@ function init() {
       console.log('bottom tiggered')
     }
 
-    event.target.innerHTML = minesAdjacent
-    console.log(currentCellNum % width)
+    console.log('this cells minesAdjacent value is', minesAdjacent)
+
+    return minesAdjacent
   }
 
 
