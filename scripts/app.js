@@ -6,9 +6,9 @@
 // Timer for the game
 // 3 difficulties - Easy: width = 5*5 && timer = 2 mins || Medium: width = 10*10, timer = 1:30mins || Hard: width 15*15, timer 1min || Custom: width = x*y, timer = t, mines = n
 // add a win function
+// if a player console.logs they can see where the mines ares
 
 function init() {
-
   const grid = document.querySelector('.grid')
   const gridCells = document.querySelectorAll('.grid')
   const width = 10
@@ -38,7 +38,6 @@ function init() {
   showAnti()
 
   // ADDING EVENT LISTENERS
-  // ISSUE! Points are being double clicked   {once: true} . dosn't work
   gridCells.forEach(element => {
     element.addEventListener('click', playerClick)
     element.addEventListener('contextmenu', flagMine)
@@ -52,40 +51,37 @@ function init() {
       console.log(cellToAddMine)
       cellToAddMine.classList.add('mineHere')
       cellToAddMine.classList.add('mine')
+      cellToAddMine.classList.remove('unclicked')
     }
   }
   addMines(cells)
 
   // HANDLES THE PLAYER CLICK
-  // ISSUE! Points are being double clicked   {once: true} . dosn't work
   function playerClick(event) {
     console.log('click on this cell', event.target)
     if (event.target.classList.contains('mineHere')) {
       event.target.classList.add('mine')
       endGame()
-    } if (event.target.classList == 'unclicked') {
+    } if (event.target.classList.contains('unclicked')) {
+      event.target.classList.remove('unclicked')
       event.target.classList.add('beer')
       score += 100
-      minesAdjacent(event)
       updateScore()
-      console.log(score)
-    }
-    if (event.target.classList == 'grid' || event.target.classList == 'unclicked beer') {
-      return null
     }
   }
 
   // HANDLES RIGHT CLICK TO FLAG MINES OR SHOW INCORRECT FLAGS
-  // ISSUE: Can keep reclicking on cell
   function flagMine(event) {
     if (antiLeft > 0) {
       if (event.target.classList.contains('mineHere')) {
+        event.target.classList.remove('mineHere')
         const bonusToPlay =  bonusActions[Math.floor(Math.random() * bonusActions.length)]
         bonusToPlay(event)
         bonus += 200
         updateBonus()
         antiLeft --
-      } if (!event.target.className.includes('mineHere')) {
+      } if (event.target.classList.contains('unclicked')) {
+        event.target.classList.remove('unclicked')
         playWrong(event)
         antiLeft --
       }
@@ -136,6 +132,7 @@ function init() {
       element.addEventListener('click', playerClick)
     })
     updateScore()
+    assignMineValueToGrid(cells)
   }
 
   // HANDLES RESET BUTTON EVENT CLICK
@@ -147,93 +144,46 @@ function init() {
     document.getElementById('score').innerHTML = `Score: ${totalScore}`
   }
 
-  // HANDLES SHOWING HOW MANY MINES ARE NEXT TO PLAYER CLICK
-
-  function assignMineValueToGrid(array) {
-    array.forEach(element => {
-      minesAdjacent(element)
-      element.innerHTML = minesAdjacent(element)
-    })
-  }
-
-  cellsTestArray = [cells[1], cells[2], cells[3], cells[4], cells[5], cells[6]]
-
-  assignMineValueToGrid(cells)
-
-
+  // HANDLES COLLECTING NUMBER OF MINES ADJACENT TO THE CURRENT CELL
   function minesAdjacent(currentCell) {
     let minesAdjacent = 0
-
     const currentCellNum = currentCell.id
-
-    console.log('the current cell is', currentCell)
-    console.log('the current cell number is', currentCellNum)
-
-    console.log('the current cell is', currentCellNum)
-
     const topRight = Number(currentCellNum) - width + 1
     const right = Number(currentCellNum) + 1
     const bottomRight = Number(currentCellNum) + width + 1
-
     const topLeft = Number(currentCellNum) - width - 1
     const left = Number(currentCellNum) - 1
     const bottomLeft = Number(currentCellNum) + width - 1
-
     const top = Number(currentCellNum) - width
     const bottom = Number(currentCellNum) + width
-
-    console.log('topright',topRight)
-    console.log('right', right)
-    console.log('BR', bottomRight)
-
-    console.log('topleft',topLeft)
-    console.log('left',left)
-    console.log('BL', bottomLeft)
-    
-    console.log('top',top)
-    console.log('B', bottom)
-
     if (topRight >= 0 && currentCellNum % width !== width - 1 && cells[topRight].classList.contains('mineHere')) {
       minesAdjacent ++
-      console.log('topRight triggered')
     } if (right < cellCount && currentCellNum % width !== width - 1 && cells[right].classList.contains('mineHere')) {
       minesAdjacent ++
-      console.log('right tiggered')
     } if (bottomRight < cellCount && currentCellNum % width !== width - 1  && cells[bottomRight].classList.contains('mineHere')) {
       minesAdjacent ++
-      console.log('bottomright tiggered')
-
     } if (topLeft >= 0 && currentCellNum % width !== 0 && cells[topLeft].classList.contains('mineHere')) {
       minesAdjacent ++
-      console.log('topLeft tiggered')
     } if (left >= 0 && currentCellNum % width !== 0 && cells[left].classList.contains('mineHere')) {
       minesAdjacent ++
-      console.log('left tiggered')
     } if (bottomLeft < cellCount &&  currentCellNum % width !== 0 && cells[bottomLeft].classList.contains('mineHere')) {
       minesAdjacent ++
-      console.log('bottomleft tiggered')
-
     } if (top >= 0 && cells[top].classList.contains('mineHere')) {
       minesAdjacent ++
-      console.log('top tiggered')
     } if (bottom < cellCount && cells[bottom].classList.contains('mineHere')) {
       minesAdjacent ++
-      console.log('bottom tiggered')
     }
-
-    console.log('this cells minesAdjacent value is', minesAdjacent)
-
     return minesAdjacent
   }
 
-
-  // We have minesAdjacent() that checks all cells around it if they have a mine next to them. We can use this so that if they return a value of 0, the are blank. We can use recursion to run the minesAdjacent function on that blank cell to check if cells surrounding that are also blank, we contiune this until we pull all surrounding mines that are blank.
-
-  // how do we show these back to the player? We can do it so that as soon as they return 0 we add a class of beer and innerHTML of 0 | OR | we can push all these blank cells to an empty array called blackCells = []. when the function ends and that there are no more cells in the chain reaction that occours from the recursion we add the class and innerHTML to all thoses cells via a forEach()
-
-  function revealSquares() {
-
+  // HANDLES ASSIGNING THE CELLS THE MINE ADJACENT VALUE
+  function assignMineValueToGrid(array) {
+    array.forEach(element => {
+      let valueToAssign = minesAdjacent(element)
+      element.classList.add(valueToAssign)
+    })
   }
+  assignMineValueToGrid(cells)
 
   // HANDLES UPDATING THE BONUS INNER HTML
   function updateBonus() {
