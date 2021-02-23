@@ -74,73 +74,73 @@ function init() {
     
     const currentCellNum = cell.id
 
-    const topRight = cells[Number(currentCellNum) - width + 1]
-    const right = cells[Number(currentCellNum) + 1]
-    const bottomRight = cells[Number(currentCellNum) + width + 1]
+    const topRight = Number(currentCellNum) - width + 1
+    const right = Number(currentCellNum) + 1
+    const bottomRight = Number(currentCellNum) + width + 1
 
-    const topLeft = cells[Number(currentCellNum) - width - 1]
-    const left = cells[Number(currentCellNum) - 1]
-    const bottomLeft = cells[Number(currentCellNum) + width - 1]
+    const topLeft = Number(currentCellNum) - width - 1
+    const left = Number(currentCellNum) - 1
+    const bottomLeft = Number(currentCellNum) + width - 1
 
-    const top = cells[Number(currentCellNum) - width]
-    const bottom = cells[Number(currentCellNum) + width]
+    const top = Number(currentCellNum) - width
+    const bottom = Number(currentCellNum) + width
     
-    let topRightValue = minesAdjacent(topRight)
-    let rightValue = minesAdjacent(right)
-    let bottomRightValue = minesAdjacent(bottomRight)
+    let topRightValue = minesAdjacent(cells[topRight])
+    let rightValue = minesAdjacent(cells[right])
+    let bottomRightValue = minesAdjacent(cells[bottomRight])
 
-    let topLeftValue = minesAdjacent(topLeft)
-    let leftValue = minesAdjacent(left)
-    let bottomLeftValue = minesAdjacent(bottomLeft)
+    let topLeftValue = minesAdjacent(cells[topLeft])
+    let leftValue = minesAdjacent(cells[left])
+    let bottomLeftValue = minesAdjacent(cells[bottomLeft])
 
-    let topValue = minesAdjacent(top)
-    let bottomValue = minesAdjacent(bottom)
+    let topValue = minesAdjacent(cells[top])
+    let bottomValue = minesAdjacent(cells[bottom])
 
-    console.log('topright =', topRight)
+    console.log('topright =', cells[topRight])
     console.log('toprightvalue =', topRightValue)
-    console.log('toprightvalue id =', topRight.id)
+    console.log('toprightvalue id =', topRight)
     
 
-    if (!topRight.classList.contains('mineHere') && topRight.id >= 0 && currentCellNum % width !== width - 1) {
-      topRight.classList.remove('unclicked')
-      topRight.innerHTML = topRightValue
+    if (cells[topRight].classList.contains('unclicked') && topRight >= 0 && currentCellNum % width !== width - 1) {
+      cells[topRight].classList.remove('unclicked')
+      cells[topRight].innerHTML = topRightValue
       // runShowValuesOnNextCells(topRight)
     }
-    if (!right.classList.contains('mineHere') && right.id < cellCount && currentCellNum % width !== width - 1) {
-      right.classList.remove('unclicked')
-      right.innerHTML = rightValue
+    if (cells[right].classList.contains('unclicked') && right < cellCount && currentCellNum % width !== width - 1) {
+      cells[right].classList.remove('unclicked')
+      cells[right].innerHTML = rightValue
       // runShowValuesOnNextCells(right)
     }
-    if (!bottomRight.classList.contains('mineHere') && bottomRight.id < cellCount && currentCellNum % width !== width - 1) {
-      bottomRight.classList.remove('unclicked')
-      bottomRight.innerHTML = bottomRightValue
+    if (cells[bottomRight].classList.contains('unclicked') && bottomRight < cellCount && currentCellNum % width !== width - 1) {
+      cells[bottomRight].classList.remove('unclicked')
+      cells[bottomRight].innerHTML = bottomRightValue
       // runShowValuesOnNextCells(bottomRight)
     }
 
-    if (!topLeft.classList.contains('mineHere') && topLeft.id >= 0 && currentCellNum % width !== 0) {
-      topLeft.classList.remove('unclicked')
-      topLeft.innerHTML = topLeftValue
+    if (cells[topLeft].classList.contains('unclicked') && topLeft >= 0 && currentCellNum % width !== 0) {
+      cells[topLeft].classList.remove('unclicked')
+      cells[topLeft].innerHTML = topLeftValue
       // runShowValuesOnNextCells(topLeft)
     }
 
-    if (!left.classList.contains('mineHere') && left.id >= 0 && currentCellNum % width !== 0 ) {
-      left.classList.remove('unclicked')
-      left.innerHTML = leftValue
+    if (cells[left].classList.contains('unclicked') && left >= 0 && currentCellNum % width !== 0 ) {
+      cells[left].classList.remove('unclicked')
+      cells[left].innerHTML = leftValue
       // runShowValuesOnNextCells(left)
     }
-    if (!bottomLeft.classList.contains('mineHere') && bottomLeft.id < cellCount &&  currentCellNum % width !== 0 ) {
-      bottomLeft.classList.remove('unclicked')
-      bottomLeft.innerHTML = bottomLeftValue
+    if (cells[bottomLeft].classList.contains('unclicked') && bottomLeft < cellCount &&  currentCellNum % width !== 0 ) {
+      cells[bottomLeft].classList.remove('unclicked')
+      cells[bottomLeft].innerHTML = bottomLeftValue
       // runShowValuesOnNextCells(bottomLeft)
     }
-    if (!top.classList.contains('mineHere') && top.id >= 0) {
-      top.classList.remove('unclicked')
-      top.innerHTML = topValue
+    if (cells[top].classList.contains('unclicked') && top >= 0) {
+      cells[top].classList.remove('unclicked')
+      cells[top].innerHTML = topValue
       // runShowValuesOnNextCells(top)
     }
-    if (!bottom.classList.contains('mineHere') && bottom.id < cellCount) {
-      bottom.classList.remove('unclicked')
-      bottom.innerHTML = bottomValue
+    if (cells[bottom].classList.contains('unclicked') && bottom < cellCount) {
+      cells[bottom].classList.remove('unclicked')
+      cells[bottom].innerHTML = bottomValue
       // runShowValuesOnNextCells(bottom)
     }
 
@@ -204,14 +204,13 @@ function init() {
   function flagMine(event) {
     if (antiLeft > 0) {
       if (event.target.classList.contains('mineHere')) {
-        event.target.classList.remove('mineHere')
         const bonusToPlay =  bonusActions[Math.floor(Math.random() * bonusActions.length)]
         bonusToPlay(event)
         bonus += 200
         updateBonus()
         antiLeft --
       } if (event.target.classList.contains('unclicked')) {
-        event.target.classList.remove('unclicked')
+        event.target.classList.replace('unclicked', 'wrong')
         playWrong(event)
         antiLeft --
       }
@@ -309,7 +308,7 @@ function init() {
 
   function playWrong(event) {
     const wrongAudio = new Audio('../assets/wrong.mp3')
-    event.target.className = 'cross'
+    event.target.classList.add('cross')
     wrongAudio.volume = 0.2
     wrongAudio.play()
   }
