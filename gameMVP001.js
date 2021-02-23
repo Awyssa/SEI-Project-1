@@ -1,4 +1,6 @@
 // ISSUE / BUG BACKLOG!!!
+// back on the issue of mines being assinged to cells that already have mines. Have work around, but not 100% fix
+// mine reveal recusion not working without entire rehaul of
 
 // THINGS TO ADD!
 // function so that when a safe cell is clicked, it randomly starts revealing safe cells next to it.
@@ -49,7 +51,6 @@ function init() {
       let cellToAddMine =  grid[Math.floor(Math.random() * grid.length)]
       console.log(cellToAddMine)
       cellToAddMine.classList.replace('unclicked', 'mineHere')
-      cellToAddMine.classList.add('mine')
     }
   }
   addMines(cells)
@@ -58,11 +59,10 @@ function init() {
   function playerClick(event) {
     console.log('click on this cell', event.target)
     if (event.target.classList.contains('mineHere')) {
-      event.target.classList.add('mine')
+      event.target.classList.add('covid')
       endGame()
     } if (event.target.classList.contains('unclicked')) {
       event.target.classList.remove('unclicked')
-      score += 100
       updateScore()
       showValues(event)
       runShowValuesOnNextCells(event.target)
@@ -220,7 +220,7 @@ function init() {
         antiLeft --
       } if (event.target.classList.contains('unclicked')) {
         event.target.classList.replace('unclicked', 'wrong')
-        playWrong(event)
+        playWrong()
         antiLeft --
       }
     } if (antiLeft === 0) {
@@ -243,7 +243,7 @@ function init() {
   function showAllMines(array) {
     array.filter(value => {
       if (value.classList.contains('mineHere')) {
-        value.classList.add('mine')
+        value.classList.add('covid')
       }
     })
   }
@@ -315,14 +315,13 @@ function init() {
     rumAudio.play()
   }
 
-  function playWrong(event) {
+  function playWrong() {
     const wrongAudio = new Audio('../assets/wrong.mp3')
-    event.target.classList.add('cross')
     wrongAudio.volume = 0.2
     wrongAudio.play()
   }
   function playEndgame(event) {
-    const endgameAudio = new Audio('../assets/endgame.mp3')
+    const endgameAudio = new Audio('../assets/doh.mp3')
     endgameAudio.volume = 0.2
     endgameAudio.play()
   } 
