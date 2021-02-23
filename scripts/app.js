@@ -86,7 +86,7 @@ function init() {
       if (topRightValue === 0) {
         cells[topRight].classList.remove('unclicked')
         cells[topRight].innerHTML = topRightValue
-        // runShowValuesOnNextCells(topRight)
+        runShowValuesOnNextCells(topRight)
       }
     }
     if (right < cellCount && currentCellNum % width !== width - 1 && cells[right].classList.contains('unclicked')) {
