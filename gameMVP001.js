@@ -49,6 +49,7 @@ function init() {
       let cellToAddMine =  grid[Math.floor(Math.random() * grid.length)]
       console.log(cellToAddMine)
       cellToAddMine.classList.replace('unclicked', 'mineHere')
+      cellToAddMine.classList.add('mine')
     }
   }
   addMines(cells)
