@@ -49,9 +49,8 @@ function init() {
     for (let i = 0; i < width; i++) {
       const cellToAddMine =  grid[Math.floor(Math.random() * grid.length)]
       console.log(cellToAddMine)
-      cellToAddMine.classList.add('mineHere')
+      cellToAddMine.classList.replace('unclicked', 'mineHere')
       cellToAddMine.classList.add('mine')
-      cellToAddMine.classList.remove('unclicked')
     }
   }
   addMines(cells)
@@ -64,11 +63,32 @@ function init() {
       endGame()
     } if (event.target.classList.contains('unclicked')) {
       event.target.classList.remove('unclicked')
-      event.target.classList.add('beer')
       score += 100
       updateScore()
+      event.target.innerHTML = event.target.classList
     }
   }
+
+  // HANDLES ASSIGNING THE CELLS THE MINE ADJACENT VALUE
+  function assignMineValueToGrid(array) {
+    array.forEach(element => {
+      let valueToAssign = minesAdjacent(element)
+      element.classList.add(valueToAssign)
+    })
+  }
+  assignMineValueToGrid(cells)
+
+  // function showValues(cell) {
+  //   cell.innerHTML = 'hello'
+  // }
+
+
+
+
+
+
+
+
 
   // HANDLES RIGHT CLICK TO FLAG MINES OR SHOW INCORRECT FLAGS
   function flagMine(event) {
@@ -84,6 +104,7 @@ function init() {
         event.target.classList.remove('unclicked')
         playWrong(event)
         antiLeft --
+        showValues(event)
       }
     } if (antiLeft === 0) {
       window.alert('You are out of Antibacterial Spray!!!')
@@ -91,7 +112,6 @@ function init() {
     showAnti()
     updateScore()
   }
-
   // HANDLES ENDGAME FUNCTION
   function endGame() {
     playEndgame(event)
@@ -175,15 +195,6 @@ function init() {
     }
     return minesAdjacent
   }
-
-  // HANDLES ASSIGNING THE CELLS THE MINE ADJACENT VALUE
-  function assignMineValueToGrid(array) {
-    array.forEach(element => {
-      let valueToAssign = minesAdjacent(element)
-      element.classList.add(valueToAssign)
-    })
-  }
-  assignMineValueToGrid(cells)
 
   // HANDLES UPDATING THE BONUS INNER HTML
   function updateBonus() {
