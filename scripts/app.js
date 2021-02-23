@@ -1,5 +1,4 @@
 // ISSUE / BUG BACKLOG!!!
-// when mines are added, they can be added to the same cell. math.random function isn't adding an if statement so that if classList = 'mineHere' { don't add another mine / move to next cell and add mine there}
 
 // THINGS TO ADD!
 // function so that when a safe cell is clicked, it randomly starts revealing safe cells next to it.
@@ -44,13 +43,15 @@ function init() {
   })
 
   // ADDS RANDOM MINES TO THE GRID THAT ARE EQUAL TO THE WIDTHS NUMBER
-  // ISSUE!!! mines are being assined to the same cell, make an if statement so that if classList === mine, dont add mine!
   function addMines(grid) {
-    for (let i = 0; i < width; i++) {
-      const cellToAddMine =  grid[Math.floor(Math.random() * grid.length)]
+    for (let i = 0; i < width; i) {
+      let cellToAddMine =  grid[Math.floor(Math.random() * grid.length)]
       console.log(cellToAddMine)
-      cellToAddMine.classList.replace('unclicked', 'mineHere')
-      cellToAddMine.classList.add('mine')
+      if (cellToAddMine.classList.contains('unclicked')) {
+        cellToAddMine.classList.replace('unclicked', 'mineHere')
+        cellToAddMine.classList.add('mine')
+        i++
+      }
     }
   }
   addMines(cells)
@@ -65,7 +66,7 @@ function init() {
       event.target.classList.remove('unclicked')
       score += 100
       updateScore()
-      event.target.innerHTML = event.target.classList
+      showValues(event)
     }
   }
 
@@ -78,15 +79,9 @@ function init() {
   }
   assignMineValueToGrid(cells)
 
-  // function showValues(cell) {
-  //   cell.innerHTML = 'hello'
-  // }
-
-
-
-
-
-
+  function showValues(cell) {
+    cell.target.innerHTML = cell.target.classList
+  }
 
 
 
