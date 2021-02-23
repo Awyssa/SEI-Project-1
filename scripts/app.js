@@ -148,174 +148,81 @@ function init() {
     document.getElementById('score').innerHTML = `Score: ${totalScore}`
   }
 
-  // function assignMinesAdjacentValueTogrid(grid) {
-  //   grid.forEach((element) => {
-  //     minesAdjacent(element)
-  //   })
-  // }
-
-  // assignMinesAdjacentValueTogrid(grid)
-
   // HANDLES SHOWING HOW MANY MINES ARE NEXT TO PLAYER CLICK
-  // function minesAdjacent(event) {
-  //   let minesAdjacentValue = 0
-  //   const currentCellNum = event.target.id
+  function minesAdjacent(event) {
+    let minesAdjacent = 0
+    const currentCellNum = event.target.id
 
-  //   const topRight = Number(currentCellNum) - width + 1
-  //   const right = Number(currentCellNum) + 1
-  //   const bottomRight = Number(currentCellNum) + width + 1
+    const topRight = Number(currentCellNum) - width + 1
+    const right = Number(currentCellNum) + 1
+    const bottomRight = Number(currentCellNum) + width + 1
 
-  //   const topLeft = Number(currentCellNum) - width - 1
-  //   const left = Number(currentCellNum) - 1
-  //   const bottomLeft = Number(currentCellNum) + width - 1
+    const topLeft = Number(currentCellNum) - width - 1
+    const left = Number(currentCellNum) - 1
+    const bottomLeft = Number(currentCellNum) + width - 1
 
-  //   const top = Number(currentCellNum) - width
-  //   const bottom = Number(currentCellNum) + width
+    const top = Number(currentCellNum) - width
+    const bottom = Number(currentCellNum) + width
 
-  //   // console.log('topright',topRight)
-  //   // console.log('right', right)
-  //   // console.log('BR', bottomRight)
+    // console.log('topright',topRight)
+    // console.log('right', right)
+    // console.log('BR', bottomRight)
 
-  //   // console.log('topleft',topLeft)
-  //   // console.log('left',left)
-  //   // console.log('BL', bottomLeft)
+    // console.log('topleft',topLeft)
+    // console.log('left',left)
+    // console.log('BL', bottomLeft)
     
-  //   // console.log('top',top)
-  //   // console.log('B', bottom)
+    // console.log('top',top)
+    // console.log('B', bottom)
 
-  //   if (topRight >= 0 && currentCellNum % width !== width - 1 && cells[topRight].classList.contains('mineHere')) {
-  //     minesAdjacentValue ++
-  //     console.log('topRight triggered')
-  //   }
+    if (topRight >= 0 && currentCellNum % width !== width - 1 && cells[topRight].classList.contains('mineHere')) {
+      minesAdjacent ++
+      console.log('topRight triggered')
+    } if (right < cellCount && currentCellNum % width !== width - 1 && cells[right].classList.contains('mineHere')) {
+      minesAdjacent ++
+      console.log('right tiggered')
+    } if (bottomRight < cellCount && currentCellNum % width !== width - 1  && cells[bottomRight].classList.contains('mineHere')) {
+      minesAdjacent ++
+      console.log('bottomright tiggered')
 
-  //   if (topRight >= 0 && currentCellNum % width !== width - 1 && !cells[topRight].classList.contains('mineHere')) {
-  //   } 
-    
-    
-  //   if (right < cellCount && currentCellNum % width !== width - 1 && cells[right].classList.contains('mineHere')) {
-  //     minesAdjacentValue ++
-  //     console.log('right tiggered')
-  //   } if (bottomRight < cellCount && currentCellNum % width !== width - 1  && cells[bottomRight].classList.contains('mineHere')) {
-  //     minesAdjacentValue ++
-  //     console.log('bottomright tiggered')
+    } if (topLeft >= 0 && currentCellNum % width !== 0 && cells[topLeft].classList.contains('mineHere')) {
+      minesAdjacent ++
+      console.log('topLeft tiggered')
+    } if (left >= 0 && currentCellNum % width !== 0 && cells[left].classList.contains('mineHere')) {
+      minesAdjacent ++
+      console.log('left tiggered')
+    } if (bottomLeft < cellCount &&  currentCellNum % width !== 0 && cells[bottomLeft].classList.contains('mineHere')) {
+      minesAdjacent ++
+      console.log('bottomleft tiggered')
 
-  //   } if (topLeft >= 0 && currentCellNum % width !== 0 && cells[topLeft].classList.contains('mineHere')) {
-  //     minesAdjacentValue ++
-  //     console.log('topLeft tiggered')
-  //   } if (left >= 0 && currentCellNum % width !== 0 && cells[left].classList.contains('mineHere')) {
-  //     minesAdjacentValue ++
-  //     console.log('left tiggered')
-  //   } if (bottomLeft < cellCount &&  currentCellNum % width !== 0 && cells[bottomLeft].classList.contains('mineHere')) {
-  //     minesAdjacentValue ++
-  //     console.log('bottomleft tiggered')
+    } if (top >= 0 && cells[top].classList.contains('mineHere')) {
+      minesAdjacent ++
+      console.log('top tiggered')
+    } if (bottom < cellCount && cells[bottom].classList.contains('mineHere')) {
+      minesAdjacent ++
+      console.log('bottom tiggered')
+    }
 
-  //   } if (top >= 0 && cells[top].classList.contains('mineHere')) {
-  //     minesAdjacentValue ++
-  //     console.log('top tiggered')
-  //   } if (bottom < cellCount && cells[bottom].classList.contains('mineHere')) {
-  //     minesAdjacentValue ++
-  //     console.log('bottom tiggered')
-  //   }
-
-  //   event.target.innerHTML = minesAdjacentValue
-  //   console.log(currentCellNum % width)
-  // }
-
-
-
-
+    event.target.innerHTML = minesAdjacent
+    console.log(currentCellNum % width)
+  }
 
 
   // We have minesAdjacent() that checks all cells around it if they have a mine next to them. We can use this so that if they return a value of 0, the are blank. We can use recursion to run the minesAdjacent function on that blank cell to check if cells surrounding that are also blank, we contiune this until we pull all surrounding mines that are blank.
 
   // how do we show these back to the player? We can do it so that as soon as they return 0 we add a class of beer and innerHTML of 0 | OR | we can push all these blank cells to an empty array called blackCells = []. when the function ends and that there are no more cells in the chain reaction that occours from the recursion we add the class and innerHTML to all thoses cells via a forEach()
 
-  function getSurroundingCellsMineValue(grid) {
+  function revealSquares() {
 
-    grid.forEach(element => {
-      const topRight = Number(element) - width + 1
-      const right = Number(element) + 1
-      const bottomRight = Number(element) + width + 1
-    
-      const topLeft = Number(element) - width - 1
-      const left = Number(element) - 1
-      const bottomLeft = Number(element) + width - 1
-    
-      const top = Number(element) - width
-      const bottom = Number(element) + width
-
-      console.log('topright',topRight)
-      console.log('right', right)
-      console.log('BR', bottomRight)
-  
-      console.log('topleft',topLeft)
-      console.log('left',left)
-      console.log('BL', bottomLeft)
-      
-      console.log('top',top)
-      console.log('B', bottom)
-
-    })
   }
-
-  getSurroundingCellsMineValue(grid)
-  
-    // console.log('topright',topRight)
-    // console.log('right', right)
-    // console.log('BR', bottomRight)
-  
-    // console.log('topleft',topLeft)
-    // console.log('left',left)
-    // console.log('BL', bottomLeft)
-      
-    // console.log('top',top)
-    // console.log('B', bottom)
-  
-  //   if (topRight >= 0 && currentCellNum % width !== width - 1 && cells[topRight].classList.contains('mineHere')) {
-  //     minesAdjacent ++
-  //   } if (right < cellCount && currentCellNum % width !== width - 1 && cells[right].classList.contains('mineHere')) {
-  //     minesAdjacent ++
-  //     console.log('right tiggered')
-  //   } if (bottomRight < cellCount && currentCellNum % width !== width - 1  && cells[bottomRight].classList.contains('mineHere')) {
-  //     minesAdjacent ++
-  //     console.log('bottomright tiggered')
-  
-  //   } if (topLeft >= 0 && currentCellNum % width !== 0 && cells[topLeft].classList.contains('mineHere')) {
-  //     minesAdjacent ++
-  //     console.log('topLeft tiggered')
-  //   } if (left >= 0 && currentCellNum % width !== 0 && cells[left].classList.contains('mineHere')) {
-  //     minesAdjacent ++
-  //     console.log('left tiggered')
-  //   } if (bottomLeft < cellCount &&  currentCellNum % width !== 0 && cells[bottomLeft].classList.contains('mineHere')) {
-  //     minesAdjacent ++
-  //     console.log('bottomleft tiggered')
-  
-  //   } if (top >= 0 && cells[top].classList.contains('mineHere')) {
-  //     minesAdjacent ++
-  //     console.log('top tiggered')
-  //   } if (bottom < cellCount && cells[bottom].classList.contains('mineHere')) {
-  //     minesAdjacent ++
-  //     console.log('bottom tiggered')
-  //   }
-  
-  //   event.target.innerHTML = minesAdjacent
-  //   console.log(currentCellNum % width)
-  // }
-
-
-
-
-
-
-    
-
-  // ALL BELOW ------------------------------------------------------------------------
-  // BONUS AND INCORRECT FLAG SOUND AND IMAGE ADDS
 
   // HANDLES UPDATING THE BONUS INNER HTML
   function updateBonus() {
     document.getElementById('bonus').innerHTML = `BONUS: ${bonus}`
   }
+
+  // ALL BELOW ------------------------------------------------------------------------
+  // BONUS AND INCORRECT FLAG SOUND AND IMAGE ADDS
   function playTheDude(event) {
     const theDudeAudio = new Audio('../assets/theDude.mp3')
     event.target.classList.add('theDude')
@@ -355,9 +262,6 @@ function init() {
     endgameAudio.volume = 0.2
     endgameAudio.play()
   } 
-
-
 }
-
 
 window.addEventListener('DOMContentLoaded', init)
