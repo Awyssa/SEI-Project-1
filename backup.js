@@ -1,23 +1,12 @@
-// ISSUE / BUG BACKLOG!!!
-// back on the issue of mines being assinged to cells that already have mines. Have work around, but not 100% fix
-// mine reveal recusion not working without entire rehaul of
-
-// THINGS TO ADD!
-// function so that when a safe cell is clicked, it randomly starts revealing safe cells next to it.
-// Timer for the game
-// 3 difficulties - Easy: width = 5*5 && timer = 2 mins || Medium: width = 10*10, timer = 1:30mins || Hard: width 15*15, timer 1min || Custom: width = x*y, timer = t, mines = n
-// add a win function
-// if a player console.logs they can see where the mines ares
-
 function init() {
   const grid = document.querySelector('.grid')
   const gridCells = document.querySelectorAll('.grid')
   const width = 10
   const cellCount = width * width
+  let mines = 10
   const cells = []
-  let bonus = 0
-  let score = 0
-  let antiLeft = width + 3
+  let minesFlagged = 0
+  let lives = 3
   const bonusActions = [playTheDude, playMurray, playDuffman, playRum]
 
   // FUNCTION TO CREATE THE GRID
@@ -34,7 +23,7 @@ function init() {
 
   // UPDATES AND ANTI SPRAY INNER HTML
   function showAnti() {
-    document.getElementById('anti').innerHTML = `Antibacterial Spray: ${antiLeft}`
+    document.getElementById('anti').innerHTML = `Free Antibacterial Spray: ${lives}`
   }
   showAnti()
 
@@ -45,12 +34,15 @@ function init() {
   })
 
   // ADDS RANDOM MINES TO THE GRID THAT ARE EQUAL TO THE WIDTHS NUMBER
-  // ISSUE! mine being added to the same cell
   function addMines(grid) {
-    for (let i = 0; i < width; i++) {
+    for (let i = 0; i < mines; i) {
       let cellToAddMine =  grid[Math.floor(Math.random() * grid.length)]
       console.log(cellToAddMine)
-      cellToAddMine.classList.replace('unclicked', 'mineHere')
+      if (cellToAddMine.classList.contains('unclicked')) {
+        cellToAddMine.classList.replace('unclicked', 'mineHere')
+        cellToAddMine.classList.add('mine')
+        i++
+      }
     }
   }
   addMines(cells)
@@ -63,7 +55,7 @@ function init() {
       endGame()
     } if (event.target.classList.contains('unclicked')) {
       event.target.classList.remove('unclicked')
-      updateScore()
+      // updateScore()
       showValues(event)
       runShowValuesOnNextCells(event.target)
     }
@@ -153,14 +145,6 @@ function init() {
       }
     }
   }
-  // --------------------------------------------------------------------------------------------------------------------------
-  // ------------------------------------------------------------------------------------------------------------------------
-  // ------------------------------------------------------------------------------------------------------------------------
-  function showCell(cell) {
-    cell.classList.remove('unclicked')
-    showValues(cell)
-    runShowValuesOnNextCells(cell.target)
-  }
 
   // HANDLES ASSIGNING THE CELLS THE MINE ADJACENT VALUE
   function assignMineValueToGrid(array) {
@@ -208,30 +192,38 @@ function init() {
     return minesAdjacent
   }
 
+  function outOfLives(lives) {
+    if (lives === 0) {
+      window.alert('You are out of spare Antibacterial Spray!!!')
+      showAllMines(cells)
+      gridCells.forEach(element => {
+        element.removeEventListener('click', playerClick)
+      })
+    }
+  }
+
   // HANDLES RIGHT CLICK TO FLAG MINES OR SHOW INCORRECT FLAGS
   function flagMine(event) {
-    if (antiLeft > 0) {
-      if (event.target.classList.contains('mineHere')) {
-        const bonusToPlay =  bonusActions[Math.floor(Math.random() * bonusActions.length)]
-        event.target.classList.replace('mineHere', 'flagged')
-        bonusToPlay(event)
-        bonus += 200
-        updateBonus()
-        antiLeft --
-      } if (event.target.classList.contains('unclicked')) {
-        event.target.classList.replace('unclicked', 'wrong')
-        playWrong()
-        antiLeft --
-      }
-    } if (antiLeft === 0) {
-      window.alert('You are out of Antibacterial Spray!!!')
+    if (event.target.classList.contains('mineHere')) {
+      const bonusToPlay =  bonusActions[Math.floor(Math.random() * bonusActions.length)]
+      event.target.classList.replace('mineHere', 'flagged')
+      bonusToPlay(event)
+      minesFlagged ++
+      mines --
+    } if (event.target.classList.contains('unclicked')) {
+      event.target.classList.replace('unclicked', 'cross')
+      playWrong()
+      lives --
+      outOfLives(lives)
     }
+    updateMinesFlagged()
     showAnti()
-    updateScore()
+    gameWon(mines)
   }
+
   // HANDLES ENDGAME FUNCTION
   function endGame() {
-    playEndgame(event)
+    playEndgame()
     showAllMines(cells)
     gridCells.forEach(element => {
       element.removeEventListener('click', playerClick)
@@ -261,32 +253,38 @@ function init() {
   function resetGame() {
     clearClasses(cells)
     addMines(cells)
-    score = 0
-    bonus = 0
-    antiLeft = width + 3
+    mines = 2
+    minesFlagged = 0
+    lives = 3
     showAnti()
     gridCells.forEach(element => {
       element.addEventListener('click', playerClick)
     })
-    updateScore()
+    updateMinesFlagged()
     assignMineValueToGrid(cells)
   }
 
   // HANDLES RESET BUTTON EVENT CLICK
   document.querySelector('#reset').addEventListener('click', resetGame)
 
-  // HANDLES UPDATING SCORE INNER HTML
-  function updateScore() {
-    let totalScore = score + bonus
-    document.getElementById('score').innerHTML = `Score: ${totalScore}`
-  }
   // HANDLES UPDATING THE BONUS INNER HTML
-  function updateBonus() {
-    document.getElementById('bonus').innerHTML = `BONUS: ${bonus}`
+  // make it so that ${mines} is static for updateMinesFlagged()
+  function updateMinesFlagged() {
+    document.getElementById('bonus').innerHTML = `Beveraginos collected: ${minesFlagged} / COVID Viruses left: ${mines}`
+  }
+  updateMinesFlagged()
+
+  // HANDLES GAME WON
+  function gameWon(mines) {
+    if (mines === 0) {
+      console.log('endgame ran')
+      window.alert('WELL DONE!!! The R rate is at 0 and you have ended the COVID pandemic!!!')
+      grid.classList.add('millhouse')
+      playMillhouse()
+    }
   }
 
-  // ALL BELOW ------------------------------------------------------------------------
-  // BONUS AND INCORRECT FLAG SOUND AND IMAGE ADDS
+  // BONUS FUNCTIONS
   function playTheDude(event) {
     const theDudeAudio = new Audio('../assets/theDude.mp3')
     event.target.classList.add('theDude')
@@ -320,10 +318,15 @@ function init() {
     wrongAudio.volume = 0.2
     wrongAudio.play()
   }
-  function playEndgame(event) {
+  function playEndgame() {
     const endgameAudio = new Audio('../assets/doh.mp3')
-    endgameAudio.volume = 0.2
+    endgameAudio.volume = 0.4
     endgameAudio.play()
+  }
+  function playMillhouse() {
+    const millhouseAudio = new Audio('../assets/millhouse.mov')
+    millhouseAudio.volume = 0.4
+    millhouseAudio.play()
   } 
 }
 
