@@ -14,9 +14,9 @@ function init() {
   const gridCells = document.querySelectorAll('.grid')
   const width = 10
   const cellCount = width * width
+  let mines = 10
   const cells = []
-  let bonus = 0
-  let score = 0
+  let minesFlagged = 0
   let antiLeft = width + 3
   const bonusActions = [playTheDude, playMurray, playDuffman, playRum]
 
@@ -47,7 +47,7 @@ function init() {
   // ADDS RANDOM MINES TO THE GRID THAT ARE EQUAL TO THE WIDTHS NUMBER
   // ISSUE! mine being added to the same cell
   function addMines(grid) {
-    for (let i = 0; i < width; i++) {
+    for (let i = 0; i < mines; i++) {
       let cellToAddMine =  grid[Math.floor(Math.random() * grid.length)]
       console.log(cellToAddMine)
       cellToAddMine.classList.replace('unclicked', 'mineHere')
@@ -63,7 +63,7 @@ function init() {
       endGame()
     } if (event.target.classList.contains('unclicked')) {
       event.target.classList.remove('unclicked')
-      updateScore()
+      // updateScore()
       showValues(event)
       runShowValuesOnNextCells(event.target)
     }
@@ -215,8 +215,9 @@ function init() {
         const bonusToPlay =  bonusActions[Math.floor(Math.random() * bonusActions.length)]
         event.target.classList.replace('mineHere', 'flagged')
         bonusToPlay(event)
-        bonus += 200
-        updateBonus()
+        minesFlagged ++
+        mines --
+        updateMinesFlagged()
         antiLeft --
       } if (event.target.classList.contains('unclicked')) {
         event.target.classList.replace('unclicked', 'wrong')
@@ -227,7 +228,7 @@ function init() {
       window.alert('You are out of Antibacterial Spray!!!')
     }
     showAnti()
-    updateScore()
+    // updateScore()
   }
   // HANDLES ENDGAME FUNCTION
   function endGame() {
@@ -261,29 +262,33 @@ function init() {
   function resetGame() {
     clearClasses(cells)
     addMines(cells)
-    score = 0
-    bonus = 0
+    mines = 10
+    minesFlagged = 0
     antiLeft = width + 3
     showAnti()
     gridCells.forEach(element => {
       element.addEventListener('click', playerClick)
     })
-    updateScore()
+    // updateScore()
     assignMineValueToGrid(cells)
   }
 
   // HANDLES RESET BUTTON EVENT CLICK
   document.querySelector('#reset').addEventListener('click', resetGame)
 
-  // HANDLES UPDATING SCORE INNER HTML
-  function updateScore() {
-    let totalScore = score + bonus
-    document.getElementById('score').innerHTML = `Score: ${totalScore}`
-  }
+  // // HANDLES UPDATING SCORE INNER HTML
+  // function updateScore() {
+  //   // let totalScore = score + bonus
+  //   document.getElementById('score').innerHTML = `COVID Viruses left: ${mines}`
+  // }
+  // updateScore()
+
   // HANDLES UPDATING THE BONUS INNER HTML
-  function updateBonus() {
-    document.getElementById('bonus').innerHTML = `BONUS: ${bonus}`
+  // make it so that ${mines} is static for updateMinesFlagged()
+  function updateMinesFlagged() {
+    document.getElementById('bonus').innerHTML = `Beveraginos collected: ${minesFlagged} / COVID Viruses left: ${mines}`
   }
+  updateMinesFlagged()
 
   // ALL BELOW ------------------------------------------------------------------------
   // BONUS AND INCORRECT FLAG SOUND AND IMAGE ADDS
@@ -322,7 +327,7 @@ function init() {
   }
   function playEndgame(event) {
     const endgameAudio = new Audio('../assets/doh.mp3')
-    endgameAudio.volume = 0.2
+    endgameAudio.volume = 0.4
     endgameAudio.play()
   } 
 }
