@@ -14,7 +14,7 @@ function init() {
   const gridCells = document.querySelectorAll('.grid')
   const width = 10
   const cellCount = width * width
-  let mines = 10
+  let mines = 2
   const cells = []
   let minesFlagged = 0
   let lives = 3
@@ -47,10 +47,13 @@ function init() {
   // ADDS RANDOM MINES TO THE GRID THAT ARE EQUAL TO THE WIDTHS NUMBER
   // ISSUE! mine being added to the same cell
   function addMines(grid) {
-    for (let i = 0; i < mines; i++) {
+    for (let i = 0; i < mines; i) {
       let cellToAddMine =  grid[Math.floor(Math.random() * grid.length)]
       console.log(cellToAddMine)
-      cellToAddMine.classList.replace('unclicked', 'mineHere')
+      if (cellToAddMine.classList.contains('unclicked')) {
+        cellToAddMine.classList.replace('unclicked', 'mineHere')
+        i++
+      }
     }
   }
   addMines(cells)
@@ -156,11 +159,11 @@ function init() {
   // --------------------------------------------------------------------------------------------------------------------------
   // ------------------------------------------------------------------------------------------------------------------------
   // ------------------------------------------------------------------------------------------------------------------------
-  function showCell(cell) {
-    cell.classList.remove('unclicked')
-    showValues(cell)
-    runShowValuesOnNextCells(cell.target)
-  }
+  // function showCell(cell) {
+  //   cell.classList.remove('unclicked')
+  //   showValues(cell)
+  //   runShowValuesOnNextCells(cell.target)
+  // }
 
   // HANDLES ASSIGNING THE CELLS THE MINE ADJACENT VALUE
   function assignMineValueToGrid(array) {
@@ -227,6 +230,7 @@ function init() {
       minesFlagged ++
       mines --
       updateMinesFlagged()
+      gameWon(mines, grid)
     } if (event.target.classList.contains('unclicked')) {
       event.target.classList.replace('unclicked', 'cross')
       playWrong()
@@ -297,6 +301,23 @@ function init() {
   }
   updateMinesFlagged()
 
+  // handles game won
+  function gameWon(mines, grid) {
+    if (mines === 0) {
+      window.alert('WELL DONE!!! The R rate is at 0 and you have ended the COVID pandemic!!!')
+      gameWonAudio()
+      showBeers(gridCells)
+    }
+  }
+
+  function showBeers(array) {
+    array.forEach((element) => {
+      if (element.classList.contains('unclicked'))
+        element.classList.add('beer')
+        console.log('add beers ran')
+    })
+  }
+
   // ALL BELOW ------------------------------------------------------------------------
   // BONUS AND INCORRECT FLAG SOUND AND IMAGE ADDS
   function playTheDude(event) {
@@ -334,6 +355,11 @@ function init() {
   }
   function playEndgame() {
     const endgameAudio = new Audio('../assets/doh.mp3')
+    endgameAudio.volume = 0.4
+    endgameAudio.play()
+  }
+  function gameWonAudio() {
+    const endgameAudio = new Audio('../assets/millhouse.mov')
     endgameAudio.volume = 0.4
     endgameAudio.play()
   } 
