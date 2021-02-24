@@ -57,6 +57,12 @@ body {
   flex-grow: 1;
   height: 10%;
   width: 10%;
+  font-size: 40px;
+  color: black;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .reset-button {
@@ -73,9 +79,9 @@ body {
   cursor: pointer;
 }
 
-.grid div{
-  font-size: 40px;
-  color: black;
+
+.clicked {
+  background-color: rgba(104, 104, 104, 0.726);
 }
 
 

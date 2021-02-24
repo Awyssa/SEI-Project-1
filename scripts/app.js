@@ -5,7 +5,7 @@ function init() {
   const gridCells = document.querySelectorAll('.grid')
   const width = 10
   const cellCount = width * width
-  let mines = 10
+  let mines = 12
   const cells = []
   let lives = 3
   const bonusActions = [playTheDude, playMurray, playDuffman, playRum]
@@ -178,7 +178,11 @@ function init() {
   }
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - SHOWS VALUE ON CLICK
   function showValues(cell) {
-    cell.target.innerHTML = cell.target.dataset.value
+    if (cell.target.dataset.value == 0) {
+      cell.target.innerHTML = ''
+    } if (cell.target.dataset.value > 0) {
+      cell.target.innerHTML = cell.target.dataset.value
+    }
   }
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ASSIGNS CELLS CLASSLIST VALUE USING MINES AJACENT()
   function assignMineValueToGrid(array) {
@@ -205,9 +209,8 @@ function init() {
       let topRightValue = minesAdjacent(cells[topRight])
       if (topRightValue === 0) {
         cells[topRight].classList.replace('unclicked', 'clicked')
-        cells[topRight].innerHTML = topRightValue
+        cells[topRight].innerHTML = ''
         runShowValuesOnNextCells(cells[topRight])
-        console.log('run show values on TOP RIGHT ran', runShowValuesOnNextCells(cells[topRight]))
       }
     }
 
@@ -216,9 +219,8 @@ function init() {
       let rightValue = minesAdjacent(cells[right])
       if (rightValue === 0) {
         cells[right].classList.replace('unclicked', 'clicked')
-        cells[right].innerHTML = rightValue
+        cells[right].innerHTML = ''
         runShowValuesOnNextCells(cells[right])
-        console.log('run show values on RIGHT ran', runShowValuesOnNextCells(cells[right]))
       }
     }
 
@@ -227,9 +229,8 @@ function init() {
       let bottomRightValue = minesAdjacent(cells[bottomRight])
       if (bottomRightValue === 0) {
         cells[bottomRight].classList.replace('unclicked', 'clicked')
-        cells[bottomRight].innerHTML = bottomRightValue
+        cells[bottomRight].innerHTML = ''
         runShowValuesOnNextCells(cells[bottomRight])
-        console.log('run show values on BOTTOM RIGHT ran', runShowValuesOnNextCells(cells[bottomRight]))
       }
     }
 
@@ -238,9 +239,8 @@ function init() {
       let topLeftValue = minesAdjacent(cells[topLeft])
       if (topLeftValue === 0) {
         cells[topLeft].classList.replace('unclicked', 'clicked')
-        cells[topLeft].innerHTML = topLeftValue
+        cells[topLeft].innerHTML = ''
         runShowValuesOnNextCells(cells[topLeft])
-        console.log('run show values on TOP LEFT ran', runShowValuesOnNextCells(topLeft))
       }
     }
 
@@ -249,9 +249,8 @@ function init() {
       let leftValue = minesAdjacent(cells[left])
       if (leftValue === 0) {
         cells[left].classList.replace('unclicked', 'clicked')
-        cells[left].innerHTML = leftValue
+        cells[left].innerHTML = ''
         runShowValuesOnNextCells(cells[left])
-        console.log('run show values on LEFT ran', runShowValuesOnNextCells(cells[left]))
       }
     }
 
@@ -260,7 +259,7 @@ function init() {
       let bottomLeftValue = minesAdjacent(cells[bottomLeft])
       if (bottomLeftValue === 0) {
         cells[bottomLeft].classList.replace('unclicked', 'clicked')
-        cells[bottomLeft].innerHTML = bottomLeftValue
+        cells[bottomLeft].innerHTML = ''
         runShowValuesOnNextCells(cells[bottomLeft])
       }
     }
@@ -270,7 +269,7 @@ function init() {
       let topValue = minesAdjacent(cells[top])
       if (topValue === 0) {
         cells[top].classList.replace('unclicked', 'clicked')
-        cells[top].innerHTML = topValue
+        cells[top].innerHTML = ''
         runShowValuesOnNextCells(cells[top])
       }
     }
@@ -280,7 +279,7 @@ function init() {
       let bottomValue = minesAdjacent(cells[bottom])
       if (bottomValue === 0) {
         cells[bottom].classList.replace('unclicked', 'clicked')
-        cells[bottom].innerHTML = bottomValue
+        cells[bottom].innerHTML = ''
         runShowValuesOnNextCells(cells[bottom])
       }
     }
