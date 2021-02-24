@@ -4,10 +4,9 @@ function init() {
   const grid = document.querySelector('.grid')
   const gridCells = document.querySelectorAll('.grid')
   const width = 10
-  const cellCount = width*width
+  const cellCount = width * width
   let mines = 10
   const cells = []
-  let minesFlagged = 0
   let lives = 3
   const bonusActions = [playTheDude, playMurray, playDuffman, playRum]
 
@@ -29,8 +28,7 @@ function init() {
       let cellToAddMine =  grid[Math.floor(Math.random() * grid.length)]
       console.log(cellToAddMine)
       if (cellToAddMine.classList.contains('unclicked')) {
-        cellToAddMine.classList.replace('unclicked', 'mineHere')
-        cellToAddMine.classList.add('mine')
+        cellToAddMine.classList.replace('unclicked', 'mine')
         i++
       }
     }
@@ -47,7 +45,7 @@ function init() {
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - PLAYER LEFT CLICK
   function playerClick(event) {
     console.log('click on this cell', event.target)
-    if (event.target.classList.contains('mineHere')) {
+    if (event.target.classList.contains('mine') && !event.target.classList.contains('flagged')) {
       event.target.classList.add('covid')
       endGame()
     } if (event.target.classList.contains('unclicked')) {
@@ -59,11 +57,10 @@ function init() {
   }
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - PLAYER RIGHT CLICK
   function flagMine(event) {
-    if (event.target.classList.contains('mineHere')) {
+    if (event.target.classList.contains('mine')) {
       const bonusToPlay =  bonusActions[Math.floor(Math.random() * bonusActions.length)]
-      event.target.classList.replace('mineHere', 'flagged')
+      event.target.classList.add('flagged')
       bonusToPlay(event)
-      minesFlagged ++
       mines --
     } if (event.target.classList.contains('unclicked')) {
       event.target.classList.replace('unclicked', 'cross')
@@ -77,7 +74,7 @@ function init() {
   }
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - UPDATES SCORE / LIVES / MINES
   function updateMinesFlagged() {
-    document.getElementById('bonus').innerHTML = `Drinks collected: ${minesFlagged} / COVID Viruses left: ${mines}`
+    document.getElementById('bonus').innerHTML = `COVID Viruses left: ${mines}`
   }
   updateMinesFlagged()
 
@@ -90,7 +87,6 @@ function init() {
 
   function resetGame() {
     lives = 3
-    minesFlagged = 0
     mines = 10
     gridCells.forEach(element => {
       element.addEventListener('click', playerClick)
@@ -131,7 +127,7 @@ function init() {
 
   function showAllMines(array) {
     array.filter(value => {
-      if (value.classList.contains('mineHere')) {
+      if (value.classList.contains('mine')) {
         value.classList.add('covid')
       }
     })
@@ -193,7 +189,7 @@ function init() {
   }
   assignMineValueToGrid(cells)
 
-    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - PULLS VALUE OF ADJACENT MINES
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - PULLS VALUE OF ADJACENT MINES
   function runShowValuesOnNextCells(cell) {
     const currentCellNum = cell.id
     const topRight = Number(currentCellNum) - width + 1
@@ -208,7 +204,7 @@ function init() {
     if (topRight >= 0 && currentCellNum % width !== width - 1 && cells[topRight].classList.contains('unclicked')) {
       let topRightValue = minesAdjacent(cells[topRight])
       if (topRightValue === 0) {
-        cells[topRight].classList.replace('unclicked', 'valueAssinged')
+        cells[topRight].classList.replace('unclicked', 'clicked')
         cells[topRight].innerHTML = topRightValue
         runShowValuesOnNextCells(cells[topRight])
         console.log('run show values on TOP RIGHT ran', runShowValuesOnNextCells(cells[topRight]))
@@ -219,7 +215,7 @@ function init() {
     if (right < cellCount && currentCellNum % width !== width - 1 && cells[right].classList.contains('unclicked')) {
       let rightValue = minesAdjacent(cells[right])
       if (rightValue === 0) {
-        cells[right].classList.replace('unclicked', 'valueAssinged')
+        cells[right].classList.replace('unclicked', 'clicked')
         cells[right].innerHTML = rightValue
         runShowValuesOnNextCells(cells[right])
         console.log('run show values on RIGHT ran', runShowValuesOnNextCells(cells[right]))
@@ -230,7 +226,7 @@ function init() {
     if (bottomRight < cellCount && currentCellNum % width !== width - 1 && cells[bottomRight].classList.contains('unclicked')) {
       let bottomRightValue = minesAdjacent(cells[bottomRight])
       if (bottomRightValue === 0) {
-        cells[bottomRight].classList.replace('unclicked', 'valueAssinged')
+        cells[bottomRight].classList.replace('unclicked', 'clicked')
         cells[bottomRight].innerHTML = bottomRightValue
         runShowValuesOnNextCells(cells[bottomRight])
         console.log('run show values on BOTTOM RIGHT ran', runShowValuesOnNextCells(cells[bottomRight]))
@@ -241,7 +237,7 @@ function init() {
     if (topLeft >= 0 && currentCellNum % width !== 0 && cells[topLeft].classList.contains('unclicked')) {
       let topLeftValue = minesAdjacent(cells[topLeft])
       if (topLeftValue === 0) {
-        cells[topLeft].classList.replace('unclicked', 'valueAssinged')
+        cells[topLeft].classList.replace('unclicked', 'clicked')
         cells[topLeft].innerHTML = topLeftValue
         runShowValuesOnNextCells(cells[topLeft])
         console.log('run show values on TOP LEFT ran', runShowValuesOnNextCells(topLeft))
@@ -252,7 +248,7 @@ function init() {
     if (left >= 0 && currentCellNum % width !== 0 && cells[left].classList.contains('unclicked')) {
       let leftValue = minesAdjacent(cells[left])
       if (leftValue === 0) {
-        cells[left].classList.replace('unclicked', 'valueAssinged')
+        cells[left].classList.replace('unclicked', 'clicked')
         cells[left].innerHTML = leftValue
         runShowValuesOnNextCells(cells[left])
         console.log('run show values on LEFT ran', runShowValuesOnNextCells(cells[left]))
@@ -263,7 +259,7 @@ function init() {
     if (bottomLeft < cellCount &&  currentCellNum % width !== 0 && cells[bottomLeft].classList.contains('unclicked')) {
       let bottomLeftValue = minesAdjacent(cells[bottomLeft])
       if (bottomLeftValue === 0) {
-        cells[bottomLeft].classList.replace('unclicked', 'valueAssinged')
+        cells[bottomLeft].classList.replace('unclicked', 'clicked')
         cells[bottomLeft].innerHTML = bottomLeftValue
         runShowValuesOnNextCells(cells[bottomLeft])
       }
@@ -273,7 +269,7 @@ function init() {
     if (top >= 0 && cells[top].classList.contains('unclicked')) {
       let topValue = minesAdjacent(cells[top])
       if (topValue === 0) {
-        cells[top].classList.replace('unclicked', 'valueAssinged')
+        cells[top].classList.replace('unclicked', 'clicked')
         cells[top].innerHTML = topValue
         runShowValuesOnNextCells(cells[top])
       }
@@ -283,7 +279,7 @@ function init() {
     if (bottom < cellCount && cells[bottom].classList.contains('unclicked')) {
       let bottomValue = minesAdjacent(cells[bottom])
       if (bottomValue === 0) {
-        cells[bottom].classList.replace('unclicked', 'valueAssinged')
+        cells[bottom].classList.replace('unclicked', 'clicked')
         cells[bottom].innerHTML = bottomValue
         runShowValuesOnNextCells(cells[bottom])
       }

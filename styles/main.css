@@ -115,11 +115,11 @@ body {
   background-size: contain;
 }
 
-.mine {
+/* .mine {
   background-image: url('../assets/mine.jpg');
   background-repeat: no-repeat;
   background-size: contain;
-}
+} */
 
 .cross {
   background-image: url('../assets/cross.png');
