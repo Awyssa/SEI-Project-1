@@ -1,6 +1,7 @@
  - - - - - - - - ISSUE / BUG BACKLOG - - - - - - - -
 // mines being assinged to cells that already have mines. Have work around, but not 100% fix
 // make it so that ${mines} is static for updateMinesFlagged()
+// get it so that bonus plays, and then game won audio after each other
 
 
 

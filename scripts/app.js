@@ -1,14 +1,3 @@
-// ISSUE / BUG BACKLOG!!!
-// back on the issue of mines being assinged to cells that already have mines. Have work around, but not 100% fix
-// mine reveal recusion not working without entire rehaul of
-
-// THINGS TO ADD!
-// function so that when a safe cell is clicked, it randomly starts revealing safe cells next to it.
-// Timer for the game
-// 3 difficulties - Easy: width = 5*5 && timer = 2 mins || Medium: width = 10*10, timer = 1:30mins || Hard: width 15*15, timer 1min || Custom: width = x*y, timer = t, mines = n
-// add a win function
-// if a player console.logs they can see where the mines ares
-
 function init() {
   const grid = document.querySelector('.grid')
   const gridCells = document.querySelectorAll('.grid')
@@ -45,7 +34,6 @@ function init() {
   })
 
   // ADDS RANDOM MINES TO THE GRID THAT ARE EQUAL TO THE WIDTHS NUMBER
-  // ISSUE! mine being added to the same cell
   function addMines(grid) {
     for (let i = 0; i < mines; i) {
       let cellToAddMine =  grid[Math.floor(Math.random() * grid.length)]
@@ -156,14 +144,6 @@ function init() {
       }
     }
   }
-  // --------------------------------------------------------------------------------------------------------------------------
-  // ------------------------------------------------------------------------------------------------------------------------
-  // ------------------------------------------------------------------------------------------------------------------------
-  // function showCell(cell) {
-  //   cell.classList.remove('unclicked')
-  //   showValues(cell)
-  //   runShowValuesOnNextCells(cell.target)
-  // }
 
   // HANDLES ASSIGNING THE CELLS THE MINE ADJACENT VALUE
   function assignMineValueToGrid(array) {
@@ -229,16 +209,15 @@ function init() {
       bonusToPlay(event)
       minesFlagged ++
       mines --
-      updateMinesFlagged()
-      gameWon(mines, grid)
     } if (event.target.classList.contains('unclicked')) {
       event.target.classList.replace('unclicked', 'cross')
       playWrong()
       lives --
       outOfLives(lives)
     }
+    updateMinesFlagged()
     showAnti()
-    // updateScore()
+    gameWon(mines)
   }
 
   // HANDLES ENDGAME FUNCTION
@@ -273,26 +252,19 @@ function init() {
   function resetGame() {
     clearClasses(cells)
     addMines(cells)
-    mines = 10
+    mines = 2
     minesFlagged = 0
     lives = 3
     showAnti()
     gridCells.forEach(element => {
       element.addEventListener('click', playerClick)
     })
-    // updateScore()
+    updateMinesFlagged()
     assignMineValueToGrid(cells)
   }
 
   // HANDLES RESET BUTTON EVENT CLICK
   document.querySelector('#reset').addEventListener('click', resetGame)
-
-  // // HANDLES UPDATING SCORE INNER HTML
-  // function updateScore() {
-  //   // let totalScore = score + bonus
-  //   document.getElementById('score').innerHTML = `COVID Viruses left: ${mines}`
-  // }
-  // updateScore()
 
   // HANDLES UPDATING THE BONUS INNER HTML
   // make it so that ${mines} is static for updateMinesFlagged()
@@ -301,25 +273,17 @@ function init() {
   }
   updateMinesFlagged()
 
-  // handles game won
-  function gameWon(mines, grid) {
+  // HANDLES GAME WON
+  function gameWon(mines) {
     if (mines === 0) {
+      console.log('endgame ran')
       window.alert('WELL DONE!!! The R rate is at 0 and you have ended the COVID pandemic!!!')
-      gameWonAudio()
-      showBeers(gridCells)
+      grid.classList.add('millhouse')
+      playMillhouse()
     }
   }
 
-  function showBeers(array) {
-    array.forEach((element) => {
-      if (element.classList.contains('unclicked'))
-        element.classList.add('beer')
-        console.log('add beers ran')
-    })
-  }
-
-  // ALL BELOW ------------------------------------------------------------------------
-  // BONUS AND INCORRECT FLAG SOUND AND IMAGE ADDS
+  // BONUS FUNCTIONS
   function playTheDude(event) {
     const theDudeAudio = new Audio('../assets/theDude.mp3')
     event.target.classList.add('theDude')
@@ -358,10 +322,10 @@ function init() {
     endgameAudio.volume = 0.4
     endgameAudio.play()
   }
-  function gameWonAudio() {
-    const endgameAudio = new Audio('../assets/millhouse.mov')
-    endgameAudio.volume = 0.4
-    endgameAudio.play()
+  function playMillhouse() {
+    const millhouseAudio = new Audio('../assets/millhouse.mov')
+    millhouseAudio.volume = 0.4
+    millhouseAudio.play()
   } 
 }
 

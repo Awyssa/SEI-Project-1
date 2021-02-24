@@ -31,7 +31,6 @@ body {
 }
 
 .grid-wrapper {
-  margin: 40px 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -140,7 +139,12 @@ body {
   background-image: url('../assets/cross.png');
   background-repeat: no-repeat;
   background-size: contain;
-  cursor: pointer;
+}
+
+.millhouse.happy {
+  background-image: url('../assets/millhouse.happy.png');
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
 
