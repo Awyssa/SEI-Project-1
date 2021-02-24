@@ -6,6 +6,8 @@
 // using createGrid() for the reset game function creates a new grid, how do I remove the old grid and build a new one?
 // 
 
+while is the next one is not a number, use that for the function, create an empyy array an then once its clicked it checks the ones next to it, if its a vlaid square amd nt a number add it to the array.
+
 
 
 
