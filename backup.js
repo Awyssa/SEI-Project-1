@@ -1,3 +1,6 @@
+// last back up 2:38 wednesday
+
+
 function init() {
   const grid = document.querySelector('.grid')
   const gridCells = document.querySelectorAll('.grid')
@@ -204,21 +207,24 @@ function init() {
 
   // HANDLES RIGHT CLICK TO FLAG MINES OR SHOW INCORRECT FLAGS
   function flagMine(event) {
-    if (event.target.classList.contains('mineHere')) {
-      const bonusToPlay =  bonusActions[Math.floor(Math.random() * bonusActions.length)]
-      event.target.classList.replace('mineHere', 'flagged')
-      bonusToPlay(event)
-      minesFlagged ++
-      mines --
-    } if (event.target.classList.contains('unclicked')) {
-      event.target.classList.replace('unclicked', 'cross')
-      playWrong()
-      lives --
-      outOfLives(lives)
+    if (antiLeft > 0) {
+      if (event.target.classList.contains('mineHere')) {
+        const bonusToPlay =  bonusActions[Math.floor(Math.random() * bonusActions.length)]
+        event.target.classList.replace('mineHere', 'flagged')
+        bonusToPlay(event)
+        bonus += 200
+        updateBonus()
+        antiLeft --
+      } if (event.target.classList.contains('unclicked')) {
+        event.target.classList.replace('unclicked', 'wrong')
+        playWrong()
+        antiLeft --
+      }
+    } if (antiLeft === 0) {
+      window.alert('You are out of Antibacterial Spray!!!')
     }
-    updateMinesFlagged()
     showAnti()
-    gameWon(mines)
+    updateScore()
   }
 
   // HANDLES ENDGAME FUNCTION

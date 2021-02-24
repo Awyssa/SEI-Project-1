@@ -1,25 +1,17 @@
-// ISSUE / BUG BACKLOG!!!
-// back on the issue of mines being assinged to cells that already have mines. Have work around, but not 100% fix
-// mine reveal recusion not working without entire rehaul of
-
-// THINGS TO ADD!
-// function so that when a safe cell is clicked, it randomly starts revealing safe cells next to it.
-// Timer for the game
-// 3 difficulties - Easy: width = 5*5 && timer = 2 mins || Medium: width = 10*10, timer = 1:30mins || Hard: width 15*15, timer 1min || Custom: width = x*y, timer = t, mines = n
-// add a win function
-// if a player console.logs they can see where the mines ares
-
 function init() {
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - VARIABLES 
   const grid = document.querySelector('.grid')
   const gridCells = document.querySelectorAll('.grid')
   const width = 10
-  const cellCount = width * width
+  const cellCount = width*width
+  let mines = 10
   const cells = []
-  let bonus = 0
-  let score = 0
-  let antiLeft = width + 3
+  let minesFlagged = 0
+  let lives = 3
   const bonusActions = [playTheDude, playMurray, playDuffman, playRum]
 
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - CREATE GRID
   // FUNCTION TO CREATE THE GRID
   function createGrid() {
     for (let i = 0; i < cellCount; i++) {
@@ -31,31 +23,27 @@ function init() {
     }
   }  
   createGrid()
-
-  // UPDATES AND ANTI SPRAY INNER HTML
-  function showAnti() {
-    document.getElementById('anti').innerHTML = `Antibacterial Spray: ${antiLeft}`
-  }
-  showAnti()
-
-  // ADDING EVENT LISTENERS
-  gridCells.forEach(element => {
-    element.addEventListener('click', playerClick)
-    element.addEventListener('contextmenu', flagMine)
-  })
-
-  // ADDS RANDOM MINES TO THE GRID THAT ARE EQUAL TO THE WIDTHS NUMBER
-  // ISSUE! mine being added to the same cell
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ADD MINES
   function addMines(grid) {
-    for (let i = 0; i < width; i++) {
+    for (let i = 0; i < mines; i) {
       let cellToAddMine =  grid[Math.floor(Math.random() * grid.length)]
       console.log(cellToAddMine)
-      cellToAddMine.classList.replace('unclicked', 'mineHere')
+      if (cellToAddMine.classList.contains('unclicked')) {
+        cellToAddMine.classList.replace('unclicked', 'mineHere')
+        cellToAddMine.classList.add('mine')
+        i++
+      }
     }
   }
   addMines(cells)
 
-  // HANDLES THE PLAYER CLICK
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - START 
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - EVENT LISTENERS
+  gridCells.forEach(element => {
+    element.addEventListener('click', playerClick)
+    element.addEventListener('contextmenu', flagMine)
+  })
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - PLAYER LEFT CLICK
   function playerClick(event) {
     console.log('click on this cell', event.target)
     if (event.target.classList.contains('mineHere')) {
@@ -63,16 +51,149 @@ function init() {
       endGame()
     } if (event.target.classList.contains('unclicked')) {
       event.target.classList.remove('unclicked')
-      updateScore()
+      // updateScore()
       showValues(event)
       runShowValuesOnNextCells(event.target)
     }
   }
-  // ------------------------------------------------------------------------------------------------------------------------
-  // ------------------------------------------------------------------------------------------------------------------------
-  // ------------------------------------------------------------------------------------------------------------------------
-  function runShowValuesOnNextCells(cell) {
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - PLAYER RIGHT CLICK
+  function flagMine(event) {
+    if (event.target.classList.contains('mineHere')) {
+      const bonusToPlay =  bonusActions[Math.floor(Math.random() * bonusActions.length)]
+      event.target.classList.replace('mineHere', 'flagged')
+      bonusToPlay(event)
+      minesFlagged ++
+      mines --
+    } if (event.target.classList.contains('unclicked')) {
+      event.target.classList.replace('unclicked', 'cross')
+      playWrong()
+      lives --
+      outOfLives(lives)
+    }
+    updateMinesFlagged()
+    showAnti()
+    gameWon(mines)
+  }
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - UPDATES SCORE / LIVES / MINES
+  function updateMinesFlagged() {
+    document.getElementById('bonus').innerHTML = `Drinks collected: ${minesFlagged} / COVID Viruses left: ${mines}`
+  }
+  updateMinesFlagged()
 
+  function showAnti() {
+    document.getElementById('anti').innerHTML = `Free Antibacterial Spray: ${lives}`
+  }
+  showAnti()
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - RESET GAME
+  document.querySelector('#reset').addEventListener('click', resetGame)
+
+  function resetGame() {
+    lives = 3
+    minesFlagged = 0
+    mines = 10
+    gridCells.forEach(element => {
+      element.addEventListener('click', playerClick)
+    })
+    clearClasses(cells)
+    addMines(cells)
+    showAnti()
+    grid.classList.remove('millhouse')
+    updateMinesFlagged()
+    assignMineValueToGrid(cells)
+  }
+
+  function clearClasses(grid) {
+    grid.forEach((element) => {
+      element.className = ''
+      element.innerHTML = ''
+      element.classList.add('unclicked')
+    })
+  }
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GAME WON
+  function gameWon(mines) {
+    if (mines === 0) {
+      console.log('endgame ran')
+      window.alert('WELL DONE!!! The R rate is at 0 and you have ended the COVID pandemic!!!')
+      grid.classList.add('millhouse')
+      playMillhouse()
+    }
+  }
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GAME OVER
+  function endGame() {
+    playEndgame()
+    showAllMines(cells)
+    gridCells.forEach(element => {
+      element.removeEventListener('click', playerClick)
+    })
+    window.alert('YOU HIT A COVID VIRUS!!!')
+  }
+
+  function showAllMines(array) {
+    array.filter(value => {
+      if (value.classList.contains('mineHere')) {
+        value.classList.add('covid')
+      }
+    })
+  }
+
+  function outOfLives(lives) {
+    if (lives === 0) {
+      window.alert('You are out of spare Antibacterial Spray!!!')
+      showAllMines(cells)
+      gridCells.forEach(element => {
+        element.removeEventListener('click', playerClick)
+      })
+    }
+  }
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GATHERS THE MINESADJACENT VALUE
+  function minesAdjacent(currentCell) {
+    let minesAdjacent = 0
+
+    const currentCellNum = currentCell.id
+
+    const topRight = Number(currentCellNum) - width + 1
+    const right = Number(currentCellNum) + 1
+    const bottomRight = Number(currentCellNum) + width + 1
+    const topLeft = Number(currentCellNum) - width - 1
+    const left = Number(currentCellNum) - 1
+    const bottomLeft = Number(currentCellNum) + width - 1
+    const top = Number(currentCellNum) - width
+    const bottom = Number(currentCellNum) + width
+    
+    if (topRight >= 0 && currentCellNum % width !== width - 1 && cells[topRight].classList.contains('mine')) {
+      minesAdjacent ++
+    } if (right < cellCount && currentCellNum % width !== width - 1 && cells[right].classList.contains('mine')) {
+      minesAdjacent ++
+    } if (bottomRight < cellCount && currentCellNum % width !== width - 1  && cells[bottomRight].classList.contains('mine')) {
+      minesAdjacent ++
+    } if (topLeft >= 0 && currentCellNum % width !== 0 && cells[topLeft].classList.contains('mine')) {
+      minesAdjacent ++
+    } if (left >= 0 && currentCellNum % width !== 0 && cells[left].classList.contains('mine')) {
+      minesAdjacent ++
+    } if (bottomLeft < cellCount &&  currentCellNum % width !== 0 && cells[bottomLeft].classList.contains('mine')) {
+      minesAdjacent ++
+    } if (top >= 0 && cells[top].classList.contains('mine')) {
+      minesAdjacent ++
+    } if (bottom < cellCount && cells[bottom].classList.contains('mine')) {
+      minesAdjacent ++
+    }
+    return minesAdjacent
+  }
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - SHOWS VALUE ON CLICK
+  function showValues(cell) {
+    cell.target.innerHTML = cell.target.classList
+  }
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ASSIGNS CELLS CLASSLIST VALUE USING MINES AJACENT()
+  function assignMineValueToGrid(array) {
+    array.forEach(element => {
+      let valueToAssign = minesAdjacent(element)
+      element.classList.add(valueToAssign)
+    })
+  }
+  assignMineValueToGrid(cells)
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - PULLS VALUE OF ADJACENT MINES
+  function runShowValuesOnNextCells(cell) {
     const currentCellNum = cell.id
     const topRight = Number(currentCellNum) - width + 1
     const right = Number(currentCellNum) + 1
@@ -153,178 +274,50 @@ function init() {
       }
     }
   }
-  // --------------------------------------------------------------------------------------------------------------------------
-  // ------------------------------------------------------------------------------------------------------------------------
-  // ------------------------------------------------------------------------------------------------------------------------
-  function showCell(cell) {
-    cell.classList.remove('unclicked')
-    showValues(cell)
-    runShowValuesOnNextCells(cell.target)
-  }
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GAME TIMER
 
-  // HANDLES ASSIGNING THE CELLS THE MINE ADJACENT VALUE
-  function assignMineValueToGrid(array) {
-    array.forEach(element => {
-      let valueToAssign = minesAdjacent(element)
-      element.classList.add(valueToAssign)
-    })
-  }
-  assignMineValueToGrid(cells)
 
-  function showValues(cell) {
-    cell.target.innerHTML = cell.target.classList
-  }
 
-  // HANDLES COLLECTING NUMBER OF MINES ADJACENT TO THE CURRENT CELL
-  function minesAdjacent(currentCell) {
-    let minesAdjacent = 0
-    const currentCellNum = currentCell.id
-    const topRight = Number(currentCellNum) - width + 1
-    const right = Number(currentCellNum) + 1
-    const bottomRight = Number(currentCellNum) + width + 1
-    const topLeft = Number(currentCellNum) - width - 1
-    const left = Number(currentCellNum) - 1
-    const bottomLeft = Number(currentCellNum) + width - 1
-    const top = Number(currentCellNum) - width
-    const bottom = Number(currentCellNum) + width
-    
-    if (topRight >= 0 && currentCellNum % width !== width - 1 && cells[topRight].classList.contains('mineHere')) {
-      minesAdjacent ++
-    } if (right < cellCount && currentCellNum % width !== width - 1 && cells[right].classList.contains('mineHere')) {
-      minesAdjacent ++
-    } if (bottomRight < cellCount && currentCellNum % width !== width - 1  && cells[bottomRight].classList.contains('mineHere')) {
-      minesAdjacent ++
-    } if (topLeft >= 0 && currentCellNum % width !== 0 && cells[topLeft].classList.contains('mineHere')) {
-      minesAdjacent ++
-    } if (left >= 0 && currentCellNum % width !== 0 && cells[left].classList.contains('mineHere')) {
-      minesAdjacent ++
-    } if (bottomLeft < cellCount &&  currentCellNum % width !== 0 && cells[bottomLeft].classList.contains('mineHere')) {
-      minesAdjacent ++
-    } if (top >= 0 && cells[top].classList.contains('mineHere')) {
-      minesAdjacent ++
-    } if (bottom < cellCount && cells[bottom].classList.contains('mineHere')) {
-      minesAdjacent ++
-    }
-    return minesAdjacent
-  }
 
-  // HANDLES RIGHT CLICK TO FLAG MINES OR SHOW INCORRECT FLAGS
-  function flagMine(event) {
-    if (antiLeft > 0) {
-      if (event.target.classList.contains('mineHere')) {
-        const bonusToPlay =  bonusActions[Math.floor(Math.random() * bonusActions.length)]
-        event.target.classList.replace('mineHere', 'flagged')
-        bonusToPlay(event)
-        bonus += 200
-        updateBonus()
-        antiLeft --
-      } if (event.target.classList.contains('unclicked')) {
-        event.target.classList.replace('unclicked', 'wrong')
-        playWrong()
-        antiLeft --
-      }
-    } if (antiLeft === 0) {
-      window.alert('You are out of Antibacterial Spray!!!')
-    }
-    showAnti()
-    updateScore()
-  }
-  // HANDLES ENDGAME FUNCTION
-  function endGame() {
-    playEndgame(event)
-    showAllMines(cells)
-    gridCells.forEach(element => {
-      element.removeEventListener('click', playerClick)
-    })
-    window.alert('YOU HIT A COVID VIRUS!!!')
-  }
-
-  // HANDLES SHOWING ALL MINES ON ENDGAME
-  function showAllMines(array) {
-    array.filter(value => {
-      if (value.classList.contains('mineHere')) {
-        value.classList.add('covid')
-      }
-    })
-  }
-
-  // HANDLES CLEARING CLASSES ON ENDGAME
-  function clearClasses(grid) {
-    grid.forEach((element) => {
-      element.className = ''
-      element.innerHTML = ''
-      element.classList.add('unclicked')
-    })
-  }
-
-  // HANDLES RESET BUTTON 
-  function resetGame() {
-    clearClasses(cells)
-    addMines(cells)
-    score = 0
-    bonus = 0
-    antiLeft = width + 3
-    showAnti()
-    gridCells.forEach(element => {
-      element.addEventListener('click', playerClick)
-    })
-    updateScore()
-    assignMineValueToGrid(cells)
-  }
-
-  // HANDLES RESET BUTTON EVENT CLICK
-  document.querySelector('#reset').addEventListener('click', resetGame)
-
-  // HANDLES UPDATING SCORE INNER HTML
-  function updateScore() {
-    let totalScore = score + bonus
-    document.getElementById('score').innerHTML = `Score: ${totalScore}`
-  }
-  // HANDLES UPDATING THE BONUS INNER HTML
-  function updateBonus() {
-    document.getElementById('bonus').innerHTML = `BONUS: ${bonus}`
-  }
-
-  // ALL BELOW ------------------------------------------------------------------------
-  // BONUS AND INCORRECT FLAG SOUND AND IMAGE ADDS
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - BONUES / AUDIO / IMAGES
   function playTheDude(event) {
     const theDudeAudio = new Audio('../assets/theDude.mp3')
     event.target.classList.add('theDude')
     theDudeAudio.volume = 0.2
     theDudeAudio.play()
   }
-
   function playMurray(event) {
     const murrayAudio = new Audio('../assets/murray.mp3')
     event.target.classList.add('murray')
     murrayAudio.volume = 0.2
     murrayAudio.play()
   }
-
   function playDuffman(event) {
     const duffmanAudio = new Audio('../assets/duffman.mp3')
     event.target.classList.add('duffman')
     duffmanAudio.volume = 0.2
     duffmanAudio.play()
   }
-
   function playRum(event) {
     const rumAudio = new Audio('../assets/rum.mp3')
     event.target.classList.add('rum')
     rumAudio.volume = 0.2
     rumAudio.play()
   }
-
   function playWrong() {
     const wrongAudio = new Audio('../assets/wrong.mp3')
     wrongAudio.volume = 0.2
     wrongAudio.play()
   }
-  function playEndgame(event) {
-    const endgameAudio = new Audio('../assets/doh.mp3')
-    endgameAudio.volume = 0.2
+  function playEndgame() {
+    const endgameAudio = new Audio('../assets/endgame.mp3')
+    endgameAudio.volume = 0.4
     endgameAudio.play()
+  }
+  function playMillhouse() {
+    const millhouseAudio = new Audio('../assets/millhouse.mov')
+    millhouseAudio.volume = 0.4
+    millhouseAudio.play()
   } 
 }
-
 window.addEventListener('DOMContentLoaded', init)

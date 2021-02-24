@@ -43,8 +43,8 @@ body {
   flex-wrap: wrap;
   height: 100%;
   justify-content: center;
-  height: 600px;
-  width: 600px;
+  height: 800px;
+  width: 800px;
   background-color: white;
   border: 5px solid rgb(37, 37, 37);
   cursor: pointer;
@@ -123,17 +123,11 @@ body {
   background-size: contain;
 }
 
-.mine {
-  background-image: url('../assets/virus.png');
-  background-repeat: no-repeat;
-  background-size: contain;
-}
-
-.mine {
+/* .mine {
   background-image: url('../assets/mine.jpg');
   background-repeat: no-repeat;
   background-size: contain;
-}
+} */
 
 .cross {
   background-image: url('../assets/cross.png');
@@ -141,10 +135,10 @@ body {
   background-size: contain;
 }
 
-.millhouse.happy {
+.millhouse{
   background-image: url('../assets/millhouse.happy.png');
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
 }
 
 
