@@ -17,7 +17,7 @@ function init() {
   let mines = 10
   const cells = []
   let minesFlagged = 0
-  let antiLeft = width + 3
+  let lives = 3
   const bonusActions = [playTheDude, playMurray, playDuffman, playRum]
 
   // FUNCTION TO CREATE THE GRID
@@ -34,7 +34,7 @@ function init() {
 
   // UPDATES AND ANTI SPRAY INNER HTML
   function showAnti() {
-    document.getElementById('anti').innerHTML = `Antibacterial Spray: ${antiLeft}`
+    document.getElementById('anti').innerHTML = `Free Antibacterial Spray: ${lives}`
   }
   showAnti()
 
@@ -208,31 +208,38 @@ function init() {
     return minesAdjacent
   }
 
+  function outOfLives(lives) {
+    if (lives === 0) {
+      window.alert('You are out of spare Antibacterial Spray!!!')
+      showAllMines(cells)
+      gridCells.forEach(element => {
+        element.removeEventListener('click', playerClick)
+      })
+    }
+  }
+
   // HANDLES RIGHT CLICK TO FLAG MINES OR SHOW INCORRECT FLAGS
   function flagMine(event) {
-    if (antiLeft > 0) {
-      if (event.target.classList.contains('mineHere')) {
-        const bonusToPlay =  bonusActions[Math.floor(Math.random() * bonusActions.length)]
-        event.target.classList.replace('mineHere', 'flagged')
-        bonusToPlay(event)
-        minesFlagged ++
-        mines --
-        updateMinesFlagged()
-        antiLeft --
-      } if (event.target.classList.contains('unclicked')) {
-        event.target.classList.replace('unclicked', 'wrong')
-        playWrong()
-        antiLeft --
-      }
-    } if (antiLeft === 0) {
-      window.alert('You are out of Antibacterial Spray!!!')
+    if (event.target.classList.contains('mineHere')) {
+      const bonusToPlay =  bonusActions[Math.floor(Math.random() * bonusActions.length)]
+      event.target.classList.replace('mineHere', 'flagged')
+      bonusToPlay(event)
+      minesFlagged ++
+      mines --
+      updateMinesFlagged()
+    } if (event.target.classList.contains('unclicked')) {
+      event.target.classList.replace('unclicked', 'cross')
+      playWrong()
+      lives --
+      outOfLives(lives)
     }
     showAnti()
     // updateScore()
   }
+
   // HANDLES ENDGAME FUNCTION
   function endGame() {
-    playEndgame(event)
+    playEndgame()
     showAllMines(cells)
     gridCells.forEach(element => {
       element.removeEventListener('click', playerClick)
@@ -264,7 +271,7 @@ function init() {
     addMines(cells)
     mines = 10
     minesFlagged = 0
-    antiLeft = width + 3
+    lives = 3
     showAnti()
     gridCells.forEach(element => {
       element.addEventListener('click', playerClick)
@@ -325,7 +332,7 @@ function init() {
     wrongAudio.volume = 0.2
     wrongAudio.play()
   }
-  function playEndgame(event) {
+  function playEndgame() {
     const endgameAudio = new Audio('../assets/doh.mp3')
     endgameAudio.volume = 0.4
     endgameAudio.play()
