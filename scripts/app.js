@@ -205,7 +205,7 @@ function init() {
     const top = Number(currentCellNum) - width
     const bottom = Number(currentCellNum) + width
 
-    if (topRight >= 0 && currentCellNum % width !== width - 1 && !cells[topRight].classList.contains('mine', 'clicked', 'valueAssigned')) {
+    if (topRight >= 0 && currentCellNum % width !== width - 1 && cells[topRight].classList.contains('unclicked')) {
       let topRightValue = minesAdjacent(cells[topRight])
       if (topRightValue === 0) {
         cells[topRight].classList.replace('unclicked', 'valueAssinged')
@@ -214,67 +214,78 @@ function init() {
         console.log('run show values on TOP RIGHT ran', runShowValuesOnNextCells(cells[topRight]))
       }
     }
-    if (right < cellCount && currentCellNum % width !== width - 1 && !cells[right].classList.contains('mine')) {
+
+
+    if (right < cellCount && currentCellNum % width !== width - 1 && cells[right].classList.contains('unclicked')) {
       let rightValue = minesAdjacent(cells[right])
       if (rightValue === 0) {
         cells[right].classList.replace('unclicked', 'valueAssinged')
         cells[right].innerHTML = rightValue
-        // runShowValuesOnNextCells(cells[right])
-        // console.log('run show values on RIGHT ran', runShowValuesOnNextCells(cells[right]))
+        runShowValuesOnNextCells(cells[right])
+        console.log('run show values on RIGHT ran', runShowValuesOnNextCells(cells[right]))
       }
     }
-    if (bottomRight < cellCount && currentCellNum % width !== width - 1 && !cells[bottomRight].classList.contains('mine')) {
+
+
+    if (bottomRight < cellCount && currentCellNum % width !== width - 1 && cells[bottomRight].classList.contains('unclicked')) {
       let bottomRightValue = minesAdjacent(cells[bottomRight])
       if (bottomRightValue === 0) {
         cells[bottomRight].classList.replace('unclicked', 'valueAssinged')
         cells[bottomRight].innerHTML = bottomRightValue
-        // runShowValuesOnNextCells(cells[bottomRight])
-        // console.log('run show values on BOTTOM RIGHT ran', runShowValuesOnNextCells(cells[bottomRight]))
+        runShowValuesOnNextCells(cells[bottomRight])
+        console.log('run show values on BOTTOM RIGHT ran', runShowValuesOnNextCells(cells[bottomRight]))
       }
     }
 
-    if (topLeft >= 0 && currentCellNum % width !== 0 && !cells[topLeft].classList.contains('mine')) {
+
+    if (topLeft >= 0 && currentCellNum % width !== 0 && cells[topLeft].classList.contains('unclicked')) {
       let topLeftValue = minesAdjacent(cells[topLeft])
       if (topLeftValue === 0) {
         cells[topLeft].classList.replace('unclicked', 'valueAssinged')
         cells[topLeft].innerHTML = topLeftValue
-        // runShowValuesOnNextCells(cells[topLeft])
-        // console.log('run show values on TOP LEFT ran', runShowValuesOnNextCells(topLeft))
+        runShowValuesOnNextCells(cells[topLeft])
+        console.log('run show values on TOP LEFT ran', runShowValuesOnNextCells(topLeft))
       }
     }
 
-    if (left >= 0 && currentCellNum % width !== 0 && !cells[left].classList.contains('mine')) {
+
+    if (left >= 0 && currentCellNum % width !== 0 && cells[left].classList.contains('unclicked')) {
       let leftValue = minesAdjacent(cells[left])
       if (leftValue === 0) {
         cells[left].classList.replace('unclicked', 'valueAssinged')
         cells[left].innerHTML = leftValue
-        // runShowValuesOnNextCells(cells[left])
-        // console.log('run show values on LEFT ran', runShowValuesOnNextCells(cells[left]))
+        runShowValuesOnNextCells(cells[left])
+        console.log('run show values on LEFT ran', runShowValuesOnNextCells(cells[left]))
       }
     }
-    if (bottomLeft < cellCount &&  currentCellNum % width !== 0 && !cells[bottomLeft].classList.contains('mine')) {
+
+
+    if (bottomLeft < cellCount &&  currentCellNum % width !== 0 && cells[bottomLeft].classList.contains('unclicked')) {
       let bottomLeftValue = minesAdjacent(cells[bottomLeft])
       if (bottomLeftValue === 0) {
         cells[bottomLeft].classList.replace('unclicked', 'valueAssinged')
         cells[bottomLeft].innerHTML = bottomLeftValue
-        // runShowValuesOnNextCells([bottomLeft])
+        runShowValuesOnNextCells(cells[bottomLeft])
       }
     }
-    if (top >= 0 && !cells[top].classList.contains('mine')) {
+
+
+    if (top >= 0 && cells[top].classList.contains('unclicked')) {
       let topValue = minesAdjacent(cells[top])
       if (topValue === 0) {
         cells[top].classList.replace('unclicked', 'valueAssinged')
         cells[top].innerHTML = topValue
-        // runShowValuesOnNextCells(cells[top])
+        runShowValuesOnNextCells(cells[top])
       }
     }
-    if (bottom < cellCount && !cells[bottom].classList.contains('mine')) {
+
+
+    if (bottom < cellCount && cells[bottom].classList.contains('unclicked')) {
       let bottomValue = minesAdjacent(cells[bottom])
       if (bottomValue === 0) {
         cells[bottom].classList.replace('unclicked', 'valueAssinged')
         cells[bottom].innerHTML = bottomValue
-        // runShowValuesOnNextCells(cells[bottom])
-        // console.log()
+        runShowValuesOnNextCells(cells[bottom])
       }
     }
   }
