@@ -102,3 +102,41 @@ if (topRight >= 0 && currentCellNum % width !== width - 1 && cells[topRight].cla
 } if (bottom < cellCount && cells[bottom].classList.contains('mineHere')) {
   minesAdjacent ++
 }
+
+
+
+    if (topRight >= 0 && currentCellNum % width !== width - 1 && cells[topRight].classList.contains('unclicked')) {
+      let topRightValue = minesAdjacent(cells[topRight])
+      if (topRightValue === 0) {
+        cells[topRight].classList.replace('unclicked', 'clicked')
+        cells[topRight].innerHTML = ''
+        runShowValuesOnNextCells(cells[topRight])
+      }
+    }
+    
+    if (bottomRight < cellCount && currentCellNum % width !== width - 1 && cells[bottomRight].classList.contains('unclicked')) {
+      let bottomRightValue = minesAdjacent(cells[bottomRight])
+      if (bottomRightValue === 0) {
+        cells[bottomRight].classList.replace('unclicked', 'clicked')
+        cells[bottomRight].innerHTML = ''
+        runShowValuesOnNextCells(cells[bottomRight])
+      }
+    }
+
+    if (topLeft >= 0 && currentCellNum % width !== 0 && cells[topLeft].classList.contains('unclicked')) {
+      let topLeftValue = minesAdjacent(cells[topLeft])
+      if (topLeftValue === 0) {
+        cells[topLeft].classList.replace('unclicked', 'clicked')
+        cells[topLeft].innerHTML = ''
+        runShowValuesOnNextCells(cells[topLeft])
+      }
+    }
+
+    if (bottomLeft < cellCount &&  currentCellNum % width !== 0 && cells[bottomLeft].classList.contains('unclicked')) {
+      let bottomLeftValue = minesAdjacent(cells[bottomLeft])
+      if (bottomLeftValue === 0) {
+        cells[bottomLeft].classList.replace('unclicked', 'clicked')
+        cells[bottomLeft].innerHTML = ''
+        runShowValuesOnNextCells(cells[bottomLeft])
+      }
+    }

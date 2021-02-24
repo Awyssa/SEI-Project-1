@@ -35,8 +35,6 @@ function init() {
   }
   addMines(cells)
 
-  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - START BUTTON
-
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - EVENT LISTENERS
   gridCells.forEach(element => {
     element.addEventListener('click', playerClick)
@@ -44,7 +42,7 @@ function init() {
   })
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - PLAYER LEFT CLICK
   function playerClick(event) {
-    console.log('click on this cell', event.target)
+    console.log('clicked on this cell', event.target)
     if (event.target.classList.contains('mine') && !event.target.classList.contains('flagged')) {
       event.target.classList.add('covid')
       endGame()
@@ -52,7 +50,9 @@ function init() {
       event.target.classList.replace('unclicked', 'clicked')
       // updateScore()
       showValues(event)
-      runShowValuesOnNextCells(event.target)
+      if (event.target.dataset.value == 0) {
+        runShowValuesOnNextCells(event.target)
+      }
     }
   }
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - PLAYER RIGHT CLICK
@@ -83,15 +83,17 @@ function init() {
   }
   showAnti()
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - RESET GAME
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - START / RESET BUTTON
+
   document.querySelector('#reset').addEventListener('click', resetGame)
 
   function resetGame() {
+    clearClasses(cells)
     lives = 3
     mines = 10
     gridCells.forEach(element => {
       element.addEventListener('click', playerClick)
     })
-    clearClasses(cells)
     addMines(cells)
     showAnti()
     grid.classList.remove('millhouse')
@@ -109,10 +111,12 @@ function init() {
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GAME WON
   function gameWon(mines) {
     if (mines === 0) {
-      console.log('endgame ran')
       window.alert('WELL DONE!!! The R rate is at 0 and you have ended the COVID pandemic!!!')
       grid.classList.add('millhouse')
       playMillhouse()
+      gridCells.forEach(element => {
+        element.removeEventListener('click', playerClick)
+      })
     }
   }
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GAME OVER
@@ -190,7 +194,9 @@ function init() {
       let valueToAssign = minesAdjacent(element)
       element.dataset.value = valueToAssign
     })
+    console.log('assigMines ran')
   }
+
   assignMineValueToGrid(cells)
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - PULLS VALUE OF ADJACENT MINES
@@ -205,16 +211,6 @@ function init() {
     const top = Number(currentCellNum) - width
     const bottom = Number(currentCellNum) + width
 
-    if (topRight >= 0 && currentCellNum % width !== width - 1 && cells[topRight].classList.contains('unclicked')) {
-      let topRightValue = minesAdjacent(cells[topRight])
-      if (topRightValue === 0) {
-        cells[topRight].classList.replace('unclicked', 'clicked')
-        cells[topRight].innerHTML = ''
-        runShowValuesOnNextCells(cells[topRight])
-      }
-    }
-
-
     if (right < cellCount && currentCellNum % width !== width - 1 && cells[right].classList.contains('unclicked')) {
       let rightValue = minesAdjacent(cells[right])
       if (rightValue === 0) {
@@ -223,28 +219,6 @@ function init() {
         runShowValuesOnNextCells(cells[right])
       }
     }
-
-
-    if (bottomRight < cellCount && currentCellNum % width !== width - 1 && cells[bottomRight].classList.contains('unclicked')) {
-      let bottomRightValue = minesAdjacent(cells[bottomRight])
-      if (bottomRightValue === 0) {
-        cells[bottomRight].classList.replace('unclicked', 'clicked')
-        cells[bottomRight].innerHTML = ''
-        runShowValuesOnNextCells(cells[bottomRight])
-      }
-    }
-
-
-    if (topLeft >= 0 && currentCellNum % width !== 0 && cells[topLeft].classList.contains('unclicked')) {
-      let topLeftValue = minesAdjacent(cells[topLeft])
-      if (topLeftValue === 0) {
-        cells[topLeft].classList.replace('unclicked', 'clicked')
-        cells[topLeft].innerHTML = ''
-        runShowValuesOnNextCells(cells[topLeft])
-      }
-    }
-
-
     if (left >= 0 && currentCellNum % width !== 0 && cells[left].classList.contains('unclicked')) {
       let leftValue = minesAdjacent(cells[left])
       if (leftValue === 0) {
@@ -253,18 +227,6 @@ function init() {
         runShowValuesOnNextCells(cells[left])
       }
     }
-
-
-    if (bottomLeft < cellCount &&  currentCellNum % width !== 0 && cells[bottomLeft].classList.contains('unclicked')) {
-      let bottomLeftValue = minesAdjacent(cells[bottomLeft])
-      if (bottomLeftValue === 0) {
-        cells[bottomLeft].classList.replace('unclicked', 'clicked')
-        cells[bottomLeft].innerHTML = ''
-        runShowValuesOnNextCells(cells[bottomLeft])
-      }
-    }
-
-
     if (top >= 0 && cells[top].classList.contains('unclicked')) {
       let topValue = minesAdjacent(cells[top])
       if (topValue === 0) {
@@ -273,7 +235,6 @@ function init() {
         runShowValuesOnNextCells(cells[top])
       }
     }
-
 
     if (bottom < cellCount && cells[bottom].classList.contains('unclicked')) {
       let bottomValue = minesAdjacent(cells[bottom])
