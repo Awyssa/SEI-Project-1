@@ -9,6 +9,7 @@ function init() {
   const cells = []
   let lives = 3
   const bonusActions = [playTheDude, playMurray, playDuffman, playRum]
+  let gameTime = 150
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - CREATE GRID
   // FUNCTION TO CREATE THE GRID
@@ -21,7 +22,6 @@ function init() {
       cell.classList.add('unclicked')
     }
   }  
-  createGrid()
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ADD MINES
   function addMines(grid) {
     for (let i = 0; i < mines; i) {
@@ -33,7 +33,6 @@ function init() {
       }
     }
   }
-  addMines(cells)
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - EVENT LISTENERS
   gridCells.forEach(element => {
@@ -82,15 +81,29 @@ function init() {
     document.getElementById('anti').innerHTML = `Free Antibacterial Spray: ${lives}`
   }
   showAnti()
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - START GAME
+  document.querySelector('#grid').addEventListener('click', startGame)
+
+  function startGame() {
+    document.querySelector('#grid').removeEventListener('click', startGame)
+    document.querySelector('.grid').innerHTML = ''
+    createGrid()
+    addMines(cells)
+    gridCells.forEach(element => {
+      element.addEventListener('click', playerClick)
+    })
+    assignMineValueToGrid(cells)
+    startTimer()
+  }
+
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - RESET GAME
-  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - START / RESET BUTTON
 
   document.querySelector('#reset').addEventListener('click', resetGame)
 
   function resetGame() {
     clearClasses(cells)
     lives = 3
-    mines = 10
+    mines = 12
     gridCells.forEach(element => {
       element.addEventListener('click', playerClick)
     })
@@ -99,6 +112,7 @@ function init() {
     grid.classList.remove('millhouse')
     updateMinesFlagged()
     assignMineValueToGrid(cells)
+    startTimer()
   }
 
   function clearClasses(grid) {
@@ -108,25 +122,51 @@ function init() {
       element.classList.add('unclicked')
     })
   }
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GAME TIMER
+
+  let time = 0
+
+  function startTimer() {
+    if (gameTime) {
+      clearInterval(gameTime)
+      gameTime = null
+    } else {
+      gameTime = setInterval(() => {
+        time++
+        timer.innerHTML = `Time: ${time}`
+      }, 1000)
+    }
+  }
+
+  function stopTimer() {
+    clearInterval(gameTime)
+  }
+
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GAME WON
+
   function gameWon(mines) {
     if (mines === 0) {
+      stopTimer()
       window.alert('WELL DONE!!! The R rate is at 0 and you have ended the COVID pandemic!!!')
       grid.classList.add('millhouse')
       playMillhouse()
       gridCells.forEach(element => {
         element.removeEventListener('click', playerClick)
       })
+      clearInterval(gameTimer)
     }
   }
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GAME OVER
   function endGame() {
+    stopTimer()
     playEndgame()
     showAllMines(cells)
     gridCells.forEach(element => {
       element.removeEventListener('click', playerClick)
     })
     window.alert('YOU HIT A COVID VIRUS!!!')
+    clearInterval(gameTimer)
   }
 
   function showAllMines(array) {
@@ -291,4 +331,5 @@ function init() {
     millhouseAudio.play()
   } 
 }
+
 window.addEventListener('DOMContentLoaded', init)

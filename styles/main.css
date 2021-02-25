@@ -21,10 +21,14 @@ body {
 
 .header {
   background-color: rgba(255, 255, 255, 0.514);
+  align-items: center;
 }
 
 .header h1 {
   margin: 10px 0 10px 0;
+}
+
+.header p {
 }
 
 .header .score {
