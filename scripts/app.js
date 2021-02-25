@@ -46,11 +46,13 @@ function init() {
     console.log('mines ajacant', minesAdjacent(event.target))
     if (event.target.classList.contains('mine') && !event.target.classList.contains('flagged')) {
       event.target.classList.add('covid')
+      window.alert('YOU HIT A COVID VIRUS!!!')
       endGame()
     } if (event.target.classList.contains('unclicked')) {
       event.target.classList.replace('unclicked', 'clicked')
       showValues(event)
       event.target.removeEventListener('click', playerClick)
+      event.target.removeEventListener('contextmenu', flagMine)
       runShowValuesOnNextCells(event.target)
     }
   }
@@ -65,11 +67,11 @@ function init() {
       event.target.classList.replace('unclicked', 'cross')
       playWrong()
       lives --
-      outOfLives(lives)
     }
     updateMinesFlagged()
     showAnti()
     gameWon(gridStats.mines)
+    outOfLives(lives)
   }
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - UPDATES SCORE / LIVES / MINES
   function updateMinesFlagged() {
@@ -81,35 +83,33 @@ function init() {
   }
   showAnti()
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - START GAME
-  createGrid()
-  addMines(gridStats.cells)
-  assignMineValueToGrid(gridStats.cells)
+  document.querySelector('#grid').addEventListener('click', startGame)
 
-  // document.querySelector('#grid').addEventListener('click', startGame)
-
-  // function startGame() {
-  //   document.querySelector('#grid').removeEventListener('click', startGame)
-  //   document.querySelector('.grid').innerHTML = ''
-  //   createGrid(grid)
-  //   addMines(gridStats.cells)
-  //   gridCells.forEach(element => {
-  //     element.addEventListener('click', playerClick)
-  //   })
-  // assignMineValueToGrid(gridStats.cells)
-  // }
+  function startGame() {
+    document.querySelector('#grid').removeEventListener('click', startGame)
+    document.querySelector('.grid').innerHTML = ''
+    createGrid()
+    addMines(gridStats.cells)
+    assignMineValueToGrid(gridStats.cells)
+    gridCells.forEach(element => {
+      element.addEventListener('click', playerClick)
+    })
+  }
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - RESET GAME
   document.querySelector('#reset').addEventListener('click', resetGame)
   function resetGame() {
-    clearClasses(gridStats.cells)
     lives = 3
     gridStats.mines = 12
+    clearClasses(gridStats.cells)
     gridCells.forEach(element => {
       element.addEventListener('click', playerClick)
+      element.addEventListener('contextmenu', flagMine)
     })
     addMines(gridStats.cells)
     showAnti()
     grid.classList.remove('millhouse')
     updateMinesFlagged()
+    assignMineValueToGrid(gridStats.cells)
   }
   function clearClasses(grid) {
     grid.forEach((element) => {
@@ -142,6 +142,7 @@ function init() {
       playMillhouse()
       gridCells.forEach(element => {
         element.removeEventListener('click', playerClick)
+        element.removeEventListener('contextmenu', flagMine)
       })
     }
   }
@@ -151,8 +152,8 @@ function init() {
     showAllMines(gridStats.cells)
     gridCells.forEach(element => {
       element.removeEventListener('click', playerClick)
+      element.removeEventListener('contextmenu', flagMine)
     })
-    window.alert('YOU HIT A COVID VIRUS!!!')
   }
   function showAllMines(array) {
     array.filter(value => {
@@ -165,8 +166,10 @@ function init() {
     if (lives === 0) {
       window.alert('You are out of spare Antibacterial Spray!!!')
       showAllMines(gridStats.cells)
+      endGame()
       gridCells.forEach(element => {
         element.removeEventListener('click', playerClick)
+        element.removeEventListener('contextmenu', flagMine)
       })
     }
   }
@@ -187,7 +190,6 @@ function init() {
   function onRightColumn(cell) {
     return (getIndexOfCell(cell) % gridStats.columns == gridStats.columns - 1 ? true : false)
   }
-  
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GATHERS THE MINESADJACENT VALUE
   function minesAdjacent(cell) {
     let mineValue = 0
@@ -200,7 +202,6 @@ function init() {
     const bottomLeft = gridStats.cells[currentCellIndex + gridStats.rows - 1]
     const bottom = gridStats.cells[currentCellIndex + gridStats.rows]
     const bottomRight = gridStats.cells[currentCellIndex + gridStats.rows + 1]
-
     if (!onTopRow(cell) && !onLeftColumn(cell) && topLeft.classList.contains('mine')) {
       mineValue ++
     } if (!onTopRow(cell) && top.classList.contains('mine')) {
@@ -220,7 +221,6 @@ function init() {
     }
     return mineValue
   }
-
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - SHOWS VALUE ON CLICK
   function showValues(cell) {
     if (cell.target.dataset.value == 0) {
@@ -239,7 +239,6 @@ function init() {
   }
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - PULLS VALUE OF ADJACENT MINES
   function runShowValuesOnNextCells(cell) {
-
     let currentCellIndex = getIndexOfCell(cell)
     const topLeft = gridStats.cells[currentCellIndex - gridStats.rows - 1]
     const top = gridStats.cells[currentCellIndex - gridStats.rows]
@@ -249,9 +248,6 @@ function init() {
     const bottomLeft = gridStats.cells[currentCellIndex + gridStats.rows - 1]
     const bottom = gridStats.cells[currentCellIndex + gridStats.rows]
     const bottomRight = gridStats.cells[currentCellIndex + gridStats.rows + 1]
-
-    console.log('cells value is', cell.dataset.value)
-
     if (cell.dataset.value == 0){
       if (!onRightColumn(cell) && right.classList.contains('unclicked')) {
         right.classList.replace('unclicked', 'clicked')
@@ -292,7 +288,6 @@ function init() {
     }
   }
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - BONUES / AUDIO / IMAGES
-  
   function playTheDude(event) {
     const theDudeAudio = new Audio('../assets/theDude.mp3')
     event.target.classList.add('theDude')
@@ -333,5 +328,4 @@ function init() {
     millhouseAudio.play()
   } 
 }
-
 window.addEventListener('DOMContentLoaded', init)
