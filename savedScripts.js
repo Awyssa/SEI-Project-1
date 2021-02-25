@@ -16,16 +16,17 @@ function minesAdjacent(event) {
   const top = Number(currentCellNum) - width
   const bottom = Number(currentCellNum) + width
 
-  // console.log('topright',topRight)
-  // console.log('right', right)
-  // console.log('BR', bottomRight)
 
-  // console.log('topleft',topLeft)
-  // console.log('left',left)
-  // console.log('BL', bottomLeft)
-  
-  // console.log('top',top)
-  // console.log('B', bottom)
+    // console.log('topleft',topLeft)
+    // console.log('top',top)
+    // console.log('topright', topRight)
+
+    // console.log('left',left)
+    // console.log('right', right)
+
+    // console.log('BL', bottomLeft)
+    // console.log('B', bottom)
+    // console.log('BR', bottomRight)
 
   if (topRight >= 0 && currentCellNum % width !== width - 1 && cells[topRight].classList.contains('mineHere')) {
     minesAdjacent ++
