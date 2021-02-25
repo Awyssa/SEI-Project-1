@@ -94,10 +94,15 @@ function init() {
     gridCells.forEach(element => {
       element.addEventListener('click', playerClick)
     })
+    handleStartTimer()
   }
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - RESET GAME
   document.querySelector('#reset').addEventListener('click', resetGame)
+
+  
+
   function resetGame() {
+    handleResetTimer()
     lives = 3
     gridStats.mines = 12
     clearClasses(gridStats.cells)
@@ -110,7 +115,9 @@ function init() {
     grid.classList.remove('millhouse')
     updateMinesFlagged()
     assignMineValueToGrid(gridStats.cells)
+    handleStartTimer()
   }
+
   function clearClasses(grid) {
     grid.forEach((element) => {
       element.className = ''
@@ -119,20 +126,30 @@ function init() {
     })
   }
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GAME TIMER
-  // const timer = document.getElementById('timer')
 
-  // function startTimer() {
-  //   time = setInterval(() => {
-  //     time++
-  //     timer.innerHTML = `Time: ${time}`
-  //   }, 1000)
-  //   console.log('timer ran')
-  // }
+  const timer = document.getElementById('timer')
 
-  // function stopTimer() {
-  //   clearInterval(gameTime)
-  //   gameTime = null
-  // }
+  let timerId = null
+  let seconds = 0
+
+  function handleStartTimer() {
+    seconds = 0
+    if (timerId) {
+      console.log('the timer was alreading running')
+      clearInterval(timerId)
+      timerId = null
+    } else {
+      console.log('the timer wasnt running, so a new one has been started')
+      timerId = setInterval(() => { 
+        seconds ++
+        timer.innerHTML = `Seconds: ${seconds}`
+      }, 1000)
+    }
+  }
+  function handleResetTimer() {
+    clearInterval(timerId) 
+    timerId = null 
+  }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GAME WON
   function gameWon() {
@@ -144,16 +161,19 @@ function init() {
         element.removeEventListener('click', playerClick)
         element.removeEventListener('contextmenu', flagMine)
       })
+      handleResetTimer()
     }
   }
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GAME OVER
   function endGame() {
     playEndgame()
     showAllMines(gridStats.cells)
+    handleResetTimer()
     gridCells.forEach(element => {
       element.removeEventListener('click', playerClick)
       element.removeEventListener('contextmenu', flagMine)
     })
+    
   }
   function showAllMines(array) {
     array.filter(value => {
@@ -164,7 +184,7 @@ function init() {
   }
   function outOfLives(lives) {
     if (lives === 0) {
-      window.alert('You are out of spare Antibacterial Spray!!!')
+      window.alert('You have no more Antibacterial Spray to clear the COVID CELLS!!!')
       showAllMines(gridStats.cells)
       endGame()
       gridCells.forEach(element => {
@@ -221,7 +241,6 @@ function init() {
     }
     return mineValue
   }
-  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - SHOWS VALUE ON CLICK
   function showValues(cell) {
     if (cell.target.dataset.value == 0) {
       cell.target.innerHTML = ''
@@ -286,6 +305,7 @@ function init() {
         }
       }
     }
+  }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - BONUES / AUDIO / IMAGES
   function playTheDude(event) {
