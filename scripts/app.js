@@ -11,14 +11,14 @@ function init() {
     cells: []
   }
 
-  const cellCount = grid.rows * grid.columns
+  const cellCount = gridStats.rows * gridStats.columns
   // let mines = 12
   let lives = 3
   const bonusActions = [playTheDude, playMurray, playDuffman, playRum]
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - CREATE GRID
   // FUNCTION TO CREATE THE GRID
-  function createGrid(grid) {
+  function createGrid() {
     for (let i = 0; i < gridStats.rows; i++) {
       for (let j = 0; j < gridStats.columns; j ++) {
         const cell = document.createElement('div')
@@ -95,7 +95,7 @@ function init() {
   showAnti()
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - START GAME
 
-  createGrid(grid)
+  createGrid()
   addMines(gridStats.cells)
 
   // document.querySelector('#grid').addEventListener('click', startGame)
@@ -196,6 +196,8 @@ function init() {
     }
   }
 
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - CHECK FOR BORDER CELLS
+
   function getIndexOfCell(cell) {
     let index = gridStats.cells.indexOf(cell)
     return index
@@ -205,6 +207,20 @@ function init() {
     return (getIndexOfCell(cell) < gridStats.rows ? true : false)
   }
 
+  function onBottomRow(cell) {
+    return (getIndexOfCell(cell) > cellCount - gridStats.rows ? true : false)
+  }
+
+  function onLeftColumn(cell) {
+    return (getIndexOfCell(cell) % gridStats.columns == 0 ? true : false)
+  }
+
+  function onRightColumn(cell) {
+    return (getIndexOfCell(cell) % gridStats.columns == gridStats.columns - 1 ? true : false)
+  }
+
+
+
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GATHERS THE MINESADJACENT VALUE
   function minesAdjacent(cell) {
 
@@ -212,12 +228,12 @@ function init() {
 
     let currentCellIndex = getIndexOfCell(cell)
 
-    console.log(inTheFirstRow(cell))
+    console.log('on left col?', onRightColumn(cell))
 
-    console.log('the cell is', cell)
-    console.log('the currentcellindex is', currentCellIndex)
+    // console.log('the cell is', cell)
+    // console.log('the currentcellindex is', currentCellIndex)
 
-    const topRight = gridStats.cells[currentCellIndex - gridStats.columns + 1]
+    // const topRight = gridStats.cells[currentCellIndex - gridStats.columns + 1]
     // const right = Number(currentCellNum) + 1
     // const bottomRight = Number(currentCellNum) + width + 1
     // const topLeft = Number(currentCellNum) - width - 1
@@ -226,7 +242,7 @@ function init() {
     // const top = Number(currentCellNum) - width
     // const bottom = Number(currentCellNum) + width
 
-    console.log('topright', topRight)
+    // console.log('topright', topRight)
 
     // console.log('right', right)
     // console.log('BR', bottomRight)
