@@ -85,12 +85,8 @@ body {
   background-color: white;
 }
 
-
-
-
-
 .clicked {
-  background-color: rgba(104, 104, 104, 0.726);
+  background-color: rgba(148, 148, 148, 0.726);
 }
 
 
@@ -158,6 +154,10 @@ body {
     display: flex;
     flex-direction: column;
     text-align: center;
+  }
+
+  body {
+    font-size: 10px;
   }
   
 
