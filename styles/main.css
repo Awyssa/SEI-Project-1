@@ -13,7 +13,7 @@ body {
 }
 
 .container {
-  margin: 0 10%;
+  width: 80%;
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -28,7 +28,8 @@ body {
   margin: 10px 0 10px 0;
 }
 
-.header p {
+.info {
+  font-size: 15px;
 }
 
 .header .score {
@@ -129,11 +130,11 @@ body {
   background-size: contain;
 }
 
-.mine {
+/* .mine {
   background-image: url('../assets/mine.jpg');
   background-repeat: no-repeat;
   background-size: contain;
-}
+} */
 
 .cross {
   background-image: url('../assets/cross.png');
@@ -151,6 +152,13 @@ body {
 
 
 @media screen and (max-width: 800px) {
+  
+  .container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
   
 
 }

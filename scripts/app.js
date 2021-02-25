@@ -79,7 +79,7 @@ function init() {
   }
   updateMinesFlagged()
   function showAnti() {
-    document.getElementById('anti').innerHTML = `Free Antibacterial Spray: ${lives}`
+    document.getElementById('anti').innerHTML = `Extra Antibacterial Spray: ${lives}`
   }
   showAnti()
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - START GAME
@@ -98,8 +98,6 @@ function init() {
   }
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - RESET GAME
   document.querySelector('#reset').addEventListener('click', resetGame)
-
-  
 
   function resetGame() {
     handleResetTimer()
