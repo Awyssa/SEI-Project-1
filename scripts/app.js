@@ -229,7 +229,7 @@ function init() {
       cell.target.innerHTML = cell.target.dataset.value
     }
   }
-  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ASSIGNS CELLS CLASSLIST VALUE USING MINES AJACENT()
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ASSIGNS CELLS CLASSLIST VALUE USING MINES AJACENT()
   function assignMineValueToGrid(array) {
     array.forEach(element => {
       let valueToAssign = minesAdjacent(element)
@@ -286,7 +286,7 @@ function init() {
         }
       }
     }
-  }
+
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - BONUES / AUDIO / IMAGES
   function playTheDude(event) {
     const theDudeAudio = new Audio('../assets/theDude.mp3')
