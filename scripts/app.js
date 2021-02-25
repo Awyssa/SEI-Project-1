@@ -3,29 +3,38 @@ function init() {
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - VARIABLES 
   const grid = document.querySelector('.grid')
   const gridCells = document.querySelectorAll('.grid')
-  const width = 10
-  const cellCount = width * width
-  let mines = 12
-  const cells = []
+
+  const gridStats = {
+    rows: 10,
+    columns: 10,
+    mines: 12,
+    cells: []
+  }
+
+  const cellCount = grid.rows * grid.columns
+  // let mines = 12
   let lives = 3
   const bonusActions = [playTheDude, playMurray, playDuffman, playRum]
-  let gameTime = 150
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - CREATE GRID
   // FUNCTION TO CREATE THE GRID
-  function createGrid() {
-    for (let i = 0; i < cellCount; i++) {
-      const cell = document.createElement('div')
-      grid.appendChild(cell)
-      cells.push(cell)
-      cell.id = i
-      cell.classList.add('unclicked')
+  function createGrid(grid) {
+    for (let i = 0; i < gridStats.rows; i++) {
+      for (let j = 0; j < gridStats.columns; j ++) {
+        const cell = document.createElement('div')
+        grid.appendChild(cell)
+        gridStats.cells.push(cell)
+        cell.classList.add('unclicked')
+      }
     }
-  }  
+    console.log('gridStats', gridStats)
+    console.log('gridStats.cells', gridStats.cells)
+  }
+
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ADD MINES
-  function addMines(grid) {
-    for (let i = 0; i < mines; i) {
-      let cellToAddMine =  grid[Math.floor(Math.random() * grid.length)]
+  function addMines(array) {
+    for (let i = 0; i < gridStats.mines; i) {
+      const cellToAddMine =  gridStats.cells[Math.floor(Math.random() * gridStats.cells.length)]
       console.log(cellToAddMine)
       if (cellToAddMine.classList.contains('unclicked')) {
         cellToAddMine.classList.replace('unclicked', 'mine')
@@ -42,6 +51,7 @@ function init() {
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - PLAYER LEFT CLICK
   function playerClick(event) {
     console.log('clicked on this cell', event.target)
+    minesAdjacent(event.target)
     if (event.target.classList.contains('mine') && !event.target.classList.contains('flagged')) {
       event.target.classList.add('covid')
       endGame()
@@ -49,18 +59,20 @@ function init() {
       event.target.classList.replace('unclicked', 'clicked')
       // updateScore()
       showValues(event)
-      if (event.target.dataset.value == 0) {
-        runShowValuesOnNextCells(event.target)
-      }
+      event.target.removeEventListener('click', playerClick)
+      // if (event.target.dataset.value == 0) {
+      //   runShowValuesOnNextCells(event.target)
+      // }
     }
   }
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - PLAYER RIGHT CLICK
+  
   function flagMine(event) {
-    if (event.target.classList.contains('mine')) {
+    if (event.target.classList.contains('mine') && !event.target.classList.contains('flagged')) {
       const bonusToPlay =  bonusActions[Math.floor(Math.random() * bonusActions.length)]
       event.target.classList.add('flagged')
       bonusToPlay(event)
-      mines --
+      gridStats.mines --
     } if (event.target.classList.contains('unclicked')) {
       event.target.classList.replace('unclicked', 'cross')
       playWrong()
@@ -69,11 +81,11 @@ function init() {
     }
     updateMinesFlagged()
     showAnti()
-    gameWon(mines)
+    gameWon(gridStats.mines)
   }
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - UPDATES SCORE / LIVES / MINES
   function updateMinesFlagged() {
-    document.getElementById('bonus').innerHTML = `COVID Viruses left: ${mines}`
+    document.getElementById('bonus').innerHTML = `COVID Viruses left: ${gridStats.mines}`
   }
   updateMinesFlagged()
 
@@ -82,37 +94,39 @@ function init() {
   }
   showAnti()
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - START GAME
-  document.querySelector('#grid').addEventListener('click', startGame)
 
-  function startGame() {
-    document.querySelector('#grid').removeEventListener('click', startGame)
-    document.querySelector('.grid').innerHTML = ''
-    createGrid()
-    addMines(cells)
-    gridCells.forEach(element => {
-      element.addEventListener('click', playerClick)
-    })
-    assignMineValueToGrid(cells)
-    startTimer()
-  }
+  createGrid(grid)
+  addMines(gridStats.cells)
+
+  // document.querySelector('#grid').addEventListener('click', startGame)
+
+  // function startGame() {
+  //   document.querySelector('#grid').removeEventListener('click', startGame)
+  //   document.querySelector('.grid').innerHTML = ''
+  //   createGrid(grid)
+  //   addMines(gridStats.cells)
+  //   gridCells.forEach(element => {
+  //     element.addEventListener('click', playerClick)
+  //   })
+  //   assignMineValueToGrid(gridStats.cells)
+  // }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - RESET GAME
 
   document.querySelector('#reset').addEventListener('click', resetGame)
 
   function resetGame() {
-    clearClasses(cells)
+    clearClasses(gridStats.cells)
     lives = 3
-    mines = 12
+    gridStats.mines = 12
     gridCells.forEach(element => {
       element.addEventListener('click', playerClick)
     })
-    addMines(cells)
+    addMines(gridStats.cells)
     showAnti()
     grid.classList.remove('millhouse')
     updateMinesFlagged()
-    assignMineValueToGrid(cells)
-    startTimer()
+    assignMineValueToGrid(gridStats.cells)
   }
 
   function clearClasses(grid) {
@@ -124,49 +138,44 @@ function init() {
   }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GAME TIMER
+  // const timer = document.getElementById('timer')
 
-  let time = 0
+  // function startTimer() {
+  //   time = setInterval(() => {
+  //     time++
+  //     timer.innerHTML = `Time: ${time}`
+  //   }, 1000)
+  //   console.log('timer ran')
+  // }
 
-  function startTimer() {
-    if (gameTime) {
-      clearInterval(gameTime)
-      gameTime = null
-    } else {
-      gameTime = setInterval(() => {
-        time++
-        timer.innerHTML = `Time: ${time}`
-      }, 1000)
-    }
-  }
-
-  function stopTimer() {
-    clearInterval(gameTime)
-  }
+  // function stopTimer() {
+  //   clearInterval(gameTime)
+  //   gameTime = null
+  // }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GAME WON
 
-  function gameWon(mines) {
-    if (mines === 0) {
-      stopTimer()
+  function gameWon() {
+    if (gridStats.mines === 0) {
       window.alert('WELL DONE!!! The R rate is at 0 and you have ended the COVID pandemic!!!')
       grid.classList.add('millhouse')
       playMillhouse()
       gridCells.forEach(element => {
         element.removeEventListener('click', playerClick)
       })
-      clearInterval(gameTimer)
     }
   }
+
+
+
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GAME OVER
   function endGame() {
-    stopTimer()
     playEndgame()
-    showAllMines(cells)
+    showAllMines(gridStats.cells)
     gridCells.forEach(element => {
       element.removeEventListener('click', playerClick)
     })
     window.alert('YOU HIT A COVID VIRUS!!!')
-    clearInterval(gameTimer)
   }
 
   function showAllMines(array) {
@@ -180,46 +189,77 @@ function init() {
   function outOfLives(lives) {
     if (lives === 0) {
       window.alert('You are out of spare Antibacterial Spray!!!')
-      showAllMines(cells)
+      showAllMines(gridStats.cells)
       gridCells.forEach(element => {
         element.removeEventListener('click', playerClick)
       })
     }
   }
+
+  function getIndexOfCell(cell) {
+    let index = gridStats.cells.indexOf(cell)
+    return index
+  }
+
+  function onTopRow(cell) {
+    return (getIndexOfCell(cell) < gridStats.rows ? true : false)
+  }
+
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GATHERS THE MINESADJACENT VALUE
-  function minesAdjacent(currentCell) {
+  function minesAdjacent(cell) {
+
     let minesAdjacent = 0
 
-    const currentCellNum = currentCell.id
+    let currentCellIndex = getIndexOfCell(cell)
 
-    const topRight = Number(currentCellNum) - width + 1
-    const right = Number(currentCellNum) + 1
-    const bottomRight = Number(currentCellNum) + width + 1
-    const topLeft = Number(currentCellNum) - width - 1
-    const left = Number(currentCellNum) - 1
-    const bottomLeft = Number(currentCellNum) + width - 1
-    const top = Number(currentCellNum) - width
-    const bottom = Number(currentCellNum) + width
+    console.log(inTheFirstRow(cell))
+
+    console.log('the cell is', cell)
+    console.log('the currentcellindex is', currentCellIndex)
+
+    const topRight = gridStats.cells[currentCellIndex - gridStats.columns + 1]
+    // const right = Number(currentCellNum) + 1
+    // const bottomRight = Number(currentCellNum) + width + 1
+    // const topLeft = Number(currentCellNum) - width - 1
+    // const left = Number(currentCellNum) - 1
+    // const bottomLeft = Number(currentCellNum) + width - 1
+    // const top = Number(currentCellNum) - width
+    // const bottom = Number(currentCellNum) + width
+
+    console.log('topright', topRight)
+
+    // console.log('right', right)
+    // console.log('BR', bottomRight)
+
+    // console.log('topleft',topLeft)
+    // console.log('left',left)
+    // console.log('BL', bottomLeft)
     
-    if (topRight >= 0 && currentCellNum % width !== width - 1 && cells[topRight].classList.contains('mine')) {
-      minesAdjacent ++
-    } if (right < cellCount && currentCellNum % width !== width - 1 && cells[right].classList.contains('mine')) {
-      minesAdjacent ++
-    } if (bottomRight < cellCount && currentCellNum % width !== width - 1  && cells[bottomRight].classList.contains('mine')) {
-      minesAdjacent ++
-    } if (topLeft >= 0 && currentCellNum % width !== 0 && cells[topLeft].classList.contains('mine')) {
-      minesAdjacent ++
-    } if (left >= 0 && currentCellNum % width !== 0 && cells[left].classList.contains('mine')) {
-      minesAdjacent ++
-    } if (bottomLeft < cellCount &&  currentCellNum % width !== 0 && cells[bottomLeft].classList.contains('mine')) {
-      minesAdjacent ++
-    } if (top >= 0 && cells[top].classList.contains('mine')) {
-      minesAdjacent ++
-    } if (bottom < cellCount && cells[bottom].classList.contains('mine')) {
-      minesAdjacent ++
-    }
+    // console.log('top',top)
+    // console.log('B', bottom)
+    
+    // if (topRight >= 0 && currentCellNum % width !== width - 1 && cells[topRight].classList.contains('mine')) {
+    //   minesAdjacent ++
+    // } if (right < cellCount && currentCellNum % width !== width - 1 && cells[right].classList.contains('mine')) {
+    //   minesAdjacent ++
+    // } if (bottomRight < cellCount && currentCellNum % width !== width - 1  && cells[bottomRight].classList.contains('mine')) {
+    //   minesAdjacent ++
+    // } if (topLeft >= 0 && currentCellNum % width !== 0 && cells[topLeft].classList.contains('mine')) {
+    //   minesAdjacent ++
+    // } if (left >= 0 && currentCellNum % width !== 0 && cells[left].classList.contains('mine')) {
+    //   minesAdjacent ++
+    // } if (bottomLeft < cellCount &&  currentCellNum % width !== 0 && cells[bottomLeft].classList.contains('mine')) {
+    //   minesAdjacent ++
+    // } if (top >= 0 && cells[top].classList.contains('mine')) {
+    //   minesAdjacent ++
+    // } if (bottom < cellCount && cells[bottom].classList.contains('mine')) {
+    //   minesAdjacent ++
+    // }
     return minesAdjacent
   }
+
+
+
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - SHOWS VALUE ON CLICK
   function showValues(cell) {
     if (cell.target.dataset.value == 0) {
@@ -229,68 +269,65 @@ function init() {
     }
   }
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ASSIGNS CELLS CLASSLIST VALUE USING MINES AJACENT()
-  function assignMineValueToGrid(array) {
-    array.forEach(element => {
-      let valueToAssign = minesAdjacent(element)
-      element.dataset.value = valueToAssign
-    })
-    console.log('assigMines ran')
-  }
+  
+  // function assignMineValueToGrid(array) {
+  //   array.forEach(element => {
+  //     let valueToAssign = minesAdjacent(element)
+  //     element.dataset.value = valueToAssign
+  //   })
+  //   console.log('assigMines ran')
+  // }
 
-  assignMineValueToGrid(cells)
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - PULLS VALUE OF ADJACENT MINES
-  function runShowValuesOnNextCells(cell) {
-    const currentCellNum = cell.id
-    const topRight = Number(currentCellNum) - width + 1
-    const right = Number(currentCellNum) + 1
-    const bottomRight = Number(currentCellNum) + width + 1
-    const topLeft = Number(currentCellNum) - width - 1
-    const left = Number(currentCellNum) - 1
-    const bottomLeft = Number(currentCellNum) + width - 1
-    const top = Number(currentCellNum) - width
-    const bottom = Number(currentCellNum) + width
+  // function runShowValuesOnNextCells(cell) {
+  //   const currentCellNum = cell.id
+  //   const topRight = Number(currentCellNum) - width + 1
+  //   const right = Number(currentCellNum) + 1
+  //   const bottomRight = Number(currentCellNum) + width + 1
+  //   const topLeft = Number(currentCellNum) - width - 1
+  //   const left = Number(currentCellNum) - 1
+  //   const bottomLeft = Number(currentCellNum) + width - 1
+  //   const top = Number(currentCellNum) - width
+  //   const bottom = Number(currentCellNum) + width
 
-    if (right < cellCount && currentCellNum % width !== width - 1 && cells[right].classList.contains('unclicked')) {
-      let rightValue = minesAdjacent(cells[right])
-      if (rightValue === 0) {
-        cells[right].classList.replace('unclicked', 'clicked')
-        cells[right].innerHTML = ''
-        runShowValuesOnNextCells(cells[right])
-      }
-    }
-    if (left >= 0 && currentCellNum % width !== 0 && cells[left].classList.contains('unclicked')) {
-      let leftValue = minesAdjacent(cells[left])
-      if (leftValue === 0) {
-        cells[left].classList.replace('unclicked', 'clicked')
-        cells[left].innerHTML = ''
-        runShowValuesOnNextCells(cells[left])
-      }
-    }
-    if (top >= 0 && cells[top].classList.contains('unclicked')) {
-      let topValue = minesAdjacent(cells[top])
-      if (topValue === 0) {
-        cells[top].classList.replace('unclicked', 'clicked')
-        cells[top].innerHTML = ''
-        runShowValuesOnNextCells(cells[top])
-      }
-    }
+  //   if (right < cellCount && currentCellNum % width !== width - 1 && cells[right].classList.contains('unclicked')) {
+  //     let rightValue = minesAdjacent(cells[right])
+  //     if (rightValue === 0) {
+  //       cells[right].classList.replace('unclicked', 'clicked')
+  //       cells[right].innerHTML = ''
+  //       runShowValuesOnNextCells(cells[right])
+  //     }
+  //   }
+  //   if (left >= 0 && currentCellNum % width !== 0 && cells[left].classList.contains('unclicked')) {
+  //     let leftValue = minesAdjacent(cells[left])
+  //     if (leftValue === 0) {
+  //       cells[left].classList.replace('unclicked', 'clicked')
+  //       cells[left].innerHTML = ''
+  //       runShowValuesOnNextCells(cells[left])
+  //     }
+  //   }
+  //   if (top >= 0 && cells[top].classList.contains('unclicked')) {
+  //     let topValue = minesAdjacent(cells[top])
+  //     if (topValue === 0) {
+  //       cells[top].classList.replace('unclicked', 'clicked')
+  //       cells[top].innerHTML = ''
+  //       runShowValuesOnNextCells(cells[top])
+  //     }
+  //   }
 
-    if (bottom < cellCount && cells[bottom].classList.contains('unclicked')) {
-      let bottomValue = minesAdjacent(cells[bottom])
-      if (bottomValue === 0) {
-        cells[bottom].classList.replace('unclicked', 'clicked')
-        cells[bottom].innerHTML = ''
-        runShowValuesOnNextCells(cells[bottom])
-      }
-    }
-  }
-  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GAME TIMER
-
-
-
+  //   if (bottom < cellCount && cells[bottom].classList.contains('unclicked')) {
+  //     let bottomValue = minesAdjacent(cells[bottom])
+  //     if (bottomValue === 0) {
+  //       cells[bottom].classList.replace('unclicked', 'clicked')
+  //       cells[bottom].innerHTML = ''
+  //       runShowValuesOnNextCells(cells[bottom])
+  //     }
+  //   }
+  // }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - BONUES / AUDIO / IMAGES
+  
   function playTheDude(event) {
     const theDudeAudio = new Audio('../assets/theDude.mp3')
     event.target.classList.add('theDude')
