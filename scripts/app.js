@@ -1,3 +1,6 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable no-unused-vars */
+/* eslint-disable prefer-const */
 function init() {
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - VARIABLES 
   const grid = document.querySelector('.grid')
@@ -9,11 +12,8 @@ function init() {
     cells: []
   }
   const cellCount = gridStats.rows * gridStats.columns
-  // let mines = 12
   let lives = 3
-  // const bonusActions = [playTheDude, playMurray, playDuffman, playRum]
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - CREATE GRID
-  // FUNCTION TO CREATE THE GRID
   function createGrid() {
     for (let i = 0; i < gridStats.rows; i++) {
       for (let j = 0; j < gridStats.columns; j ++) {
@@ -25,7 +25,7 @@ function init() {
     }
   }
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ADD MINES
-  function addMines(array) {
+  function addMines() {
     for (let i = 0; i < gridStats.mines; i) {
       const cellToAddMine =  gridStats.cells[Math.floor(Math.random() * gridStats.cells.length)]
       console.log(cellToAddMine)
@@ -42,7 +42,6 @@ function init() {
   })
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - PLAYER LEFT CLICK
   function playerClick(event) {
-    playAudio(wolf)
     console.log('clicked on this cell', event.target)
     console.log('mines ajacant', minesAdjacent(event.target))
     if (event.target.classList.contains('mine') && !event.target.classList.contains('flagged')) {
@@ -60,13 +59,12 @@ function init() {
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - PLAYER RIGHT CLICK
   function flagMine(event) {
     if (event.target.classList.contains('mine') && !event.target.classList.contains('flagged')) {
-      const bonusToPlay =  bonusActions[Math.floor(Math.random() * bonusActions.length)]
       event.target.classList.add('flagged')
-      bonusToPlay(event)
       gridStats.mines --
+      // playBonus(bonusArray[1][0], bonusArray[1][1])
+      playRandomBonus()
     } if (event.target.classList.contains('unclicked')) {
       event.target.classList.replace('unclicked', 'cross')
-      playWrong()
       lives --
     }
     updateMinesFlagged()
@@ -112,6 +110,7 @@ function init() {
     addMines(gridStats.cells)
     showAnti()
     grid.classList.remove('millhouse')
+    grid.classList.remove('michael')
     updateMinesFlagged()
     assignMineValueToGrid(gridStats.cells)
     handleStartTimer()
@@ -155,7 +154,6 @@ function init() {
     if (gridStats.mines === 0) {
       window.alert('WELL DONE!!! The R rate is at 0 and you have ended the COVID pandemic!!!')
       grid.classList.add('millhouse')
-      playMillhouse()
       gridCells.forEach(element => {
         element.removeEventListener('click', playerClick)
         element.removeEventListener('contextmenu', flagMine)
@@ -163,20 +161,21 @@ function init() {
       handleResetTimer()
     }
   }
+
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GAME OVER
   function endGame() {
-    playEndgame()
     showAllMines(gridStats.cells)
     handleResetTimer()
     gridCells.forEach(element => {
       element.removeEventListener('click', playerClick)
       element.removeEventListener('contextmenu', flagMine)
     })
-    
+    grid.classList.add('michael')
+    endgame.audio.play()
   }
   function showAllMines(array) {
     array.filter(value => {
-      if (value.classList.contains('mine')) {
+      if (value.classList.contains('mine') && !value.classList.contains('flagged')) {
         value.classList.add('covid')
       }
     })
@@ -308,27 +307,113 @@ function init() {
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - BONUES / AUDIO / IMAGES
 
-  let endgameAudio = new Audio('../assets/noo.mov')
-  let wrongAudio = new Audio('../assets/wrong.mp3')
+  let endgame = {
+    audio: new Audio('../assets/noo.mov'),
+    image: 'michael'
+  }
 
-  let theDudeAudio = new Audio('../assets/theDude.mp3')
-  let murrayAudio = new Audio('../assets/murray.mov')
-  let duffmanAudio = new Audio('../assets/duffman.mp3')
-  let rumAudio = new Audio('../assets/rum.mov')
-  let dayman = new Audio('../assets/dayman.mov')
-  let mclovin = new Audio('../assets/mclovin.mov')
-  let merry = new Audio('../assets/merry.mov')
-  let peep = new Audio('../assets/peep.mov')
-  let ronBurg = new Audio('../assets/ron.b.mov')
-  let rumham = new Audio('../assets/rumham.mov')
-  let wolf = new Audio('../assets/wolf.mov')
+  let millhouse = {
+    audio: new Audio('../assets/millhouse.mov'),
+    image: 'millhouse'
+  }
 
-  playAudio(wolf)
+  let wrong = {
+    audio: new Audio('../assets/wrong.mp3'),
+    image: 'cross'
+  }
+    
+  let theDude = {
+    audio: new Audio('../assets/theDude.mp3'),
+    image: 'theDude'
+  }
 
-  function playAudio(audio) {
+  let murray = {
+    audio: new Audio('../assets/murray.mov'),
+    image: 'murray'
+  }
+
+  let duffman = {
+    audio: new Audio('../assets/duffman.mp3'),
+    image: 'duffman'
+  }
+  let rum = {
+    audio: new Audio('../assets/rum.mov'),
+    image: 'rum'
+  }
+
+  let dayman = {
+    audio: new Audio('../assets/dayman.mov'),
+    image: 'charlie'
+  } 
+
+  let mclovin = {
+    audio: new Audio('../assets/mclovin.mov'),
+    image: 'mclovin'
+  }
+
+  let merry = {
+    audio: new Audio('../assets/merry.mov'),
+    image: 'merry'
+  }
+
+  let peep = {
+    audio: new Audio('../assets/peep.mov'),
+    image: 'mark'
+  }
+  
+  let ronBurg = {
+    audio: new Audio('../assets/ron.b.mov'),
+    image: 'ronBurg'
+  }
+
+  let ronSwanson = {
+    audio: new Audio('../assets/ronSwanson.mov'),
+    image: 'ronSwanson'
+  }
+  
+  let rumham = {
+    audio: new Audio('../assets/rumham.mov'),
+    image: 'rumham'
+  }
+
+  let wolf = {
+    audio: new Audio('../assets/wolf.mov'),
+    image: 'wolf' 
+  }
+
+  function playAudio(image, audio) {
+    event.target.classList.add(image)
     audio.volume = 0.5
     audio.play()
-
   }
+
+  let bonusArray = [
+    [wolf.image, wolf.audio], 
+    [rumham.image, rumham.audio],
+    [theDude.image, theDude.audio],
+    [murray.image, murray.audio],
+    [duffman.image, duffman.audio],
+    [rum.image, rum.audio],
+    [dayman.image, dayman.audio],
+    [mclovin.image, mclovin.audio],
+    [merry.image, merry.audio],
+    [peep.image, peep.audio],
+    [ronBurg.image, ronBurg.audio],
+    [ronSwanson.image, ronSwanson.audio]
+  ]
+
+  let bonusIndex = 0
+  const bonusSound = 0
+  const bonusAudio = 1
+
+  function playRandomBonus() {
+    console.log(bonusIndex, bonusSound, bonusAudio)
+    playAudio(bonusArray[bonusIndex][bonusSound],bonusArray[bonusIndex][bonusAudio])
+    bonusIndex ++
+  }
+  console.log(bonusArray)
+
 }
+
+
 window.addEventListener('DOMContentLoaded', init)
