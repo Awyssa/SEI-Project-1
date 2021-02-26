@@ -28,7 +28,6 @@ function init() {
   function addMines() {
     for (let i = 0; i < gridStats.mines; i) {
       const cellToAddMine =  gridStats.cells[Math.floor(Math.random() * gridStats.cells.length)]
-      console.log(cellToAddMine)
       if (cellToAddMine.classList.contains('unclicked')) {
         cellToAddMine.classList.replace('unclicked', 'mine')
         i++
@@ -42,8 +41,6 @@ function init() {
   })
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - PLAYER LEFT CLICK
   function playerClick(event) {
-    console.log('clicked on this cell', event.target)
-    console.log('mines ajacant', minesAdjacent(event.target))
     if (event.target.classList.contains('mine') && !event.target.classList.contains('flagged')) {
       event.target.classList.add('covid')
       showBlock('YOU HIT A COVID VIRUS!!!')
@@ -140,11 +137,9 @@ function init() {
   function handleStartTimer() {
     seconds = 0
     if (timerId) {
-      console.log('the timer was alreading running')
       clearInterval(timerId)
       timerId = null
     } else {
-      console.log('the timer wasnt running, so a new one has been started')
       timerId = setInterval(() => { 
         seconds ++
         timer.innerHTML = `Seconds: ${seconds}`
@@ -262,7 +257,6 @@ function init() {
       let valueToAssign = minesAdjacent(element)
       element.dataset.value = valueToAssign
     })
-    console.log('assigMines ran')
   }
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - PULLS VALUE OF ADJACENT MINES
   function runShowValuesOnNextCells(cell) {
@@ -417,7 +411,6 @@ function init() {
   let bonusAudio = 1
 
   function playRandomBonus() {
-    console.log(bonusIndex, bonusSound, bonusAudio)
     playAudio(bonusArray[bonusIndex][bonusSound],bonusArray[bonusIndex][bonusAudio])
     bonusIndex ++
   }
