@@ -11,7 +11,7 @@ function init() {
   const cellCount = gridStats.rows * gridStats.columns
   // let mines = 12
   let lives = 3
-  const bonusActions = [playTheDude, playMurray, playDuffman, playRum]
+  // const bonusActions = [playTheDude, playMurray, playDuffman, playRum]
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - CREATE GRID
   // FUNCTION TO CREATE THE GRID
   function createGrid() {
@@ -42,6 +42,7 @@ function init() {
   })
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - PLAYER LEFT CLICK
   function playerClick(event) {
+    playAudio(wolf)
     console.log('clicked on this cell', event.target)
     console.log('mines ajacant', minesAdjacent(event.target))
     if (event.target.classList.contains('mine') && !event.target.classList.contains('flagged')) {
@@ -306,44 +307,28 @@ function init() {
   }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - BONUES / AUDIO / IMAGES
-  function playTheDude(event) {
-    const theDudeAudio = new Audio('../assets/theDude.mp3')
-    event.target.classList.add('theDude')
-    theDudeAudio.volume = 0.2
-    theDudeAudio.play()
+
+  let endgameAudio = new Audio('../assets/noo.mov')
+  let wrongAudio = new Audio('../assets/wrong.mp3')
+
+  let theDudeAudio = new Audio('../assets/theDude.mp3')
+  let murrayAudio = new Audio('../assets/murray.mov')
+  let duffmanAudio = new Audio('../assets/duffman.mp3')
+  let rumAudio = new Audio('../assets/rum.mov')
+  let dayman = new Audio('../assets/dayman.mov')
+  let mclovin = new Audio('../assets/mclovin.mov')
+  let merry = new Audio('../assets/merry.mov')
+  let peep = new Audio('../assets/peep.mov')
+  let ronBurg = new Audio('../assets/ron.b.mov')
+  let rumham = new Audio('../assets/rumham.mov')
+  let wolf = new Audio('../assets/wolf.mov')
+
+  playAudio(wolf)
+
+  function playAudio(audio) {
+    audio.volume = 0.5
+    audio.play()
+
   }
-  function playMurray(event) {
-    const murrayAudio = new Audio('../assets/murray.mov')
-    event.target.classList.add('murray')
-    murrayAudio.volume = 0.2
-    murrayAudio.play()
-  }
-  function playDuffman(event) {
-    const duffmanAudio = new Audio('../assets/duffman.mp3')
-    event.target.classList.add('duffman')
-    duffmanAudio.volume = 0.2
-    duffmanAudio.play()
-  }
-  function playRum(event) {
-    const rumAudio = new Audio('../assets/rum.mov')
-    event.target.classList.add('rum')
-    rumAudio.volume = 0.2
-    rumAudio.play()
-  }
-  function playWrong() {
-    const wrongAudio = new Audio('../assets/wrong.mp3')
-    wrongAudio.volume = 0.2
-    wrongAudio.play()
-  }
-  function playEndgame() {
-    const endgameAudio = new Audio('../assets/endgame.mp3')
-    endgameAudio.volume = 0.4
-    endgameAudio.play()
-  }
-  function playMillhouse() {
-    const millhouseAudio = new Audio('../assets/millhouse.mov')
-    millhouseAudio.volume = 0.4
-    millhouseAudio.play()
-  } 
 }
 window.addEventListener('DOMContentLoaded', init)
