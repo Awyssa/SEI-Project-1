@@ -313,7 +313,7 @@ function init() {
     theDudeAudio.play()
   }
   function playMurray(event) {
-    const murrayAudio = new Audio('../assets/murray.mp3')
+    const murrayAudio = new Audio('../assets/murray.mov')
     event.target.classList.add('murray')
     murrayAudio.volume = 0.2
     murrayAudio.play()
@@ -325,7 +325,7 @@ function init() {
     duffmanAudio.play()
   }
   function playRum(event) {
-    const rumAudio = new Audio('../assets/rum.mp3')
+    const rumAudio = new Audio('../assets/rum.mov')
     event.target.classList.add('rum')
     rumAudio.volume = 0.2
     rumAudio.play()
