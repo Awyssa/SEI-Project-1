@@ -8,7 +8,7 @@ function init() {
   const gridStats = {
     rows: 10,
     columns: 10,
-    mines: 3,
+    mines: 12,
     cells: []
   }
   const cellCount = gridStats.rows * gridStats.columns
@@ -47,6 +47,7 @@ function init() {
     if (event.target.classList.contains('mine') && !event.target.classList.contains('flagged')) {
       event.target.classList.add('covid')
       showBlock('YOU HIT A COVID VIRUS!!!')
+      modalwindow.classList.add('modallose')
       endGame()
     } if (event.target.classList.contains('unclicked')) {
       event.target.classList.replace('unclicked', 'clicked')
@@ -118,6 +119,8 @@ function init() {
     bonusSound = 0
     bonusAudio = 1
     modalwindow.classList.remove('modalwin')
+    modalwindow.classList.remove('modallose')
+    modalwindow.classList.remove('modallost')
   }
 
   function clearClasses(grid) {
@@ -189,6 +192,7 @@ function init() {
   function outOfLives(lives) {
     if (lives === 0) {
       showBlock('You have no more Antibacterial Spray to clear the COVID CELLS!!!')
+      modalwindow.classList.add('modallost')
       showAllMines(gridStats.cells)
       endGame()
       gridCells.forEach(element => {
@@ -319,7 +323,7 @@ function init() {
   }
 
   let millhouse = {
-    audio: new Audio('../assets/millhouse.mov'),
+    audio: new Audio('../assets/dance.mp3'),
     image: 'millhouse'
   }
 
@@ -418,7 +422,7 @@ function init() {
     bonusIndex ++
   }
 
-  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - BONUES / AUDIO / IMAGES
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - MODALS
   let modal = document.getElementById('myModal')
   let modalmsg = document.getElementById('modalmsg')
   let btn = document.getElementById('myBtn')
@@ -429,9 +433,6 @@ function init() {
     modal.style.display = 'block'
     modalmsg.innerHTML = `${string}`
   }
-  // span.onclick = function() {
-  //   modal.style.display = "none";
-  // }
   span.onclick = function(event) {
     if (event.target == span) {
       modal.style.display = 'none'
