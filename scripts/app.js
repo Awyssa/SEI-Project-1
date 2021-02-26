@@ -61,10 +61,10 @@ function init() {
     if (event.target.classList.contains('mine') && !event.target.classList.contains('flagged')) {
       event.target.classList.add('flagged')
       gridStats.mines --
-      // playBonus(bonusArray[1][0], bonusArray[1][1])
       playRandomBonus()
     } if (event.target.classList.contains('unclicked')) {
       event.target.classList.replace('unclicked', 'cross')
+      wrong.audio.play()
       lives --
     }
     updateMinesFlagged()
@@ -114,6 +114,9 @@ function init() {
     updateMinesFlagged()
     assignMineValueToGrid(gridStats.cells)
     handleStartTimer()
+    bonusIndex = 0
+    bonusSound = 0
+    bonusAudio = 1
   }
 
   function clearClasses(grid) {
@@ -154,6 +157,7 @@ function init() {
     if (gridStats.mines === 0) {
       window.alert('WELL DONE!!! The R rate is at 0 and you have ended the COVID pandemic!!!')
       grid.classList.add('millhouse')
+      millhouse.audio.play()
       gridCells.forEach(element => {
         element.removeEventListener('click', playerClick)
         element.removeEventListener('contextmenu', flagMine)
@@ -333,7 +337,7 @@ function init() {
   }
 
   let duffman = {
-    audio: new Audio('../assets/duffman.mp3'),
+    audio: new Audio('../assets/duffman.mov'),
     image: 'duffman'
   }
   let rum = {
@@ -388,23 +392,23 @@ function init() {
   }
 
   let bonusArray = [
-    [wolf.image, wolf.audio], 
-    [rumham.image, rumham.audio],
-    [theDude.image, theDude.audio],
+    [wolf.image, wolf.audio],
     [murray.image, murray.audio],
-    [duffman.image, duffman.audio],
-    [rum.image, rum.audio],
+    [theDude.image, theDude.audio],
+    [ronBurg.image, ronBurg.audio],
+    [rumham.image, rumham.audio],
     [dayman.image, dayman.audio],
     [mclovin.image, mclovin.audio],
     [merry.image, merry.audio],
     [peep.image, peep.audio],
-    [ronBurg.image, ronBurg.audio],
-    [ronSwanson.image, ronSwanson.audio]
+    [ronSwanson.image, ronSwanson.audio],
+    [rum.image, rum.audio],
+    [duffman.image, duffman.audio]
   ]
 
   let bonusIndex = 0
-  const bonusSound = 0
-  const bonusAudio = 1
+  let bonusSound = 0
+  let bonusAudio = 1
 
   function playRandomBonus() {
     console.log(bonusIndex, bonusSound, bonusAudio)

@@ -56,14 +56,12 @@ body {
   justify-content: center;
   height: 500px;
   width: 600px;
-  background-color: white;
-  border: 8px solid rgb(117, 117, 117);
+  border: 5px solid white;
   cursor: pointer;
 }
 
 .grid div {
-  border: 1px solid lightgrey;
-  flex-grow: 1;
+  border: 1px solid white;
   height: 10%;
   width: 10%;
   font-size: 40px;
@@ -71,6 +69,21 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.unclicked {
+  cursor: pointer;
+}
+
+.unclicked :hover {
+  background-color: red;
+}
+
+
+
+.clicked {
+  background-color: rgba(148, 148, 148, 0.521);
+  cursor: default;
 }
 
 .reset-button {
@@ -86,15 +99,6 @@ body {
   padding: 15px 50px;
   background-color: white;
 }
-
-.clicked {
-  background-color: rgba(148, 148, 148, 0.521);
-}
-
-.clear{
-  background-color: transparent;
-}
-
 
 /* IMAGES */
 
