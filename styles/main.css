@@ -4,7 +4,6 @@
 
 body {
   height: 100vh;
-  width: 100vw;
   display: flex;
   margin: 0;
   background-color: black;
@@ -22,22 +21,22 @@ body {
 .header {
   margin-top: 20px;
   background-color: rgba(255, 255, 255, 0.548);
-  align-items: center;
   border-radius: 20px;
 }
 
 .header h1 {
-  margin: 10px 0 10px 0;
+  margin: 10px 0 0 0;
 }
 
 .info {
-  font-size: 15px;
+  font-size: 12px;
 }
 
 .header .score {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
+  font-weight: bolder;
 }
 
 .grid-wrapper {
@@ -47,6 +46,7 @@ body {
 }
 
 .grid {
+  color: white;
   margin-bottom: 20px;
   align-items: center;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
@@ -65,10 +65,14 @@ body {
   height: 10%;
   width: 10%;
   font-size: 40px;
-  color: black;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.grid :hover {
+  background-color: white;
+  color: black;
 }
 
 .unclicked {
@@ -79,18 +83,15 @@ body {
   background-color: red;
 }
 
-
-
 .clicked {
-  background-color: rgba(148, 148, 148, 0.521);
+  background-color: rgba(255, 255, 255, 0.411);
+  color: white;
   cursor: default;
 }
 
 .reset-button {
   display: flex;
   justify-content: space-evenly;
-  color: black;
-  align-items: center;
 }
 
 .reset-button p {
@@ -98,6 +99,10 @@ body {
   justify-content: space-around;
   padding: 15px 50px;
   background-color: white;
+}
+
+#reset {
+  cursor: pointer;
 }
 
 /* IMAGES */
@@ -215,6 +220,54 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  padding-top: 400px;
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */;
+}
+
+.modal-content {
+  background-color: black;
+  color: white;
+  text-align: center;
+  height: 200px;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+.modalwin {
+  background-image: url('../assets/cheers.gif');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position-y: 20%;
+  font-size: 30px;
+  color: white;
+}
+
+.close {
+  color: #ffffff;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 

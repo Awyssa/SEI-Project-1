@@ -8,7 +8,7 @@ function init() {
   const gridStats = {
     rows: 10,
     columns: 10,
-    mines: 12,
+    mines: 3,
     cells: []
   }
   const cellCount = gridStats.rows * gridStats.columns
@@ -46,7 +46,7 @@ function init() {
     console.log('mines ajacant', minesAdjacent(event.target))
     if (event.target.classList.contains('mine') && !event.target.classList.contains('flagged')) {
       event.target.classList.add('covid')
-      window.alert('YOU HIT A COVID VIRUS!!!')
+      showBlock('YOU HIT A COVID VIRUS!!!')
       endGame()
     } if (event.target.classList.contains('unclicked')) {
       event.target.classList.replace('unclicked', 'clicked')
@@ -117,6 +117,7 @@ function init() {
     bonusIndex = 0
     bonusSound = 0
     bonusAudio = 1
+    modalwindow.classList.remove('modalwin')
   }
 
   function clearClasses(grid) {
@@ -155,7 +156,8 @@ function init() {
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GAME WON
   function gameWon() {
     if (gridStats.mines === 0) {
-      window.alert('WELL DONE!!! The R rate is at 0 and you have ended the COVID pandemic!!!')
+      showBlock('WELL DONE!!! The R rate is at 0 and you have ended the COVID pandemic!!!')
+      modalwindow.classList.add('modalwin')
       grid.classList.add('millhouse')
       millhouse.audio.play()
       gridCells.forEach(element => {
@@ -186,7 +188,7 @@ function init() {
   }
   function outOfLives(lives) {
     if (lives === 0) {
-      window.alert('You have no more Antibacterial Spray to clear the COVID CELLS!!!')
+      showBlock('You have no more Antibacterial Spray to clear the COVID CELLS!!!')
       showAllMines(gridStats.cells)
       endGame()
       gridCells.forEach(element => {
@@ -415,7 +417,26 @@ function init() {
     playAudio(bonusArray[bonusIndex][bonusSound],bonusArray[bonusIndex][bonusAudio])
     bonusIndex ++
   }
-  console.log(bonusArray)
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - BONUES / AUDIO / IMAGES
+  let modal = document.getElementById('myModal')
+  let modalmsg = document.getElementById('modalmsg')
+  let btn = document.getElementById('myBtn')
+  let span = document.getElementsByClassName('close')[0]
+  let modalwindow = document.querySelector('.modal-content')
+
+  function showBlock(string) {
+    modal.style.display = 'block'
+    modalmsg.innerHTML = `${string}`
+  }
+  // span.onclick = function() {
+  //   modal.style.display = "none";
+  // }
+  span.onclick = function(event) {
+    if (event.target == span) {
+      modal.style.display = 'none'
+    }
+  }
 
 }
 
