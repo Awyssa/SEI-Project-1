@@ -237,7 +237,6 @@ body {
 }
 
 .modal-content {
-  display: flex;
   background-color: black;
   color: white;
   text-align: center;
