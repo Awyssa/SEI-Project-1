@@ -1,6 +1,3 @@
-/* eslint-disable eqeqeq */
-/* eslint-disable no-unused-vars */
-/* eslint-disable prefer-const */
 function init() {
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - VARIABLES 
   const grid = document.querySelector('.grid')
@@ -128,7 +125,6 @@ function init() {
     })
   }
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GAME TIMER
-
   const timer = document.getElementById('timer')
 
   let timerId = null
@@ -150,7 +146,6 @@ function init() {
     clearInterval(timerId) 
     timerId = null 
   }
-
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GAME WON
   function gameWon() {
     if (gridStats.mines === 0) {
@@ -165,7 +160,6 @@ function init() {
       handleResetTimer()
     }
   }
-
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GAME OVER
   function endGame() {
     showAllMines(gridStats.cells)
@@ -308,34 +302,27 @@ function init() {
       }
     }
   }
-
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - BONUES / AUDIO / IMAGES
-
   let endgame = {
     audio: new Audio('./assets/noo.mov'),
     image: 'michael'
   }
-
   let millhouse = {
     audio: new Audio('./assets/dance.mp3'),
     image: 'millhouse'
   }
-
   let wrong = {
     audio: new Audio('./assets/wrong.mp3'),
     image: 'cross'
   }
-    
   let theDude = {
     audio: new Audio('./assets/theDude.mp3'),
     image: 'theDude'
   }
-
   let murray = {
     audio: new Audio('./assets/murray.mov'),
     image: 'murray'
   }
-
   let duffman = {
     audio: new Audio('./assets/duffman.mov'),
     image: 'duffman'
@@ -344,42 +331,34 @@ function init() {
     audio: new Audio('./assets/rum.mov'),
     image: 'rum'
   }
-
   let dayman = {
     audio: new Audio('./assets/dayman.mov'),
     image: 'charlie'
   } 
-
   let mclovin = {
     audio: new Audio('./assets/mclovin.mov'),
     image: 'mclovin'
   }
-
   let merry = {
     audio: new Audio('./assets/merry.mov'),
     image: 'merry'
   }
-
   let peep = {
     audio: new Audio('./assets/peep.mov'),
     image: 'mark'
   }
-  
   let ronBurg = {
     audio: new Audio('./assets/ron.b.mov'),
     image: 'ronBurg'
   }
-
   let ronSwanson = {
     audio: new Audio('./assets/ronSwanson.mov'),
     image: 'ronSwanson'
   }
-  
   let rumham = {
     audio: new Audio('./assets/rumham.mov'),
     image: 'rumham'
   }
-
   let wolf = {
     audio: new Audio('./assets/wolf.mov'),
     image: 'wolf' 
@@ -414,7 +393,6 @@ function init() {
     playAudio(bonusArray[bonusIndex][bonusSound],bonusArray[bonusIndex][bonusAudio])
     bonusIndex ++
   }
-
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - MODALS
   let modal = document.getElementById('myModal')
   let modalmsg = document.getElementById('modalmsg')
@@ -433,6 +411,5 @@ function init() {
   }
 
 }
-
 
 window.addEventListener('DOMContentLoaded', init)
